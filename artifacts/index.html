@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Source artifacts - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Source artifacts";
+        var mkdocs_page_input_path = "artifacts.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Source artifacts</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#source-archive-format">Source archive format</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#index-reference">Index reference</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cache-layout">Cache layout</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cabin-fetch-workflow">cabin fetch workflow</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#http-artifact-downloads">HTTP artifact downloads</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#checksum-verification">Checksum verification</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#safe-extraction">Safe extraction</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cabin-fetch">cabin fetch</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#-frozen">--frozen</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#limitations">Limitations</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Dependencies</li>
+      <li class="breadcrumb-item active">Source artifacts</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/artifacts.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="source-artifacts">Source Artifacts</h1>
+<p>Cabin source-artifact fetching takes a resolved package set plus an
+index that points at <code>.tar.gz</code> archives. It verifies SHA-256
+checksums, copies archives into a
+checksum-addressed cache, safely extracts them, validates the
+extracted manifests, and feeds the result into the build planner.</p>
+<p><code>cabin-artifact</code> itself is transport-neutral: local indexes provide a
+filesystem path, and the sparse HTTP client downloads bytes before
+handing them to the same verifier and extractor. OCI / Git transports
+are deferred.</p>
+<h2 id="source-archive-format">Source archive format</h2>
+<p>Every registry package source archive must be a <code>.tar.gz</code> whose root
+contains the package's <code>cabin.toml</code>. <code>cabin package</code> produces
+archives in exactly this shape — see
+<a href="../package-format/"><code>package-format.md</code></a> for the producer contract,
+including the determinism rules and the include / exclude policy.
+<code>cabin publish --registry-dir</code> writes those archives into a local file
+registry under
+<code>&lt;registry&gt;/artifacts/&lt;name&gt;/&lt;name&gt;-&lt;version&gt;.tar.gz</code>, matching
+what the artifact fetcher reads back; see
+<a href="../registry-design/"><code>registry-design.md</code></a>.</p>
+<pre><code>fmt-10.2.1.tar.gz
+  ├── cabin.toml
+  ├── include/
+  │   └── fmt.h
+  └── src/
+      └── fmt.cc
+</code></pre>
+<p>Rules:</p>
+<ul>
+<li>the archive root must contain a file named <code>cabin.toml</code>;</li>
+<li>the extracted manifest's <code>[package].name</code> must equal the resolved
+  package name;</li>
+<li>the extracted manifest's <code>[package].version</code> must equal the
+  resolved package version;</li>
+<li>archives whose root is a single top-level directory are <strong>not</strong>
+  supported — <code>cabin.toml</code> must sit at the very top.</li>
+</ul>
+<p>Any deviation produces a clear error such as
+<code>source archive for</code>fmt 10.2.1<code>does not contain cabin.toml at its root</code>
+or
+<code>source archive for</code>fmt 10.2.1<code>contains package</code>fmt 10.1.0``.</p>
+<h2 id="index-reference">Index reference</h2>
+<p>In the local JSON index, each version that should be materialisable
+carries a <code>source</code> block alongside its <code>checksum</code>:</p>
+<pre><code class="language-json">&quot;source&quot;: {
+  &quot;type&quot;: &quot;archive&quot;,
+  &quot;path&quot;: &quot;../artifacts/fmt-10.2.1.tar.gz&quot;,
+  &quot;format&quot;: &quot;tar.gz&quot;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Allowed values</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td><code>"archive"</code></td>
+<td>Local source archive.</td>
+</tr>
+<tr>
+<td><code>format</code></td>
+<td><code>"tar.gz"</code></td>
+<td>Gzipped tar.</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td>non-empty string</td>
+<td>Absolute or relative filesystem path. Relative paths resolve against the directory containing the <code>&lt;package&gt;.json</code> index file.</td>
+</tr>
+</tbody>
+</table>
+<p><code>checksum</code> is the <code>sha256:&lt;hex&gt;</code> digest of the archive's bytes. It
+is required for any version <code>cabin fetch</code> or <code>cabin build</code> is asked
+to materialise; it is optional for resolver-only fixtures.</p>
+<h2 id="cache-layout">Cache layout</h2>
+<p>Cabin uses a project-local checksum-addressed cache by default:</p>
+<pre><code>.cabin/cache/
+  archives/
+    sha256/
+      &lt;hex&gt;.tar.gz
+  sources/
+    sha256/
+      &lt;hex&gt;/
+        cabin.toml
+        include/
+        src/
+</code></pre>
+<ul>
+<li>The archive cache key is the lower-case hex of the archive's
+  SHA-256.</li>
+<li>The source cache key is the same hex; the extracted tree lives at
+  <code>sources/sha256/&lt;hex&gt;/</code>.</li>
+<li>If a cached archive's bytes still hash to the expected value, it is
+  reused as-is.</li>
+<li>If a cached source directory exists and its <code>cabin.toml</code> matches
+  the resolved name and version, it is reused as-is.</li>
+<li>A partial or corrupt source extraction is removed and re-extracted
+  on the next non-<code>--frozen</code> run.</li>
+</ul>
+<p>The cache directory is selected by, in order:</p>
+<ol>
+<li><code>--cache-dir &lt;path&gt;</code> (CLI flag);</li>
+<li><code>CABIN_CACHE_DIR</code> environment variable;</li>
+<li><code>&lt;root_dir&gt;/.cabin/cache</code>, where <code>&lt;root_dir&gt;</code> is the parent
+   directory of the manifest passed to <code>--manifest-path</code>.</li>
+</ol>
+<h2 id="cabin-fetch-workflow"><code>cabin fetch</code> workflow</h2>
+<pre><code class="language-sh"># Fetch every resolved registry package: write cabin.lock, verify
+# checksums, copy archives into the cache, and extract sources.
+cabin fetch --manifest-path app/cabin.toml --index-path index
+
+# Use a non-default cache directory.
+cabin fetch --manifest-path app/cabin.toml --index-path index --cache-dir /tmp/cabin-cache
+
+# CI mode: require existing cache + lockfile; refuse to populate.
+cabin fetch --frozen --manifest-path app/cabin.toml --index-path index
+</code></pre>
+<p><code>cabin build --index-path &lt;path&gt;</code> accepts the same <code>--cache-dir</code>,
+<code>--locked</code>, and <code>--frozen</code> flags. With versioned dependencies the
+build path runs the same fetch pipeline, then plans and runs a
+unified build over local and registry packages. See
+<a href="../lockfile/"><code>lockfile.md</code></a> for the <code>--locked</code> / <code>--frozen</code>
+contract.</p>
+<h2 id="http-artifact-downloads">HTTP artifact downloads</h2>
+<p><code>cabin &lt;fetch|build&gt; --index-url &lt;url&gt;</code> reuses exactly the same
+artifact cache. The HTTP path differs only in how archive bytes
+arrive at <code>cabin-artifact</code>:</p>
+<ol>
+<li>The HTTP index loader resolves each version's <code>source.path</code>
+   into an absolute URL and rejects the result unless it stays on
+   the same origin as the package metadata URL and contains no
+   <code>userinfo</code> credentials.</li>
+<li><code>cabin-cli</code> calls <code>cabin_index_http::HttpClient::download</code> to
+   fetch the archive bytes once per <code>(name, version)</code> that the
+   resolved set requires.</li>
+<li>The bytes are handed to <code>cabin-artifact</code> as a
+   [<code>FetchSource::InMemoryArchive</code>]. From there, the existing
+   artifact path verifies SHA-256, atomic-renames the bytes into
+   <code>&lt;cache&gt;/archives/sha256/&lt;hex&gt;.tar.gz</code>, and safely extracts
+   into <code>&lt;cache&gt;/sources/sha256/&lt;hex&gt;/</code>.</li>
+</ol>
+<p>For local archive sources, cache-hit behaviour is unchanged: an
+archive whose SHA-256 is already present in the artifact cache is
+not read again from the source path. For HTTP sources, Cabin
+currently downloads the archive bytes before <code>cabin-artifact</code> can
+observe the cache hit; the existing cache entry is still verified
+and reused, but the HTTP archive request still happens once per
+resolved package in that run.</p>
+<h2 id="checksum-verification">Checksum verification</h2>
+<p><code>cabin-artifact</code> always hashes the bytes it reads:</p>
+<ul>
+<li>on a cache hit, the cached archive is hashed and compared against
+  the expected <code>sha256</code> digest before being reused;</li>
+<li>on a cache miss (and not <code>--frozen</code>), the source archive is copied
+  into a <code>&lt;hex&gt;.tar.gz.partial</code> sibling while being hashed; if the
+  bytes do not match the expected digest, the partial file is removed
+  and the run fails with <code>checksum mismatch for ...: expected ...,
+  got ...</code>.</li>
+</ul>
+<p>There is no way to skip checksum verification.</p>
+<h2 id="safe-extraction">Safe extraction</h2>
+<p>Source archives are extracted with fail-closed rules:</p>
+<ul>
+<li>archive entries with absolute paths are rejected;</li>
+<li>archive entries containing <code>..</code> components are rejected;</li>
+<li>archive entries whose joined destination escapes the source
+  directory are rejected;</li>
+<li>only <code>Regular</code> files and <code>Directory</code> entries are accepted; symlinks,
+  hard links, char/block devices, fifos, sparse, GNU long-name, pax
+  extension, and continuation entries are rejected with a clear
+  error;</li>
+<li>symlinks are never followed; nothing is written outside the
+  destination directory.</li>
+</ul>
+<p>Errors look like
+<code>refusing to extract unsafe archive entry</code>../escape.txt<code>or
+`refusing to extract unsupported archive entry `evil</code>.</p>
+<h2 id="cabin-fetch"><code>cabin fetch</code></h2>
+<pre><code class="language-sh">cabin fetch \
+  [--manifest-path &lt;path&gt;] \
+  [--index-path &lt;path&gt;] \
+  [--cache-dir &lt;path&gt;] \
+  [--locked | --frozen] \
+  [--format human|json]
+</code></pre>
+<p>Behaviour:</p>
+<ol>
+<li>Load manifest / workspace.</li>
+<li>Resolve versioned dependencies with the same lockfile-aware
+   semantics as <code>cabin resolve</code>.</li>
+<li>Write or update <code>cabin.lock</code> unless <code>--locked</code> or <code>--frozen</code>
+   forbids it.</li>
+<li>For each resolved registry package, build a fetch entry from the
+   index's <code>source</code> and <code>checksum</code>.</li>
+<li>Verify checksums and copy archives into the cache.</li>
+<li>Safely extract sources into the cache and validate each
+   extracted package's <code>cabin.toml</code>.</li>
+<li>Print the fetched packages.</li>
+</ol>
+<p><code>cabin build --index-path &lt;path&gt;</code> runs the same pipeline before
+planning the build.</p>
+<h3 id="-frozen"><code>--frozen</code></h3>
+<p><code>--frozen</code> does not write the lockfile and does not populate the
+artifact cache. Already-cached, already-extracted artifacts may be
+reused. If a required archive or source tree is not already cached,
+the run fails with
+<code>cannot fetch artifact for</code>fmt 10.2.1<code>because --frozen was specified
+and the artifact is not cached</code>.</p>
+<p>For HTTP indexes, <code>--frozen</code> always fails when the effective
+index source is a URL, whether it came from <code>--index-url</code>,
+<code>[registry] index-url</code>, or source replacement, because the HTTP
+index loader has no persistent metadata cache. The error message
+is:</p>
+<pre><code>cannot use --index-url with --frozen: there is no persistent HTTP index metadata cache, so a frozen run would have to perform network fetches it is not allowed to perform
+</code></pre>
+<p>Vendoring / offline workflows are separate and still require a
+local <code>--index-path</code>; they do not make frozen HTTP index URLs
+usable.</p>
+<h2 id="limitations">Limitations</h2>
+<p><code>cabin-artifact</code> deliberately does <strong>not</strong> implement any of the
+following:</p>
+<ul>
+<li>HTTP downloads itself — the HTTP read path lives in
+  <code>cabin-index-http</code> and hands archive bytes to this
+  crate as <code>FetchSource::InMemoryArchive</code>;</li>
+<li>Git / OCI / GHCR transports;</li>
+<li>network publish or non-local registry write paths;</li>
+<li>package publishing (<code>cabin package</code>, <code>cabin publish</code>);</li>
+<li>a binary artifact cache or remote build cache;</li>
+<li>artifact signing or trust configuration;</li>
+<li>account, ownership, or hosted-service policy features.</li>
+</ul>
+<p>See <a href="../registry-design/"><code>registry-design.md</code></a> for what is deferred
+and what is out of scope.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../vendoring-offline/" class="btn btn-neutral float-left" title="Vendoring and offline mode"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../workspaces/" class="btn btn-neutral float-right" title="Workspaces">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../vendoring-offline/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../workspaces/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

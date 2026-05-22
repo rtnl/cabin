@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Local JSON package index - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Local JSON package index";
+        var mkdocs_page_input_path = "package-index.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Local JSON package index</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#index-sources">Index sources</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#directory-layouts">Directory layouts</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#flat-layout">Flat layout</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#registry-root-layout">Registry-root layout</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#package-file-shape">Package file shape</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#source-artifact">Source artifact</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#package-with-dependencies">Package with dependencies</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#yanked-version">Yanked version</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#validation">Validation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#not-supported-yet">Not supported yet</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#sparse-http-index">Sparse HTTP index</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#frozen-offline-limits">Frozen / offline limits</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#end-to-end-example">End-to-end example</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#relationship-to-cabin-package">Relationship to cabin package</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Distribution and registry interface</li>
+      <li class="breadcrumb-item active">Local JSON package index</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/package-index.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="local-json-package-index">Local JSON Package Index</h1>
+<p>Cabin resolves versioned dependencies against a tiny on-disk JSON
+index. This is <strong>not</strong> a real registry — it has no network protocol,
+no append-only structure, and no signing. The format carries
+resolver metadata, checksum data for <code>cabin.lock</code>, and a source
+block so <code>cabin fetch</code> and <code>cabin build</code> can materialise registry
+packages.</p>
+<p>For <code>--index-path</code> local file indexes, HTTP, OCI, Git, and remote
+source paths are <strong>not</strong> supported. The only source shape recognised
+there is <code>type = "archive"</code> / <code>format = "tar.gz"</code> with a local
+filesystem <code>path</code>. Sparse HTTP indexes are documented below and use
+the same archive source records after URL resolution.</p>
+<h2 id="index-sources">Index sources</h2>
+<p><code>cabin resolve / fetch / build / update</code> reaches the package index
+through one of two flags. They are mutually exclusive — passing
+both fails with <code>use either --index-path or --index-url, not both</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Backend</th>
+<th>Section</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--index-path &lt;path&gt;</code></td>
+<td>local filesystem directory</td>
+<td><a href="#directory-layouts">Directory layouts</a></td>
+</tr>
+<tr>
+<td><code>--index-url &lt;url&gt;</code></td>
+<td>sparse HTTP</td>
+<td><a href="#sparse-http-index">Sparse HTTP index</a></td>
+</tr>
+</tbody>
+</table>
+<p>Local-only projects (no versioned dependencies) require neither
+flag.</p>
+<h2 id="directory-layouts">Directory layouts</h2>
+<p><code>--index-path &lt;path&gt;</code> accepts two on-disk shapes:</p>
+<h3 id="flat-layout">Flat layout</h3>
+<pre><code>index/
+  fmt.json
+  spdlog.json
+  ...
+</code></pre>
+<p>Every file whose name ends in <code>.json</code> is treated as a package
+metadata file; other files (<code>README.md</code>, <code>.gitignore</code>, …) are
+ignored. Source paths in package metadata resolve relative to this
+directory.</p>
+<h3 id="registry-root-layout">Registry-root layout</h3>
+<pre><code>registry/
+  config.json
+  packages/
+    fmt.json
+    spdlog.json
+  artifacts/
+    fmt/
+      fmt-10.2.1.tar.gz
+    spdlog/
+      spdlog-1.13.0.tar.gz
+</code></pre>
+<p>When a <code>config.json</code> is present at the index root the loader uses
+the registry-root layout: <code>config.packages</code> (default <code>"packages"</code>)
+points at the directory holding <code>&lt;name&gt;.json</code> files, and source
+paths in those files resolve relative to that directory — i.e.
+<code>"../artifacts/fmt/fmt-10.2.1.tar.gz"</code> lands at
+<code>registry/artifacts/fmt/fmt-10.2.1.tar.gz</code>. <code>config.json</code> itself
+must satisfy <code>schema = 1</code>, <code>kind = "file-registry"</code>, and reject
+<code>..</code> or absolute paths in the configured subdirectories. See
+<a href="../registry-design/"><code>registry-design.md</code></a> for the full layout
+contract.</p>
+<p>In both layouts the filename stem (<code>fmt</code> for <code>fmt.json</code>) must
+equal the package's declared <code>name</code> field. Mismatches produce a
+clear error.</p>
+<h2 id="package-file-shape">Package file shape</h2>
+<pre><code class="language-json">{
+  &quot;schema&quot;: 1,
+  &quot;name&quot;: &quot;fmt&quot;,
+  &quot;versions&quot;: {
+    &quot;10.2.1&quot;: {
+      &quot;dependencies&quot;: {},
+      &quot;yanked&quot;: false,
+      &quot;checksum&quot;: &quot;sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef&quot;,
+      &quot;source&quot;: {
+        &quot;type&quot;: &quot;archive&quot;,
+        &quot;path&quot;: &quot;../artifacts/fmt-10.2.1.tar.gz&quot;,
+        &quot;format&quot;: &quot;tar.gz&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schema</code></td>
+<td>yes</td>
+<td>Schema version. Only <code>1</code> is supported; other values produce a clear error.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>yes</td>
+<td>Package name. Must equal the file's stem.</td>
+</tr>
+<tr>
+<td><code>versions</code></td>
+<td>yes</td>
+<td>Map from SemVer version string to version metadata. May be empty.</td>
+</tr>
+</tbody>
+</table>
+<p>Each version's metadata:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Required</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dependencies</code></td>
+<td>no</td>
+<td><code>{}</code></td>
+<td>Map from package name to version requirement string. The same requirement subset as <code>cabin.toml</code> (see <a href="../manifest/"><code>docs/manifest.md</code></a>).</td>
+</tr>
+<tr>
+<td><code>yanked</code></td>
+<td>no</td>
+<td><code>false</code></td>
+<td>When <code>true</code>, the resolver excludes this version from candidate sets.</td>
+</tr>
+<tr>
+<td><code>checksum</code></td>
+<td>no</td>
+<td><code>null</code></td>
+<td><code>sha256:&lt;hex&gt;</code> digest of the source archive's bytes. Optional in the schema so resolver-only fixtures can omit it; required by <code>cabin fetch</code> and <code>cabin build</code> when the version must be materialised.</td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td>no</td>
+<td><code>null</code></td>
+<td>Source archive metadata. Optional in the schema; required by <code>cabin fetch</code> and <code>cabin build</code>. See <a href="#source-artifact">Source artifact</a> below.</td>
+</tr>
+<tr>
+<td><code>features</code></td>
+<td>no</td>
+<td>omitted</td>
+<td>Declared <code>[features]</code>. Older index entries that omit the field continue to load.</td>
+</tr>
+</tbody>
+</table>
+<p>Unknown fields anywhere in the file are rejected.</p>
+<h2 id="source-artifact">Source artifact</h2>
+<p>Each <code>source</code> block must take this exact shape:</p>
+<pre><code class="language-json">&quot;source&quot;: {
+  &quot;type&quot;: &quot;archive&quot;,
+  &quot;path&quot;: &quot;../artifacts/fmt-10.2.1.tar.gz&quot;,
+  &quot;format&quot;: &quot;tar.gz&quot;
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Allowed values</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td><code>"archive"</code></td>
+<td>Local source archives. Other values (HTTP, OCI, Git, ...) produce a clear error.</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td>non-empty string</td>
+<td>Absolute or relative filesystem path to the <code>.tar.gz</code> archive. Relative paths are resolved against the directory containing the <code>&lt;package&gt;.json</code> file at load time.</td>
+</tr>
+<tr>
+<td><code>format</code></td>
+<td><code>"tar.gz"</code></td>
+<td>Gzipped tar archives.</td>
+</tr>
+</tbody>
+</table>
+<p><code>cabin fetch</code> and <code>cabin build</code> copy each archive into the artifact
+cache, hashing as they go, and reject any archive whose bytes do not
+match the entry's <code>checksum</code>. The cache layout is documented in
+<a href="../artifacts/"><code>artifacts.md</code></a>.</p>
+<h2 id="package-with-dependencies">Package with dependencies</h2>
+<pre><code class="language-json">{
+  &quot;schema&quot;: 1,
+  &quot;name&quot;: &quot;spdlog&quot;,
+  &quot;versions&quot;: {
+    &quot;1.13.0&quot;: {
+      &quot;dependencies&quot;: { &quot;fmt&quot;: &quot;&gt;=10.0.0 &lt;11.0.0&quot; },
+      &quot;yanked&quot;: false,
+      &quot;checksum&quot;: &quot;sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef&quot;
+    }
+  }
+}
+</code></pre>
+<h2 id="yanked-version">Yanked version</h2>
+<pre><code class="language-json">{
+  &quot;schema&quot;: 1,
+  &quot;name&quot;: &quot;fmt&quot;,
+  &quot;versions&quot;: {
+    &quot;10.2.1&quot;: { &quot;dependencies&quot;: {}, &quot;yanked&quot;: true },
+    &quot;10.1.0&quot;: { &quot;dependencies&quot;: {}, &quot;yanked&quot;: false }
+  }
+}
+</code></pre>
+<p><code>cabin resolve</code> will pick <code>10.1.0</code> from this index. If every matching
+version is yanked, the resolver returns
+"all matching versions of <code>fmt</code> are yanked".</p>
+<h2 id="validation">Validation</h2>
+<p>Loading rejects an index when:</p>
+<ul>
+<li>the path is not a directory</li>
+<li>a <code>*.json</code> file has unknown fields</li>
+<li><code>schema</code> is not <code>1</code></li>
+<li>the declared <code>name</code> doesn't equal the filename stem</li>
+<li>a version key is not a valid SemVer string</li>
+<li>a dependency requirement is not parseable</li>
+<li>a <code>source.type</code> is anything other than <code>"archive"</code></li>
+<li>a <code>source.format</code> is anything other than <code>"tar.gz"</code></li>
+<li>a <code>source.path</code> is empty</li>
+</ul>
+<h2 id="not-supported-yet">Not supported yet</h2>
+<p>The index format deliberately leaves the following out:</p>
+<ul>
+<li>OCI / GHCR or other remote-archive transports;</li>
+<li>Git sources;</li>
+<li>account or credential handling;</li>
+<li>append-only / immutable indexes;</li>
+<li>artifact signing or trust configuration;</li>
+<li>platform-specific dependency data beyond the current serialized
+  dependency records;</li>
+<li>mirror configuration;</li>
+<li>a cabin-specific JSON schema document; the format is documented
+  here and validated by code, but no formal <code>$schema</code> URL is
+  published.</li>
+</ul>
+<p>These are deferred.</p>
+<h2 id="sparse-http-index">Sparse HTTP index</h2>
+<p><code>--index-url &lt;url&gt;</code> consumes the same registry-root layout served
+as static HTTP files. The base URL may include or omit a trailing
+slash; the loader normalises it.</p>
+<p>Request shape:</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>URL</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>GET &lt;url&gt;/config.json</code></td>
+<td>Validates <code>schema = 1</code>, <code>kind = "file-registry"</code>, and the configured <code>packages</code> / <code>artifacts</code> subdirectories.</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>GET &lt;url&gt;/&lt;config.packages&gt;/&lt;name&gt;.json</code></td>
+<td>One request per package referenced by the manifest's versioned dependencies (and their transitive closure).</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>GET &lt;artifact-url&gt;</code></td>
+<td>Source-archive download for each <code>(name, version)</code> <code>cabin fetch</code> / <code>cabin build</code> needs.</td>
+</tr>
+</tbody>
+</table>
+<p>Source-path resolution for each version:</p>
+<ul>
+<li><code>source.path</code> is resolved against the package metadata URL using
+  RFC 3986 rules. The standard
+  <code>"../artifacts/&lt;name&gt;/&lt;name&gt;-&lt;version&gt;.tar.gz"</code> therefore
+  resolves to <code>&lt;url&gt;/&lt;config.artifacts&gt;/&lt;name&gt;/&lt;name&gt;-&lt;version&gt;.tar.gz</code>.</li>
+<li>Absolute or scheme-relative <code>http://</code> / <code>https://</code> values are
+  accepted only when the final artifact URL has the same origin
+  (scheme, host, and effective port) as the package metadata URL.
+  Cross-origin artifact URLs and URLs containing <code>userinfo</code>
+  credentials are rejected before any download is attempted.</li>
+</ul>
+<p>Error mapping:</p>
+<ul>
+<li><code>404</code> on a package metadata URL → <code>package &lt;name&gt; was not found
+  in HTTP index</code>.</li>
+<li><code>5xx</code> → <code>HTTP index request failed for &lt;name&gt;: server returned
+  &lt;code&gt;</code>.</li>
+<li>Malformed JSON → <code>invalid package metadata from HTTP index for
+  &lt;name&gt;: ...</code>.</li>
+<li>Mismatched checksum on a downloaded archive → the same artifact
+  error (<code>checksum mismatch for ...</code>).</li>
+</ul>
+<h3 id="frozen-offline-limits">Frozen / offline limits</h3>
+<p>There is no persistent HTTP metadata cache. Combining
+<code>--frozen</code> with an effective HTTP index URL, whether from
+<code>--index-url</code>, <code>[registry] index-url</code>, or source replacement,
+therefore fails with a clear message:</p>
+<pre><code>cannot use --index-url with --frozen: there is no persistent HTTP index metadata cache, so a frozen run would have to perform network fetches it is not allowed to perform
+</code></pre>
+<p><code>--locked --index-url</code> does work — the lockfile lives on the
+local filesystem, and the resolver can validate fetched metadata
+against it. Full offline / vendoring workflows are separate
+commands documented in <a href="../vendoring-offline/"><code>vendoring-offline.md</code></a>.</p>
+<h3 id="end-to-end-example">End-to-end example</h3>
+<p>A registry written by <code>cabin publish --registry-dir</code> can be served
+as static HTTP and consumed by every read command without conversion:</p>
+<pre><code class="language-sh"># 1. Publish a package into a local file registry.
+cabin publish --manifest-path fmt/cabin.toml --registry-dir registry
+
+# 2. Serve the registry as static HTTP files.
+python3 -m http.server --directory registry 8000  # any static server works
+
+# 3. Resolve / fetch / build using the HTTP URL.
+cabin resolve --manifest-path app/cabin.toml --index-url http://localhost:8000
+cabin fetch   --manifest-path app/cabin.toml --index-url http://localhost:8000 --cache-dir cache
+cabin build   --manifest-path app/cabin.toml --index-url http://localhost:8000 --cache-dir cache --build-dir build
+</code></pre>
+<h2 id="relationship-to-cabin-package">Relationship to <code>cabin package</code></h2>
+<p><code>cabin package</code> and <code>cabin publish --dry-run</code> produce a
+canonical per-version metadata document next to the archive. The
+generated document mirrors the shape of one entry inside this
+index file (same <code>schema</code>, <code>dependencies</code>, <code>yanked</code>, <code>checksum</code>,
+<code>source</code> shape) so file-registry publish can splice it into a
+<code>&lt;package&gt;.json</code> without re-deriving anything. Packaging and
+dry-run publishing do <strong>not</strong> modify any index — see
+<a href="../package-format/"><code>package-format.md</code></a>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../package-format/" class="btn btn-neutral float-left" title="Package archive and canonical metadata"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../registry-design/" class="btn btn-neutral float-right" title="Registry design">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../package-format/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../registry-design/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

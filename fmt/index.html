@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Formatting - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Formatting";
+        var mkdocs_page_input_path = "fmt.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Formatting</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#write-mode-default">Write mode (default)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#check-mode">Check mode</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#excluding-paths">Excluding paths</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#including-vcs-ignored-files">Including VCS-ignored files</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#workspace-selection">Workspace selection</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-gets-formatted">What gets formatted</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#style-discovery">Style discovery</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#choosing-the-formatter-executable">Choosing the formatter executable</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#verbosity">Verbosity</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Targets and building</li>
+      <li class="breadcrumb-item active">Formatting</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/fmt.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="formatting-c-and-c-sources-cabin-fmt">Formatting C and C++ sources (<code>cabin fmt</code>)</h1>
+<p><code>cabin fmt</code> is Cabin's wrapper around <code>clang-format</code>.  It walks
+the selected package(s) for C/C++ source and header files,
+hands them to <code>clang-format</code>, and either rewrites the files in
+place or verifies that they are already formatted.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-text">cabin fmt [--check] [--exclude &lt;PATH&gt;]... [--no-ignore-vcs] [SELECTION]
+</code></pre>
+<p><code>cabin fmt --help</code> lists every flag with its short description.</p>
+<h3 id="write-mode-default">Write mode (default)</h3>
+<pre><code class="language-text">cabin fmt
+</code></pre>
+<p><code>clang-format -i --style=file</code> is invoked on every discovered
+source.  Status output reports how many files were processed:</p>
+<pre><code class="language-text">cabin: formatted 17 files
+</code></pre>
+<h3 id="check-mode">Check mode</h3>
+<pre><code class="language-text">cabin fmt --check
+</code></pre>
+<p><code>clang-format --dry-run -Werror --style=file</code> is invoked.  The
+command exits with a non-zero status if any file would be
+reformatted, and never modifies files on disk:</p>
+<pre><code class="language-text">cabin: formatting check failed; 2 files would be reformatted (re-run without --check to apply)
+</code></pre>
+<p>Use this in CI to enforce a clean tree.</p>
+<h3 id="excluding-paths">Excluding paths</h3>
+<pre><code class="language-text">cabin fmt --exclude src/generated.cc --exclude vendored/
+</code></pre>
+<p><code>--exclude</code> may be repeated.  Each argument is a file or
+directory path resolved against the current working directory;
+a directory entry skips every descendant.</p>
+<h3 id="including-vcs-ignored-files">Including VCS-ignored files</h3>
+<p>By default <code>cabin fmt</code> honours <code>.gitignore</code>, <code>.ignore</code>,
+parent-directory ignore files, and global git excludes.  Pass
+<code>--no-ignore-vcs</code> to force <code>clang-format</code> to run on files that
+are normally hidden by those rules:</p>
+<pre><code class="language-text">cabin fmt --no-ignore-vcs
+</code></pre>
+<p><code>--no-ignore-vcs</code> disables <em>only</em> the VCS ignore layer.  The
+walker still skips:</p>
+<ul>
+<li>Cabin's built-in build / cache / vendor / VCS-state
+  directories (see "What gets formatted" below);</li>
+<li>top-level hidden directories that are not on the built-in
+  exclude list (<code>.cache</code>, <code>.tools</code>, etc. — anything starting
+  with a dot is treated as tool state, not developer-edited
+  source).</li>
+</ul>
+<p>This shape matches how <code>clang-format</code> users typically want the
+flag to behave: it brings back files a project's
+<code>.gitignore</code> chose to hide, not files whose location signals
+that they aren't user-authored at all.</p>
+<h3 id="workspace-selection">Workspace selection</h3>
+<p><code>cabin fmt</code> honours Cabin's standard workspace selection flags:</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--workspace</code></td>
+<td>Format every workspace member</td>
+</tr>
+<tr>
+<td><code>--package &lt;name&gt;</code>, <code>-p &lt;name&gt;</code></td>
+<td>Format the named workspace package; repeat for multiple</td>
+</tr>
+<tr>
+<td><code>--default-members</code></td>
+<td>Format <code>[workspace.default-members]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Without any of these flags, <code>cabin fmt</code> formats the <em>current
+package</em>: the package the manifest discovery walk lands on,
+which is consistent with <code>cabin build</code>'s default behaviour.</p>
+<h2 id="what-gets-formatted">What gets formatted</h2>
+<p>Source discovery only emits files whose extension is one of:</p>
+<ul>
+<li>C sources: <code>.c</code></li>
+<li>C++ sources: <code>.cc</code>, <code>.cpp</code>, <code>.cxx</code>, <code>.c++</code>, <code>.C</code></li>
+<li>C/C++ headers: <code>.h</code>, <code>.hh</code>, <code>.hpp</code>, <code>.hxx</code></li>
+</ul>
+<p>The walk skips:</p>
+<ul>
+<li>VCS-ignored files (unless <code>--no-ignore-vcs</code> is in effect);</li>
+<li>Cabin's build directory (the path resolved by <code>--build-dir</code> /
+  <code>CABIN_BUILD_DIR</code> / <code>[paths] build-dir</code>, or the built-in
+  default <code>build</code>);</li>
+<li>Conventional output / cache / dependency directories
+  (<code>target</code>, <code>dist</code>, <code>out</code>, <code>.cabin</code>, <code>node_modules</code>, <code>.venv</code>,
+  <code>__pycache__</code>);</li>
+<li>VCS metadata directories (<code>.git</code>, <code>.hg</code>, <code>.svn</code>, <code>.jj</code>,
+  <code>.pijul</code>);</li>
+<li>The manifest directories of <em>unselected</em> workspace members,
+  so walking one package never spills into another.</li>
+</ul>
+<h2 id="style-discovery">Style discovery</h2>
+<p><code>cabin fmt</code> always passes <code>--style=file</code> to <code>clang-format</code>,
+which makes <code>clang-format</code> walk upward from each file to find
+the nearest <code>.clang-format</code> (or <code>_clang-format</code>) style file.
+Cabin does <strong>not</strong> generate a <code>.clang-format</code> for you; commit
+one to your repository if you want a project-wide style.  When
+no <code>.clang-format</code> is found anywhere, <code>clang-format</code> falls back
+to its built-in LLVM style — the same behaviour you would see
+invoking <code>clang-format</code> directly.</p>
+<h2 id="choosing-the-formatter-executable">Choosing the formatter executable</h2>
+<p>Cabin spawns <code>clang-format</code> from <code>PATH</code> by default.  Override
+the executable by setting <a href="../environment-variables/"><code>CABIN_FMT</code></a>:</p>
+<pre><code class="language-text">CABIN_FMT=/opt/llvm/bin/clang-format cabin fmt --check
+</code></pre>
+<p><code>CABIN_FMT</code> is taken verbatim — typically an absolute path, but
+a bare command name works too (it is then resolved against
+<code>PATH</code>).  When the executable cannot be found Cabin emits an
+actionable error:</p>
+<pre><code class="language-text">error: clang-format was not found on PATH.
+  install `clang-format` (LLVM toolchain) and re-run, or set `CABIN_FMT=/path/to/clang-format` to a specific binary
+</code></pre>
+<h2 id="verbosity">Verbosity</h2>
+<p><code>cabin fmt</code> honours Cabin's standard verbosity flags
+(see <a href="../environment-variables/"><code>environment-variables.md</code></a>):</p>
+<ul>
+<li><code>-q</code> / <code>--quiet</code> suppresses normal status output.  Errors
+  are still reported.</li>
+<li><code>-v</code> / <code>--verbose</code> adds a one-liner describing the selected
+  package(s) and the number of files being formatted.</li>
+<li><code>-vv</code> (or <code>-v -v</code>) additionally echoes the formatter command
+  line and the list of files that would be passed to it.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../testing/" class="btn btn-neutral float-left" title="Testing"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../tidy/" class="btn btn-neutral float-right" title="Static analysis">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../testing/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../tidy/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

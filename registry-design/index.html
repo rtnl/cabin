@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Registry design - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Registry design";
+        var mkdocs_page_input_path = "registry-design.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Registry design</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#local-file-registry">Local File Registry</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#sparse-http-read-path">Sparse HTTP Read Path</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#transport-and-format-boundaries">Transport And Format Boundaries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#out-of-scope">Out Of Scope</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Distribution and registry interface</li>
+      <li class="breadcrumb-item active">Registry design</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/registry-design.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="registry-interface">Registry Interface</h1>
+<p>This repository contains the local registry interface used by Cabin's
+public OSS core:</p>
+<ul>
+<li>a deterministic local JSON package index;</li>
+<li>a local file-registry write path for <code>cabin publish --registry-dir</code>;</li>
+<li>a read-only sparse HTTP client that consumes the same static layout;</li>
+<li>package archive metadata that preserves the manifest-declared fields
+  the resolver and build pipeline need.</li>
+</ul>
+<p>It does <strong>not</strong> contain a non-local registry service, account system,
+ownership workflow, package yanking workflow, signing policy, upload API,
+or other non-local registry control plane. Those concerns are outside
+this repository's local-core boundary.</p>
+<h2 id="local-file-registry">Local File Registry</h2>
+<p><code>cabin publish --registry-dir &lt;dir&gt;</code> writes a deterministic file registry
+that the resolver can read back through <code>--index-path &lt;dir&gt;</code>.</p>
+<pre><code class="language-text">&lt;registry&gt;/
+  config.json
+  packages/
+    fmt.json
+    spdlog.json
+  artifacts/
+    fmt/
+      fmt-10.2.1.tar.gz
+    spdlog/
+      spdlog-1.13.0.tar.gz
+</code></pre>
+<p><code>config.json</code> identifies the registry layout and the relative <code>packages</code>
+and <code>artifacts</code> directories. Each <code>packages/&lt;name&gt;.json</code> file contains
+the deterministic per-package version list. Each version points at its
+source archive by a registry-relative path such as
+<code>../artifacts/fmt/fmt-10.2.1.tar.gz</code>.</p>
+<p>The file-registry writer:</p>
+<ul>
+<li>stages package archives and canonical metadata through the same
+  package code used by <code>cabin package</code>;</li>
+<li>validates package names before they become path components;</li>
+<li>rejects duplicate versions;</li>
+<li>writes version entries in deterministic semver order;</li>
+<li>uses a simple registry lock file to avoid concurrent mutation;</li>
+<li>keeps archive checksums in the index so the artifact pipeline can
+  verify bytes before extraction.</li>
+</ul>
+<p>The existing read path (<code>cabin resolve</code>, <code>cabin fetch</code>,
+<code>cabin build --index-path</code>) accepts either a registry root with
+<code>config.json</code> or the legacy flat-fixture layout described in
+<a href="../package-index/"><code>package-index.md</code></a>, so a registry written by
+<code>cabin publish --registry-dir</code> can be consumed end to end without
+any conversion step:</p>
+<pre><code class="language-sh">cabin publish --manifest-path fmt/cabin.toml --registry-dir registry
+cabin resolve --manifest-path app/cabin.toml --index-path registry
+cabin fetch   --manifest-path app/cabin.toml --index-path registry --cache-dir cache
+cabin build   --manifest-path app/cabin.toml --index-path registry --cache-dir cache --build-dir build
+</code></pre>
+<h2 id="sparse-http-read-path">Sparse HTTP Read Path</h2>
+<p>The sparse HTTP client reads the same file-registry shape over plain
+<code>GET</code> requests:</p>
+<ul>
+<li><code>GET &lt;url&gt;/config.json</code></li>
+<li><code>GET &lt;url&gt;/packages/&lt;name&gt;.json</code></li>
+<li><code>GET &lt;url&gt;/artifacts/&lt;name&gt;/&lt;name&gt;-&lt;version&gt;.tar.gz</code></li>
+</ul>
+<p>The client is read-only. It does not publish packages, mutate registry
+state, persist HTTP metadata for offline use, or infer a default remote
+source. Commands that need an index source require <code>--index-path</code>,
+<code>--index-url</code>, or a local config default.</p>
+<p>HTTP archive bytes still flow through the artifact cache. Cabin hashes
+the bytes, checks them against the index's <code>sha256:&lt;hex&gt;</code> value, stores
+the archive under the content-addressed cache path, and extracts it with
+the same path-traversal protections used for local archives.</p>
+<h2 id="transport-and-format-boundaries">Transport And Format Boundaries</h2>
+<p>The package index document shape is shared by the local filesystem and
+sparse HTTP read paths. Transport-specific code lives outside the
+domain model:</p>
+<ul>
+<li><code>cabin-index</code> parses package index documents from local files;</li>
+<li><code>cabin-registry-file</code> owns the local mutable file-registry layout;</li>
+<li><code>cabin-index-http</code> performs read-only HTTP fetches and hands the
+  retrieved JSON to the same typed index model;</li>
+<li><code>cabin-artifact</code> verifies, caches, and extracts source archives
+  without knowing whether bytes came from a file or HTTP.</li>
+</ul>
+<p>The separation is intentional: adding a new local or static read
+transport should not require changing package metadata, the lockfile,
+or the build planner.</p>
+<h2 id="out-of-scope">Out Of Scope</h2>
+<p>The local OSS core deliberately excludes:</p>
+<ul>
+<li>network-backed package publishing;</li>
+<li>non-local registry account or ownership workflows;</li>
+<li>package yanking / unpublishing;</li>
+<li>artifact signing policy;</li>
+<li>Git repository indexes;</li>
+<li>persistent HTTP metadata caching;</li>
+<li>binary artifact caches or remote build caches.</li>
+</ul>
+<p>See <a href="../package-index/"><code>package-index.md</code></a>,
+<a href="../package-format/"><code>package-format.md</code></a>, and
+<a href="../artifacts/"><code>artifacts.md</code></a> for the concrete on-disk documents and
+archive rules.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../package-index/" class="btn btn-neutral float-left" title="Local JSON package index"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../distribution/" class="btn btn-neutral float-right" title="CLI distribution artefacts">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../package-index/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../distribution/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

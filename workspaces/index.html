@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Workspaces - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Workspaces";
+        var mkdocs_page_input_path = "workspaces.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Workspaces</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#manifest-syntax">Manifest syntax</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#rules">Rules</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#backwards-compatibility">Backwards compatibility</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#workspace-root-discovery">Workspace root discovery</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#package-selection-flags">Package-selection flags</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#default-behaviour-with-no-flags">Default behaviour with no flags</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#constraints">Constraints</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#per-command-notes">Per-command notes</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#worked-examples">Worked examples</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#llvm-style-monorepo">LLVM-style monorepo</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#per-team-monorepo-with-shared-dependencies">Per-team monorepo with shared dependencies</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#boundaries">Boundaries</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Workspaces and observability</li>
+      <li class="breadcrumb-item active">Workspaces</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/workspaces.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="workspaces">Workspaces</h1>
+<p>Cabin treats a workspace as a package graph rooted at one
+<code>cabin.toml</code> that declares a <code>[workspace]</code> table. The root manifest
+may itself be a package (<code>[package]</code> is allowed alongside
+<code>[workspace]</code>) or a pure workspace root (<code>[workspace]</code> only).</p>
+<p>Cabin workspaces support:</p>
+<ul>
+<li>recursive <strong>member discovery</strong> through path globs;</li>
+<li><strong><code>[workspace.exclude]</code></strong> to drop unwanted directories;</li>
+<li><strong><code>[workspace.default-members]</code></strong> to pick a subset for the
+  no-flag default;</li>
+<li><strong><code>[workspace.dependencies]</code></strong> /
+  <strong><code>[workspace.dev-dependencies]</code></strong> plus
+  <code>dep = { workspace = true }</code> for shared, kind-specific
+  dependency requirements;</li>
+<li><strong>root discovery from member directories</strong> so commands "just
+  work" when invoked anywhere under the workspace;</li>
+<li>consistent <strong>package selection</strong> flags across the commands that
+  operate on a workspace.</li>
+</ul>
+<p>All workspace operations are local-only and deterministic.</p>
+<h2 id="manifest-syntax">Manifest syntax</h2>
+<pre><code class="language-toml">[workspace]
+members = [
+  &quot;libs/*&quot;,
+  &quot;tools/driver&quot;,
+]
+exclude = [
+  &quot;libs/experimental&quot;,
+  &quot;third_party/*&quot;,
+]
+default-members = [
+  &quot;libs/core&quot;,
+  &quot;tools/driver&quot;,
+]
+
+[workspace.dependencies]
+fmt    = &quot;&gt;=10 &lt;11&quot;
+spdlog = &quot;^1.12&quot;
+</code></pre>
+<p>A member <code>cabin.toml</code> opts into a shared dependency with:</p>
+<pre><code class="language-toml">[dependencies]
+fmt = { workspace = true }
+</code></pre>
+<h3 id="rules">Rules</h3>
+<ul>
+<li><code>members</code> and <code>exclude</code> entries are paths or single-<code>*</code> trailing
+  globs (e.g. <code>libs/*</code>). Multi-level globs (<code>a/*/b</code>) are
+  intentionally rejected with a clear error.</li>
+<li>Excluded paths are removed from the candidate set before any
+  member is loaded. An exclude pattern that does not drop at least
+  one member is reported as <code>unused exclude pattern</code>.</li>
+<li><code>default-members</code> entries must resolve to declared members.
+  Unknown entries produce
+  <code>workspace default member 'libs/missing' is not listed in
+  workspace.members</code>.</li>
+<li>Duplicate member paths are deduplicated deterministically; the
+  resulting member order is sorted.</li>
+<li>Two workspace members may not share a <code>[package].name</code>.</li>
+<li>Nested workspaces are rejected. The loader rejects the case
+  where a member directory's <code>cabin.toml</code> declares its own
+  <code>[workspace]</code> table; the upward discovery walk additionally
+  errors when a <code>cabin.toml</code> with <code>[workspace]</code> sits above
+  another <code>cabin.toml</code> with <code>[workspace]</code> regardless of whether
+  the outer claims the inner as a member (see "Workspace root
+  discovery" below).</li>
+<li><code>dep = { workspace = true }</code> looks up the <code>[workspace.&lt;kind&gt;-dependencies]</code>
+  table that matches the section it was declared in
+  (<code>[dependencies]</code> → <code>[workspace.dependencies]</code>,
+  <code>[dev-dependencies]</code> → <code>[workspace.dev-dependencies]</code>).
+  The lookup is strictly kind-specific — a <code>{ workspace = true }</code>
+  under <code>[dev-dependencies]</code> does not fall back to
+  <code>[workspace.dependencies]</code>. If the matching workspace table
+  does not declare the dependency, Cabin reports a clear error
+  naming the dependency, the declaring section, and the
+  expected workspace section.</li>
+<li><code>workspace = true</code> cannot be combined with <code>path = "..."</code> or
+  <code>version = "..."</code>; pick exactly one source.</li>
+</ul>
+<h3 id="backwards-compatibility">Backwards compatibility</h3>
+<ul>
+<li>Manifests without <code>[workspace]</code> keep behaving as single-package
+  projects.</li>
+<li>Manifests with <code>[workspace] members = [...]</code> keep
+  working unchanged. The new fields (<code>exclude</code>, <code>default-members</code>,
+  <code>dependencies</code>) are all optional.</li>
+<li>Older lockfiles, package archives, and registry index entries are
+  unaffected.</li>
+</ul>
+<h2 id="workspace-root-discovery">Workspace root discovery</h2>
+<p>When the user runs <code>cabin &lt;subcommand&gt;</code> without an explicit
+<code>--manifest-path</code>, Cabin walks <strong>upward</strong> from the current
+directory and looks for a <code>cabin.toml</code> whose root declares a
+<code>[workspace]</code> table.</p>
+<ul>
+<li><strong>Zero</strong> workspace roots above the cwd → fall back to
+  <code>./cabin.toml</code> exactly as before.</li>
+<li><strong>Exactly one</strong> workspace root → use it as the entry point.</li>
+<li><strong>Two or more</strong> stacked workspace roots → discovery errors out
+  with <code>nested workspace detected: nearest workspace is &lt;inner&gt;
+  but outer workspace is &lt;outer&gt;</code>. This rule
+  strict: previous releases either silently picked the outer or
+  let the loader's member-list rejection produce a
+  similar-looking error only when the outer happened to claim
+  the inner as a member. The strict rule means stacking
+  workspaces is always surfaced to the user, regardless of how
+  the outer's <code>[workspace]</code> table is configured.</li>
+</ul>
+<p>When discovery returns an error, the user is expected to
+disambiguate by passing <code>--manifest-path</code> explicitly. A
+user-supplied <code>--manifest-path /some/path/cabin.toml</code> always
+wins — root discovery only triggers when the user did not pass
+<code>--manifest-path</code> at all.</p>
+<p>Discovery never touches the network and never crosses unusual
+filesystem boundaries (it stops at the filesystem root).</p>
+<h2 id="package-selection-flags">Package-selection flags</h2>
+<p>The same flag bundle applies to <code>cabin build</code>, <code>cabin metadata</code>,
+<code>cabin resolve</code>, <code>cabin fetch</code>, <code>cabin package</code>, and
+<code>cabin publish</code>:</p>
+<pre><code>--workspace                      operate on every workspace member
+-p, --package &lt;PACKAGE&gt;          operate on the named member; repeatable
+--default-members                operate on [workspace.default-members]
+--exclude &lt;PACKAGE&gt;              drop a member from --workspace / default
+</code></pre>
+<h3 id="default-behaviour-with-no-flags">Default behaviour with no flags</h3>
+<table>
+<thead>
+<tr>
+<th>Context</th>
+<th>Selected packages</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single-package project</td>
+<td>Just that package.</td>
+</tr>
+<tr>
+<td>Workspace root with <code>[workspace.default-members]</code></td>
+<td>The declared default-members.</td>
+</tr>
+<tr>
+<td>Workspace root without <code>[workspace.default-members]</code></td>
+<td><strong>All</strong> workspace members.</td>
+</tr>
+<tr>
+<td>Inside a member directory</td>
+<td>Same as the workspace root above (root discovery picks it up).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="constraints">Constraints</h3>
+<ul>
+<li><code>--workspace</code>, <code>-p / --package</code>, and <code>--default-members</code> are
+  mutually exclusive.</li>
+<li><strong>Selection flags:</strong> <code>--exclude</code> is only valid in combination with
+  <code>--workspace</code> or <code>--default-members</code>. Older behaviour also
+  accepted <code>--exclude</code> with the no-flag "current package" default;
+  Cabin made the rule stricter (closer to Cargo) so a typo on
+  a single-package project surfaces a clear error rather than
+  silently doing the wrong thing.</li>
+<li>Unknown package names (whether selected or excluded) produce
+  <code>package 'foo' is not a member of this workspace; available
+  members: alpha, beta, gamma</code>.</li>
+</ul>
+<h3 id="per-command-notes">Per-command notes</h3>
+<ul>
+<li><strong><code>cabin metadata</code></strong> reports <code>workspace.members</code>,
+  <code>workspace.default_members</code>, <code>workspace.excluded_members</code>, and
+  <code>workspace.selected_packages</code>. All four lists are sorted by
+  package name (or path, for <code>excluded_members</code>) so the JSON shape
+  is deterministic.</li>
+<li><strong><code>cabin build</code></strong> plans only the C/C++ targets in the selected
+  packages. Cabin does not currently offer a single-target
+  selector flag, so the build always enumerates every
+  default-buildable target in the selected packages.
+  Unselected packages are not built, so the resulting
+  <code>build.ninja</code> is the smallest graph that covers the request.</li>
+<li><strong><code>cabin resolve</code></strong> walks the <strong>selected package closure</strong> —
+  the resolved selection plus every local path-dependency
+  reachable from it — and unions every reachable member's
+  versioned dependencies into a single resolution. The workspace loader
+  added the closure walk so a registry dep declared by a
+  path-dep <code>lib</code> reaches the resolver when the user picks <code>app</code>.
+  The selection-aware closure extends all the way down into
+  <em>registry materialization</em>: when the loader expands versioned
+  dependencies into the package graph, it only requires registry
+  entries for packages reachable from the selected closure.
+  Versioned deps of unrelated workspace members (or unrelated
+  path-deps) are silently skipped, so <code>cabin resolve -p app</code> no
+  longer requires the index to know about an unrelated member's
+  dependency on <code>spdlog</code>. The lockfile, by contrast, is still
+  workspace-wide once produced — selection only affects what the
+  loader has to materialize <em>for this command</em>.</li>
+</ul>
+<p>Pure workspace roots (no <code>[package]</code>) work too: <code>cabin resolve
+  --workspace</code> over a workspace root that only has members with
+  <code>[dependencies]</code> produces a lockfile rooted at a synthetic
+  <code>__workspace_&lt;dirname&gt;</code> 0.0.0 identity. Member-level
+  requirement conflicts (<code>fmt = "^10"</code> and <code>fmt = "^11"</code> in two
+  members) surface as a clear <code>incompatible workspace
+  requirements for 'fmt'</code> error.
+- <strong><code>cabin update</code></strong> keeps its historical <code>--package &lt;name&gt;</code>
+  meaning: refresh only the named registry dependency. To avoid
+  colliding with that flag, <code>cabin update</code> exposes a <em>reduced</em>
+  workspace-selection bundle — <code>--workspace</code>,
+  <code>--default-members</code>, and <code>--exclude</code> — but <strong>not</strong> <code>-p</code> /
+  <code>--package</code>. Existing scripts that pass <code>cabin update --package
+  &lt;dep&gt;</code> keep working unchanged.</p>
+<p>Cabin makes the scope explicit: <code>cabin update --package
+  &lt;name&gt;</code> only targets <em>direct</em> versioned dependencies of the
+  root package — those declared under <code>[dependencies]</code> (or the
+  workspace-inherited equivalent) of the manifest you are
+  updating. Transitive locked packages cannot be refreshed
+  individually; to update a transitive lockfile entry, drop the
+  <code>--package</code> flag (<code>cabin update</code>) so resolution rolls forward
+  every relaxable constraint, or scope the refresh to a wider
+  selection (<code>cabin update --workspace</code>, etc.). An unknown or
+  transitive name produces "package 'foo' is not a direct
+  versioned dependency of <code>&lt;root&gt;</code>; cabin update --package only
+  refreshes direct dependencies declared in [dependencies]".
+- <strong><code>cabin fetch</code></strong> validates the workspace selection up-front
+  (so <code>cabin fetch -p missing</code> errors even when the workspace
+  has no versioned deps) and then unions selected members'
+  versioned deps for the resolution. The artifact cache itself
+  remains workspace-flat — every required artifact is downloaded
+  exactly once.
+- <strong><code>cabin package</code></strong> in a workspace requires exactly one
+  <code>--package &lt;name&gt;</code> selection. The workspace root itself is not
+  packageable.
+- <strong><code>cabin publish</code></strong> in a workspace requires exactly one
+  <code>--package &lt;name&gt;</code> selection for both <code>--dry-run</code> and
+  <code>--registry-dir</code> flows.</p>
+<p><code>-p / --package &lt;name&gt;</code> always matches by package name (the
+<code>[package].name</code> declared by the member). Workspace member paths
+(<code>libs/core</code>) are never accepted by <code>--package</code>; they live only
+inside the manifest's <code>[workspace] members = [...]</code> list.</p>
+<h2 id="worked-examples">Worked examples</h2>
+<h3 id="llvm-style-monorepo">LLVM-style monorepo</h3>
+<pre><code class="language-toml"># cabin.toml at the repository root
+[workspace]
+members = [
+  &quot;llvm&quot;,
+  &quot;lld&quot;,
+  &quot;lldb&quot;,
+  &quot;clang&quot;,
+  &quot;clang-tools-extra&quot;,
+  &quot;compiler-rt/*&quot;,
+]
+exclude = [
+  &quot;third-party/*&quot;,
+]
+default-members = [
+  &quot;llvm&quot;,
+  &quot;clang&quot;,
+]
+
+[workspace.dependencies]
+fmt = &quot;^11&quot;
+</code></pre>
+<pre><code class="language-sh"># Build the default (llvm + clang).
+cabin build
+
+# Build the entire monorepo, minus the LLDB tests.
+cabin build --workspace --exclude lldb
+
+# Build only one component.
+cabin build -p llvm -p clang
+
+# Inspect what Cabin sees.
+cabin metadata
+</code></pre>
+<h3 id="per-team-monorepo-with-shared-dependencies">Per-team monorepo with shared dependencies</h3>
+<pre><code class="language-toml">[workspace]
+members = [&quot;services/*&quot;, &quot;libs/*&quot;]
+
+[workspace.dependencies]
+fmt    = &quot;&gt;=10 &lt;11&quot;
+spdlog = &quot;^1.12&quot;
+</code></pre>
+<pre><code class="language-toml"># services/api/cabin.toml
+[package]
+name = &quot;api&quot;
+version = &quot;0.1.0&quot;
+
+[dependencies]
+fmt    = { workspace = true }
+spdlog = { workspace = true }
+
+[target.api]
+type = &quot;cpp_executable&quot;
+sources = [&quot;src/main.cc&quot;]
+</code></pre>
+<p>Bumping <code>fmt</code> from <code>&gt;=10 &lt;11</code> to <code>^12</code> then becomes a one-line change
+at the workspace root rather than a dozen individual member edits.</p>
+<h2 id="boundaries">Boundaries</h2>
+<p>Workspace support covers the local package graph and the
+workspace-aware command surfaces documented above: dependency
+kinds, feature unification, target-conditioned dependencies,
+profiles, toolchain settings, compiler-cache settings, config
+discovery, patches, source replacement, vendoring / offline mode,
+and dev / test / example target kinds all participate in
+workspace selection where their owning feature requires it.</p>
+<p>The remaining non-goals are network-side registry operation and
+remote publication. Cabin can read sparse HTTP indexes and publish
+to a local file registry, but it does not implement a registry
+server, HTTP publish, registry authentication, or a remote build
+cache.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../artifacts/" class="btn btn-neutral float-left" title="Source artifacts"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../metadata-tree-explain/" class="btn btn-neutral float-right" title="Metadata, tree, and explain">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../artifacts/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../metadata-tree-explain/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

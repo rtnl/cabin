@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Vendoring and offline mode - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Vendoring and offline mode";
+        var mkdocs_page_input_path = "vendoring-offline.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Vendoring and offline mode</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#what-cabin-vendor-produces">What cabin vendor produces</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#selection">Selection</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#locked-frozen-and-offline-semantics">Locked, frozen, and offline semantics</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#patches-and-source-replacement">Patches and source replacement</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#c-c-first-class-support">C / C++ first-class support</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scope">Scope</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#direct-ninja-invocation">Direct ninja invocation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment variables</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Dependencies</li>
+      <li class="breadcrumb-item active">Vendoring and offline mode</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/vendoring-offline.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="vendoring-and-offline-mode">Vendoring and offline mode</h1>
+<p><code>cabin vendor</code> materialises the external versioned dependencies
+the selected packages need into a deterministic local
+file-registry directory. The output is just an ordinary Cabin
+file registry — the same shape <code>cabin publish --registry-dir</code>
+writes — so every existing read-path command knows how to
+consume it without any new protocol.</p>
+<p>The core offline-consumption workflow is:</p>
+<pre><code class="language-sh">cabin vendor                                   # populate ./vendor
+cabin build  --offline --index-path ./vendor   # build with no network
+cabin fetch  --offline --index-path ./vendor   # populate the cache offline
+</code></pre>
+<p><code>cabin test --offline --index-path ./vendor</code> can use the
+vendored registry only when the selected tests do not require
+additional registry packages from <code>[dev-dependencies]</code>; the
+vendor sweep follows the same selection policy as <code>cabin build</code>
+and does not include dev-only dependencies.</p>
+<h2 id="what-cabin-vendor-produces">What <code>cabin vendor</code> produces</h2>
+<p>The default vendor directory is <code>vendor/</code> next to the project
+manifest. Pass <code>--vendor-dir &lt;path&gt;</code> to override it.</p>
+<p>The directory layout is the existing Cabin file registry:</p>
+<pre><code>vendor/
+  config.json                                 # {&quot;schema&quot;:1, &quot;kind&quot;:&quot;file-registry&quot;, ...}
+  packages/&lt;name&gt;.json                        # per-package version index
+  artifacts/&lt;name&gt;/&lt;name&gt;-&lt;version&gt;.tar.gz    # verified source archives
+  cabin-vendor.json                           # deterministic summary of this run
+</code></pre>
+<p><code>cabin-vendor.json</code> records the <code>(name, version, checksum,
+artifact)</code> set this invocation wrote, in stable
+<code>(name, version)</code> order. Re-running <code>cabin vendor</code> against the
+same inputs produces a byte-identical summary.</p>
+<p>Every archive is re-verified against the checksum recorded in
+the source index before the byte stream is written; a checksum
+mismatch surfaces as an explicit error and never overwrites the
+destination.</p>
+<h2 id="selection">Selection</h2>
+<p><code>cabin vendor</code> accepts the same selection bundle as
+<code>cabin build</code> / <code>cabin fetch</code>:</p>
+<pre><code class="language-sh">cabin vendor --workspace
+cabin vendor -p app
+cabin vendor --exclude lldb
+cabin vendor --features simd,ssl
+cabin vendor --no-default-features
+cabin vendor --no-patches
+</code></pre>
+<p>Only the packages reachable from the resolved selection are
+vendored. A workspace member you did not pick is ignored.
+<code>cabin vendor</code> matches the <code>cabin build</code> policy: dev
+dependencies are <em>not</em> vendored unless they are in the
+selection's build closure.</p>
+<h2 id="locked-frozen-and-offline-semantics">Locked, frozen, and offline semantics</h2>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Lockfile</th>
+<th>Artifact cache</th>
+<th>Vendor directory</th>
+<th>Network / HTTP index source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(default)</td>
+<td>written</td>
+<td>populated</td>
+<td>written</td>
+<td>not used; HTTP index rejected</td>
+</tr>
+<tr>
+<td><code>--locked</code></td>
+<td>required, kept</td>
+<td>populated</td>
+<td>written</td>
+<td>not used; HTTP index rejected</td>
+</tr>
+<tr>
+<td><code>--frozen</code></td>
+<td>required, kept</td>
+<td>not populated</td>
+<td>written (explicit output)</td>
+<td>not used; HTTP index rejected</td>
+</tr>
+<tr>
+<td><code>--offline</code></td>
+<td>written</td>
+<td>populated</td>
+<td>written</td>
+<td><strong>forbidden</strong></td>
+</tr>
+</tbody>
+</table>
+<p><code>cabin vendor</code> requires a local file-registry index
+(<code>--index-path</code> or <code>[registry] index-path</code>) so the per-package
+metadata it copies into the vendor directory is byte-stable. An
+HTTP index URL supplied by a <code>[registry] index-url</code> config
+setting — or one reached via <code>[source-replacement]</code> — is
+rejected before any network attempt. Already-cached artifacts
+and local file-registry indexes are unaffected.</p>
+<p><code>cabin vendor --frozen</code> is the documented "rebuild a vendor
+directory from the existing artifact cache without touching the
+lockfile or refreshing the cache" flow. The vendor directory is
+the <em>explicit user-requested output</em> of the command, so it is
+still written under <code>--frozen</code>; the lockfile and the artifact
+cache are not.</p>
+<p><code>--offline</code> and <code>--frozen</code> compose: <code>cabin vendor --offline
+--frozen</code> succeeds when the closure is fully cached and the
+lockfile is current, and fails with an actionable diagnostic
+otherwise.</p>
+<h2 id="patches-and-source-replacement">Patches and source replacement</h2>
+<p><code>cabin vendor</code> honours every patch / override mechanism:</p>
+<ul>
+<li><strong>Manifest <code>[patch]</code></strong> entries point at a local working copy.
+  Patched packages do not flow through the resolver and are
+  therefore not vendored — the vendor directory is for the
+  registry-supplied versions only. Consumers of the vendor
+  directory still see the patched local copy because the
+  manifest's <code>[patch]</code> table is read from the consuming
+  project, not from the vendor directory.</li>
+<li><strong>Config <code>[patch]</code> / <code>[source-replacement]</code></strong> is honoured
+  identically.</li>
+<li><strong><code>--no-patches</code></strong> disables the entire local-policy layer for
+  the vendor invocation — the resolver picks the registry
+  versions and Cabin vendors those.</li>
+</ul>
+<p>Local path dependencies (<code>dep = { path = "../local" }</code>) are
+<strong>not</strong> copied into the vendor directory. They remain local
+references; the consuming project must continue to provide them
+on disk. <code>cabin vendor</code> does not invent a packaging path for
+local sources because publishing them would require a different
+identity contract (no checksum / no index entry).</p>
+<h2 id="c-c-first-class-support">C / C++ first-class support</h2>
+<p>Vendored builds preserve every C/C++ contract documented in
+<code>docs/toolchains.md</code> and <code>docs/targets.md</code>:</p>
+<ul>
+<li>CC and CXX remain separate;</li>
+<li><code>cflags</code> / <code>cxxflags</code> / <code>ldflags</code> keep their argv-space
+  separation;</li>
+<li>C and C++ standard flags do not leak across language slots;</li>
+<li>the link driver is selected per target by the planner
+  regardless of how the dependency's archive was sourced;</li>
+<li>public include directories propagate from a vendored
+  dependency to its consumers exactly as they would from a
+  registry consumer;</li>
+<li>system dependency declarations are not vendored; later build /
+  test / metadata commands still probe active <code>system = true</code>
+  entries through <code>pkg-config</code>.</li>
+</ul>
+<p>Because vendoring re-uses the existing artifact pipeline, every
+fingerprint input documented in <code>docs/toolchains.md</code> continues
+to participate in <code>BuildConfiguration::fingerprint</code> for vendor
+builds.</p>
+<h2 id="scope">Scope</h2>
+<p><code>cabin vendor</code> operates on the registry-package closure of the
+resolved selection. Local path dependencies are not copied into
+the vendor directory, and the command mirrors <code>cabin build</code>'s
+closure policy (dev dependencies are not swept).</p>
+<h2 id="direct-ninja-invocation">Direct <code>ninja</code> invocation</h2>
+<p><code>cabin build --offline --index-path ./vendor</code> regenerates
+<code>build.ninja</code> and <code>compile_commands.json</code> from the vendored
+inputs every time. Direct <code>ninja -C &lt;build-dir&gt;</code> invocations
+still work for incremental rebuilds (Cabin does not interfere
+with that flow), but Ninja does not re-read <code>cabin.toml</code>,
+config files, or environment changes. Run <code>cabin build</code> after
+manifest / config / toolchain edits so the build configuration
+fingerprint and the generated commands reflect the new inputs.</p>
+<h2 id="environment-variables">Environment variables</h2>
+<p><code>cabin vendor</code> shares the fetch / index / artifact-cache /
+offline environment policy used by the dependency-fetching
+pipeline. It does not resolve a compiler toolchain or build
+anything, so <code>CC</code>, <code>CXX</code>, <code>AR</code>, <code>CFLAGS</code>, <code>CXXFLAGS</code>,
+<code>LDFLAGS</code>, and <code>LD</code> are not consumed by <code>cabin vendor</code> itself.
+Subsequent build commands that use the vendored index still
+honour their normal toolchain and profile environment policy.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--offline forbids network access, but the resolved index source is the URL …</code></td>
+<td>A <code>[registry] index-url</code> config setting is active.</td>
+<td>Pass <code>--index-path &lt;vendor-dir&gt;</code> or remove the URL setting from the active config.</td>
+</tr>
+<tr>
+<td><code>cabin vendor requires a local --index-path source …</code></td>
+<td>The resolved index source is a URL (config or <code>[source-replacement]</code>).</td>
+<td>Switch to a local <code>--index-path</code> source or adjust the offending config entry.</td>
+</tr>
+<tr>
+<td><code>vendor directory already contains &lt;path&gt; with checksum sha256:… which does not match …</code></td>
+<td>A previous run left a stale archive on disk.</td>
+<td>Delete the offending file (or the whole <code>vendor/artifacts/&lt;name&gt;/</code> subdir) and re-run.</td>
+</tr>
+<tr>
+<td><code>checksum mismatch while vendoring …</code></td>
+<td>The artifact in the cache no longer matches the index's recorded checksum.</td>
+<td>Clear the cache (<code>--cache-dir &lt;new-dir&gt;</code>) or refresh the index, then re-run <code>cabin vendor</code>.</td>
+</tr>
+<tr>
+<td><code>vendoring requires the source index to expose packages/&lt;name&gt;.json at …</code></td>
+<td>The local <code>--index-path</code> is missing per-package metadata.</td>
+<td>Re-publish the package with <code>cabin publish --registry-dir &lt;dir&gt;</code> so the file appears.</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../patch-overrides/" class="btn btn-neutral float-left" title="Patch, override, and source replacement"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../artifacts/" class="btn btn-neutral float-right" title="Source artifacts">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../patch-overrides/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../artifacts/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>CLI distribution artefacts - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "CLI distribution artefacts";
+        var mkdocs_page_input_path = "distribution.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">CLI distribution artefacts</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#shell-completions">Shell completions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#man-pages">Man pages</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#notes-for-package-manager-integrators">Notes for package-manager integrators</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Distribution and registry interface</li>
+      <li class="breadcrumb-item active">CLI distribution artefacts</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/distribution.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="cli-distribution-artefacts">CLI distribution artefacts</h1>
+<p>Cabin ships two CLI subcommands that emit artefacts package
+managers usually want:</p>
+<ul>
+<li><code>cabin compgen</code> — shell completion scripts (bash, zsh, fish,
+  powershell, elvish);</li>
+<li><code>cabin mangen</code> — man pages (<code>cabin(1)</code> plus one
+  <code>cabin-&lt;sub&gt;(1)</code> per top-level subcommand).</li>
+</ul>
+<p>Both commands derive every byte of output from the canonical
+<code>clap::Command</code> tree returned by <code>Cli::command()</code>.  There are
+no hand-written completion scripts and no hand-written man
+pages.</p>
+<p><code>compgen</code> and <code>mangen</code> are aimed at downstream packagers, so
+they are hidden from <code>cabin --help</code> to keep the day-to-day
+listing short.  They are still listed by <code>cabin --list</code>, still
+parse normally, still appear in generated shell completions,
+and still ship per-command man pages — only the curated help
+view omits them.</p>
+<p>The two commands bound themselves to artefact generation:
+they do not write a Homebrew formula, publish to a registry,
+build release archives, attach binaries, or perform deployment
+integration.  Those concerns are out of scope for the local
+OSS core.</p>
+<h2 id="shell-completions">Shell completions</h2>
+<pre><code class="language-sh">cabin compgen &lt;shell&gt; [--output-dir &lt;dir&gt;]
+cabin compgen --all --output-dir &lt;dir&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Shell</th>
+<th>Identifier</th>
+<th>Default filename in <code>--output-dir</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bash</td>
+<td><code>bash</code></td>
+<td><code>cabin.bash</code></td>
+</tr>
+<tr>
+<td>Zsh</td>
+<td><code>zsh</code></td>
+<td><code>_cabin</code></td>
+</tr>
+<tr>
+<td>Fish</td>
+<td><code>fish</code></td>
+<td><code>cabin.fish</code></td>
+</tr>
+<tr>
+<td>PowerShell</td>
+<td><code>powershell</code></td>
+<td><code>cabin.ps1</code></td>
+</tr>
+<tr>
+<td>Elvish</td>
+<td><code>elvish</code></td>
+<td><code>cabin.elv</code></td>
+</tr>
+</tbody>
+</table>
+<p>Behaviour:</p>
+<ul>
+<li>Without <code>--output-dir</code>, <code>cabin compgen &lt;shell&gt;</code> writes the
+  script to stdout.  This is the normal "install one shell"
+  entry point (<code>cabin compgen bash &gt; cabin.bash</code>).</li>
+<li>With <code>--output-dir &lt;dir&gt;</code>, the script is written into the
+  directory using the table above.  The directory is created
+  if it does not already exist; existing files are
+  overwritten.</li>
+<li><code>cabin compgen --all --output-dir &lt;dir&gt;</code> writes one file
+  per supported shell into the directory.  <code>--all</code> requires
+  <code>--output-dir</code>; multiple files cannot be written to stdout
+  cleanly, so omitting it produces a clear error.</li>
+<li>An unknown shell name fails with clap's standard validation
+  error.</li>
+</ul>
+<p>Examples:</p>
+<pre><code class="language-sh"># Bash
+cabin compgen bash &gt; cabin.bash
+
+# Zsh — drop into a directory on $fpath, e.g. ~/.zfunc/
+cabin compgen zsh &gt; _cabin
+
+# Fish — into the user completions directory
+cabin compgen fish &gt; ~/.config/fish/completions/cabin.fish
+
+# PowerShell
+cabin compgen powershell &gt; cabin.ps1
+
+# Elvish
+cabin compgen elvish &gt; cabin.elv
+
+# Every supported shell, into one folder
+cabin compgen --all --output-dir completions
+</code></pre>
+<h2 id="man-pages">Man pages</h2>
+<pre><code class="language-sh">cabin mangen [--output-dir &lt;dir&gt;]
+</code></pre>
+<p>Behaviour:</p>
+<ul>
+<li>Without <code>--output-dir</code>, <code>cabin mangen</code> writes the root
+  <code>cabin(1)</code> man page (ROFF) to stdout.</li>
+<li>With <code>--output-dir &lt;dir&gt;</code>, the directory is created if
+  needed and populated with <code>cabin.1</code> (the root page) plus
+  <code>cabin-&lt;sub&gt;.1</code> for every top-level subcommand.  Hidden
+  subcommands such as <code>compgen</code> and <code>mangen</code> still receive
+  their own per-command pages; the root <code>cabin.1</code> page mirrors <code>cabin
+  --help</code> and therefore omits the hidden subcommands from its
+  SUBCOMMANDS section.</li>
+<li>Aliases do not get separate pages.</li>
+<li>Existing files in the output directory are overwritten.</li>
+</ul>
+<p>Examples:</p>
+<pre><code class="language-sh"># Root cabin(1) to stdout
+cabin mangen &gt; cabin.1
+
+# Full set into ./man
+cabin mangen --output-dir man
+
+# Install root + per-subcommand pages into a system man path
+cabin mangen --output-dir /usr/local/share/man/man1
+</code></pre>
+<h2 id="notes-for-package-manager-integrators">Notes for package-manager integrators</h2>
+<ul>
+<li>The generated artefacts are derived from the clap CLI
+  definition, so they stay in sync with whatever subcommands
+  and flags currently exist.</li>
+<li>Refresh both completions and man pages on every release
+  that changes the CLI surface — adding or renaming a
+  subcommand, flag, or value enum changes the output.</li>
+<li>Both commands are deterministic for the same <code>cabin</code>
+  binary: running them twice in a row produces identical
+  output.</li>
+<li>Bundling the artefacts into a Homebrew formula, deb / rpm
+  package, or release tarball is a downstream concern. The
+  repository's tag-triggered release workflow creates GitHub
+  release notes only; it does not package these artefacts.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../registry-design/" class="btn btn-neutral float-left" title="Registry design"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../registry-design/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

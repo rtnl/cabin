@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Environment variables - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Environment variables";
+        var mkdocs_page_input_path = "environment-variables.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Environment variables</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#read-side-variables">Read-side variables</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#build-time-version-metadata">Build-time version metadata</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#precedence">Precedence</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#truthy-falsy-spellings">Truthy / falsy spellings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#terminal-color-cabin_term_color-and-color">Terminal color (CABIN_TERM_COLOR and --color)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#terminal-verbosity-cabin_term_verbose-cabin_term_quiet-v-and-q">Terminal verbosity (CABIN_TERM_VERBOSE, CABIN_TERM_QUIET, -v, and -q)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#build-jobs-cabin_build_jobs-and-jobs">Build jobs (CABIN_BUILD_JOBS and --jobs)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cppflags-cflags-cxxflags-ldflags">CPPFLAGS / CFLAGS / CXXFLAGS / LDFLAGS</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#parsing">Parsing</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#layer-order">Layer order</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#commands-and-reproducibility">Commands and reproducibility</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#output-policy">Output policy</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#ld-is-not-honoured">LD is not honoured</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#variables-cabin-sets-for-cabin-run-and-cabin-test">Variables Cabin sets for cabin run and cabin test</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#why-cabin-does-not-auto-inject-dcabin_package_-macros">Why Cabin does not auto-inject -DCABIN_PACKAGE_* macros</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#see-also">See also</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Manifest and configuration</li>
+      <li class="breadcrumb-item active">Environment variables</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/environment-variables.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="environment-variables">Environment variables</h1>
+<p>This page lists every runtime <code>CABIN_*</code> environment variable
+Cabin reads, the build-time <code>CABIN_*</code> metadata variables that
+affect <code>cabin version -v</code>, the small fixed set Cabin sets on a
+child process (<code>cabin run</code> / <code>cabin test</code>), and the precedence
+chain for each.</p>
+<p>The single source of truth for runtime and child-process names
+lives in the
+<a href="https://github.com/cabinpkg/cabin/blob/main/crates/cabin-env/src/lib.rs"><code>cabin-env</code></a>
+crate as <code>pub const ... : &amp;str = ...</code> constants. Build-time
+version metadata is owned by <code>cabin-cli/build.rs</code> because those
+values are embedded while compiling the CLI, not read from the
+user's environment when <code>cabin</code> runs.</p>
+<h2 id="read-side-variables">Read-side variables</h2>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Default</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CABIN_CONFIG</code></td>
+<td>unset</td>
+<td>Path to one explicit config file. Disables the normal config-discovery walk.</td>
+</tr>
+<tr>
+<td><code>CABIN_CONFIG_HOME</code></td>
+<td>platform default</td>
+<td>Override for the per-user config home</td>
+</tr>
+<tr>
+<td><code>CABIN_NO_CONFIG</code></td>
+<td>unset</td>
+<td>When truthy, no config files load at all</td>
+</tr>
+<tr>
+<td><code>CABIN_BUILD_DIR</code></td>
+<td><code>build</code></td>
+<td>Build output directory</td>
+</tr>
+<tr>
+<td><code>CABIN_CACHE_DIR</code></td>
+<td>platform default</td>
+<td>Artifact cache directory</td>
+</tr>
+<tr>
+<td><code>CABIN_NET_OFFLINE</code></td>
+<td>unset</td>
+<td>Forbid network access this invocation</td>
+</tr>
+<tr>
+<td><code>CABIN_COMPILER_WRAPPER</code></td>
+<td>unset</td>
+<td><code>ccache</code> / <code>sccache</code> / unset</td>
+</tr>
+<tr>
+<td><code>CABIN_TERM_COLOR</code></td>
+<td>unset</td>
+<td>Terminal-color choice (<code>auto</code> / <code>always</code> / <code>never</code>)</td>
+</tr>
+<tr>
+<td><code>CABIN_TERM_VERBOSE</code></td>
+<td>unset</td>
+<td>Enable verbose Cabin-owned status output when truthy</td>
+</tr>
+<tr>
+<td><code>CABIN_TERM_QUIET</code></td>
+<td>unset</td>
+<td>Suppress Cabin-owned status output when truthy</td>
+</tr>
+<tr>
+<td><code>CABIN_FMT</code></td>
+<td>unset</td>
+<td>Override for the <code>clang-format</code> executable <code>cabin fmt</code> spawns</td>
+</tr>
+<tr>
+<td><code>CABIN_TIDY</code></td>
+<td>unset</td>
+<td>Override for the <code>run-clang-tidy</code> executable <code>cabin tidy</code> spawns</td>
+</tr>
+<tr>
+<td><code>CABIN_PKG_CONFIG</code></td>
+<td>unset</td>
+<td>Override for the <code>pkg-config</code> executable Cabin spawns when probing <code>`system = true</code> deps`</td>
+</tr>
+<tr>
+<td><code>CABIN_BUILD_JOBS</code></td>
+<td>unset</td>
+<td>Number of parallel jobs the build backend should use</td>
+</tr>
+<tr>
+<td><code>CPPFLAGS</code></td>
+<td>unset</td>
+<td>Conventional preprocessor flags appended to <strong>both</strong> C and C++ compile commands</td>
+</tr>
+<tr>
+<td><code>CFLAGS</code></td>
+<td>unset</td>
+<td>Conventional flags appended only to C compile commands</td>
+</tr>
+<tr>
+<td><code>CXXFLAGS</code></td>
+<td>unset</td>
+<td>Conventional flags appended only to C++ compile commands</td>
+</tr>
+<tr>
+<td><code>LDFLAGS</code></td>
+<td>unset</td>
+<td>Conventional flags appended only to link commands</td>
+</tr>
+</tbody>
+</table>
+<h2 id="build-time-version-metadata">Build-time version metadata</h2>
+<p>These variables are consumed while compiling <code>cabin-cli</code> and
+are embedded into the binary's verbose version output. They are
+not runtime controls: setting them in the shell when invoking
+<code>cabin version -v</code> has no effect on an already-built binary.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CABIN_BUILD_COMMIT</code></td>
+<td>Full git commit hash to embed in verbose version output</td>
+</tr>
+<tr>
+<td><code>CABIN_BUILD_COMMIT_DATE</code></td>
+<td>Commit date to embed in verbose version output</td>
+</tr>
+<tr>
+<td><code>CABIN_BUILD_HOST</code></td>
+<td>Host triple to embed in verbose version output</td>
+</tr>
+</tbody>
+</table>
+<h3 id="precedence">Precedence</h3>
+<p>Read-side settings use a consistent shape when they have more
+than one source:</p>
+<ol>
+<li><strong>CLI flag</strong> (e.g. <code>--build-dir</code>, <code>--offline</code>)</li>
+<li><strong>Environment variable</strong> (e.g. <code>CABIN_BUILD_DIR=…</code>)</li>
+<li><strong>Config file</strong> (e.g. <code>[paths] build-dir = …</code>)</li>
+<li><strong>Built-in default</strong> (e.g. <code>build</code>)</li>
+</ol>
+<p>Not every environment variable has all four layers. For example,
+<code>CPPFLAGS</code> / <code>CFLAGS</code> / <code>CXXFLAGS</code> / <code>LDFLAGS</code> have no Cabin CLI
+or config equivalent, and tool executable overrides such as
+<code>CABIN_FMT</code> are environment-only. Where a setting does have a
+config or CLI counterpart, precedence labels are surfaced through
+<code>cabin metadata</code> so users can audit which layer supplied each
+effective value.</p>
+<h3 id="truthy-falsy-spellings">Truthy / falsy spellings</h3>
+<p>For boolean env vars (<code>CABIN_NET_OFFLINE</code>, <code>CABIN_NO_CONFIG</code>,
+<code>CABIN_TERM_VERBOSE</code>, <code>CABIN_TERM_QUIET</code>, …) Cabin recognises:</p>
+<ul>
+<li>truthy: <code>1</code>, <code>true</code>, <code>yes</code>, <code>on</code> (case-insensitive)</li>
+<li>falsy: empty string, <code>0</code>, <code>false</code>, <code>no</code>, <code>off</code></li>
+</ul>
+<p>Anything else is an error.</p>
+<h3 id="terminal-color-cabin_term_color-and-color">Terminal color (<code>CABIN_TERM_COLOR</code> and <code>--color</code>)</h3>
+<p>Cabin emits ANSI color in human-readable diagnostic output.
+The choice follows the same precedence chain as every other
+read-side variable:</p>
+<ol>
+<li><strong><code>--color &lt;when&gt;</code></strong> on the command line.</li>
+<li><strong><code>CABIN_TERM_COLOR=&lt;when&gt;</code></strong> environment variable.</li>
+<li><strong><code>[term] color = "&lt;when&gt;"</code></strong> in a config file.</li>
+<li><strong>Default</strong>: <code>auto</code>.</li>
+</ol>
+<p><code>&lt;when&gt;</code> is one of:</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>auto</code></td>
+<td>Emit color only when stderr is a terminal and the environment does not opt out (e.g. <code>NO_COLOR</code>).</td>
+</tr>
+<tr>
+<td><code>always</code></td>
+<td>Always emit color, even when output is redirected.</td>
+</tr>
+<tr>
+<td><code>never</code></td>
+<td>Never emit color, regardless of terminal detection.</td>
+</tr>
+</tbody>
+</table>
+<p>Invalid values produce a clear error. Example:</p>
+<pre><code class="language-text">$ CABIN_TERM_COLOR=sometimes cabin build
+error: invalid CABIN_TERM_COLOR value 'sometimes'; expected one of: auto, always, never
+</code></pre>
+<p>Machine-readable output (<code>cabin metadata --format json</code>,
+<code>cabin tree --format json</code>, etc.) is always emitted without
+color regardless of the selected mode, so piping into <code>jq</code>
+stays deterministic.</p>
+<h3 id="terminal-verbosity-cabin_term_verbose-cabin_term_quiet-v-and-q">Terminal verbosity (<code>CABIN_TERM_VERBOSE</code>, <code>CABIN_TERM_QUIET</code>, <code>-v</code>, and <code>-q</code>)</h3>
+<p>Cabin-owned status output follows this precedence chain:</p>
+<ol>
+<li><strong><code>-q</code> / <code>--quiet</code></strong> or <strong><code>-v</code> / <code>--verbose</code></strong> on the command line.</li>
+<li><strong><code>CABIN_TERM_QUIET=&lt;bool&gt;</code></strong> or <strong><code>CABIN_TERM_VERBOSE=&lt;bool&gt;</code></strong>.</li>
+<li><strong><code>[term] quiet = &lt;bool&gt;</code></strong> or <strong><code>[term] verbose = &lt;bool&gt;</code></strong> in a config file.</li>
+<li><strong>Default</strong>: normal status output.</li>
+</ol>
+<p>The two environment variables use the truthy / falsy spellings
+listed above. If both are truthy in the same invocation, Cabin
+rejects the conflict instead of guessing which level the user
+intended. CLI flags still take precedence, so <code>cabin -q build</code>
+does not inspect a conflicting <code>CABIN_TERM_VERBOSE</code>.</p>
+<h3 id="build-jobs-cabin_build_jobs-and-jobs">Build jobs (<code>CABIN_BUILD_JOBS</code> and <code>--jobs</code>)</h3>
+<p>Cabin lets the user cap the number of parallel jobs the build
+backend runs.  The choice follows the standard precedence
+chain:</p>
+<ol>
+<li><strong><code>-j</code> / <code>--jobs &lt;N&gt;</code></strong> on the command line (supported by
+   <code>cabin build</code>, <code>cabin run</code>, and <code>cabin tidy</code>).</li>
+<li><strong><code>CABIN_BUILD_JOBS=&lt;N&gt;</code></strong> environment variable.</li>
+<li><strong><code>[build] jobs = &lt;N&gt;</code></strong> in a config file.</li>
+<li><strong>Default</strong> — the build backend's own default (Ninja picks
+   a value derived from the host's CPU count).</li>
+</ol>
+<p><code>&lt;N&gt;</code> must be a positive integer.  Cabin rejects <code>0</code>,
+negatives, and non-numeric values with a clear error before
+spawning anything:</p>
+<pre><code class="language-text">$ cabin build --jobs 0
+error: invalid value '0' for '--jobs &lt;N&gt;': expected a positive integer, got 0
+$ CABIN_BUILD_JOBS=many cabin build
+error: invalid CABIN_BUILD_JOBS value &quot;many&quot;: invalid jobs value &quot;many&quot;; expected a positive integer
+</code></pre>
+<p>Cabin passes the resolved value to Ninja as <code>-jN</code> and does not
+otherwise modify the parallelism story for compilers or
+linkers.  <code>cabin test</code> does not expose <code>--jobs</code>: the test
+runner is sequential, and <code>CABIN_BUILD_JOBS</code> is ignored when
+<code>cabin test</code> invokes Ninja for the build phase.</p>
+<p><code>cabin tidy</code> honours the same precedence chain and forwards the
+resolved value to <code>run-clang-tidy</code> as <code>-j N</code>.  In <code>--fix</code> mode
+the effective parallelism is clamped to <code>1</code> so concurrent
+clang-tidy instances cannot race while applying overlapping
+fixes; verbose mode reports the override when a higher count
+was requested.</p>
+<h3 id="cppflags-cflags-cxxflags-ldflags"><code>CPPFLAGS</code> / <code>CFLAGS</code> / <code>CXXFLAGS</code> / <code>LDFLAGS</code></h3>
+<p>Cabin honours the conventional C / C++ build-flag environment
+variables alongside its typed manifest <code>[profile]</code> fields.  Each
+variable is read at command start, parsed once, and merged
+into the per-package compile / link command-lines.</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Routes to</th>
+<th>Reaches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CPPFLAGS</code></td>
+<td>language-neutral compile bucket</td>
+<td>every C and every C++ compile command</td>
+</tr>
+<tr>
+<td><code>CFLAGS</code></td>
+<td>C-only compile bucket</td>
+<td>every C compile command</td>
+</tr>
+<tr>
+<td><code>CXXFLAGS</code></td>
+<td>C++-only compile bucket</td>
+<td>every C++ compile command</td>
+</tr>
+<tr>
+<td><code>LDFLAGS</code></td>
+<td>link bucket</td>
+<td>every link command</td>
+</tr>
+</tbody>
+</table>
+<p>Cabin keeps the four buckets strictly separated.  A <code>CFLAGS</code>
+token never reaches a C++ compile line, a <code>CXXFLAGS</code> token
+never reaches a C compile line, and neither reaches the link
+command.  <code>CPPFLAGS</code> is preprocessor-shaped so it lands on both
+compile languages, but is never treated as a linker flag.</p>
+<h4 id="parsing">Parsing</h4>
+<p>Each variable's value is split into argv tokens with an
+in-process shell-like splitter (no real shell is invoked).
+The splitter recognises:</p>
+<ul>
+<li>whitespace-separated tokens (runs collapse);</li>
+<li>single-quoted runs (<code>'…'</code>) — emit contents verbatim;</li>
+<li>double-quoted runs (<code>"…"</code>) — recognise <code>\"</code>, <code>\\</code>, <code>\$</code>,
+  and <code>\`</code> as the documented escape forms; backslash
+  before any other character inside double quotes is preserved
+  literally;</li>
+<li>unquoted <code>\&lt;char&gt;</code> — emit <code>&lt;char&gt;</code> literally, so <code>\</code> and
+  <code>\\</code> survive into a single argv element.</li>
+</ul>
+<p>Empty and whitespace-only variables are no-ops.  An
+unterminated quote or a trailing escape character is rejected
+with a clear error that names the offending variable:</p>
+<pre><code class="language-text">$ CXXFLAGS=&quot;'oops&quot; cabin build
+error: invalid CXXFLAGS: unterminated single quote
+</code></pre>
+<pre><code class="language-text">$ LDFLAGS='-L/lib\' cabin build
+error: invalid LDFLAGS: trailing escape character
+</code></pre>
+<h4 id="layer-order">Layer order</h4>
+<p>Environment flags merge with Cabin's existing build-flag
+sources in this documented order (later layers append to
+earlier ones; nothing replaces or erases an earlier layer):</p>
+<ol>
+<li>Built-in backend defaults (<code>-std=c11</code> / <code>-std=c++17</code>, the
+   profile's <code>-O…</code> / <code>-g</code>, …).</li>
+<li>The package's own <code>[profile]</code> table.</li>
+<li>The package's matching <code>[target.'cfg(...)'.profile]</code> blocks.</li>
+<li>The selected profile's <code>[profile.&lt;name&gt;]</code> block.</li>
+<li><code>pkg-config</code> contributions from <code>`system = true</code> deps`.</li>
+<li><code>CPPFLAGS</code>, <code>CFLAGS</code>, <code>CXXFLAGS</code>, <code>LDFLAGS</code> — the
+   environment layer described above.</li>
+</ol>
+<p>Environment flags only contribute to <strong>primary</strong> packages —
+the workspace members the user owns.  Registry and path
+dependencies still observe their own <code>[profile]</code> declarations
+but are not augmented by the user's environment, so a
+<code>-Werror</code> in <code>CXXFLAGS</code> cannot break a third-party dep.</p>
+<h4 id="commands-and-reproducibility">Commands and reproducibility</h4>
+<p><code>cabin build</code>, <code>cabin run</code>, <code>cabin test</code>, and <code>cabin tidy</code> read
+the four variables and pass the parsed tokens through to the
+generated <code>build.ninja</code> and <code>compile_commands.json</code>. The build
+configuration fingerprint folds in the per-bucket values, so
+changing a relevant variable moves the fingerprint exactly the
+way changing the matching <code>[profile]</code> field would; Ninja
+rebuilds are driven by the changed command lines.</p>
+<p><code>cabin fmt</code>, <code>cabin clean</code>, <code>cabin new</code>, and <code>cabin init</code> do
+<strong>not</strong> participate.  These commands either do not invoke the
+C / C++ build at all (<code>fmt</code>, <code>new</code>, <code>init</code>) or only touch the
+on-disk build directory (<code>clean</code>), so the four environment
+variables have no effect on them.</p>
+<h4 id="output-policy">Output policy</h4>
+<ul>
+<li>Quiet and normal modes do not print the env flags.</li>
+<li>Verbose mode prints one line per active variable on stderr
+  with arg counts only (e.g. <code>cabin: applying CPPFLAGS (2 args)</code>).</li>
+<li>Very-verbose mode prints the parsed argv tokens on stderr.
+  Be careful: environment flag values can contain local
+  include paths or tokens — treat the very-verbose log as
+  command-line output.</li>
+<li>Machine-readable stdout (<code>cabin metadata --format json</code>,
+  <code>cabin tree --format json</code>, …) stays clean: all chatter
+  routes to stderr.  The metadata JSON view reflects the
+  applied flags through the per-package
+  <code>toolchain.build_flags_per_package</code> block.</li>
+</ul>
+<h4 id="ld-is-not-honoured"><code>LD</code> is not honoured</h4>
+<p>The conventional <code>LD</code> environment variable selects a linker
+binary.  Cabin does not honour <code>LD</code> — linker selection would
+require a linker-command abstraction the C++ backend does not
+expose.  Use <code>LDFLAGS</code> to extend the link command line
+(via the C / C++ driver Cabin already picked); the driver is
+what controls whether the C++ runtime is pulled in.</p>
+<h2 id="variables-cabin-sets-for-cabin-run-and-cabin-test">Variables Cabin sets for <code>cabin run</code> and <code>cabin test</code></h2>
+<p><code>cabin run</code> spawns the selected <code>cpp_executable</code>, and <code>cabin
+test</code> spawns each <code>cpp_test</code> executable, with the user's
+environment <strong>plus</strong> a small, deterministic, identical
+<code>CABIN_*</code> package-execution overlay:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CABIN_MANIFEST_DIR</code></td>
+<td>Absolute path to the owning package's manifest directory</td>
+</tr>
+<tr>
+<td><code>CABIN_MANIFEST_PATH</code></td>
+<td>Absolute path to the owning package's <code>cabin.toml</code></td>
+</tr>
+<tr>
+<td><code>CABIN_PACKAGE_NAME</code></td>
+<td>Package name as the manifest declares it</td>
+</tr>
+<tr>
+<td><code>CABIN_PACKAGE_VERSION</code></td>
+<td>Resolved package version</td>
+</tr>
+<tr>
+<td><code>CABIN_PROFILE</code></td>
+<td>Active profile (<code>dev</code>, <code>release</code>, …)</td>
+</tr>
+<tr>
+<td><code>CABIN_BUILD_DIR</code></td>
+<td>Resolved build directory</td>
+</tr>
+</tbody>
+</table>
+<p>This is the entire injected contract: the overlay is the same
+for <code>cabin run</code> and <code>cabin test</code> and does not depend on the
+target's name or kind. The user's <code>PATH</code>, <code>LANG</code>, etc. are
+inherited unchanged. <code>cabin run</code>'s working directory is the
+user's invoking cwd (matching <code>cargo run</code>); <code>cabin test</code> runs
+each executable in its owning package's manifest directory so
+tests can reach repository-relative fixture data
+deterministically.</p>
+<h2 id="why-cabin-does-not-auto-inject-dcabin_package_-macros">Why Cabin does not auto-inject <code>-DCABIN_PACKAGE_*</code> macros</h2>
+<p>Cargo's <code>CARGO_PKG_*</code> env vars are compile-time constants in
+Rust because <code>env!()</code> reads them during compilation. C/C++
+has no equivalent: turning package metadata into compiler
+<code>-D</code> flags would change every translation unit's preprocessor
+state, leak into public headers if surfaced via
+<code>usage-requirements</code>, and churn every affected object file
+whenever the version bumps.</p>
+<p>The default is therefore: <strong>run/test executables receive the
+metadata as env vars; compile commands do not receive
+<code>-DCABIN_PACKAGE_*</code> macros</strong>. Users who genuinely want the
+macro form can add explicit <code>defines</code> to their target in the
+manifest.</p>
+<h2 id="see-also">See also</h2>
+<ul>
+<li><a href="../cargo-inspired-interface/"><code>cargo-inspired-interface.md</code></a>
+  — full Cabin-vs-Cargo audit.</li>
+<li><a href="../config/"><code>config.md</code></a> — config-file precedence and
+  <code>[paths] build-dir</code> syntax.</li>
+<li><a href="../toolchains/"><code>toolchains.md</code></a> — toolchain inputs that
+  participate in the build-configuration fingerprint.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../config/" class="btn btn-neutral float-left" title="Configuration files"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../profiles/" class="btn btn-neutral float-right" title="Build profiles">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../config/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../profiles/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

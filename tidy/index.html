@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Static analysis - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Static analysis";
+        var mkdocs_page_input_path = "tidy.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Static analysis</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#default-invocation">Default invocation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#applying-fixes">Applying fixes</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#parallel-jobs">Parallel jobs</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#excluding-paths">Excluding paths</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#including-vcs-ignored-files">Including VCS-ignored files</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#workspace-selection">Workspace selection</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compile-database-generation">Compile database generation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#choosing-the-tidy-driver-executable">Choosing the tidy driver executable</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#clang-tidy-discovery">.clang-tidy discovery</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-gets-analysed">What gets analysed</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#verbosity">Verbosity</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#versioned-dependencies">Versioned dependencies</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Targets and building</li>
+      <li class="breadcrumb-item active">Static analysis</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/tidy.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="static-analysis-with-clang-tidy-cabin-tidy">Static analysis with <code>clang-tidy</code> (<code>cabin tidy</code>)</h1>
+<p><code>cabin tidy</code> is Cabin's wrapper around
+<a href="https://clang.llvm.org/extra/clang-tidy/index.html#using-clang-tidy"><code>run-clang-tidy</code></a>,
+the standard LLVM driver that fans <code>clang-tidy</code> invocations out
+across a Clang JSON compilation database.  Cabin walks the
+selected package(s) for C/C++ source files, generates the
+compilation database from its build graph, and hands both to
+<code>run-clang-tidy</code>.  Source discovery shares its rules with
+<a href="../fmt/"><code>cabin fmt</code></a>, so a file <code>cabin fmt</code> would touch is
+a file <code>cabin tidy</code> will analyse — provided it has a compile
+entry in the database.</p>
+<h2 id="usage">Usage</h2>
+<pre><code class="language-text">cabin tidy [--fix] [--exclude &lt;PATH&gt;]... [--no-ignore-vcs] [-j &lt;N&gt;] [SELECTION]
+</code></pre>
+<p><code>cabin tidy --help</code> lists every flag with its short
+description.</p>
+<h3 id="default-invocation">Default invocation</h3>
+<pre><code class="language-text">cabin tidy
+</code></pre>
+<p>Cabin generates <code>build/&lt;profile&gt;/compile_commands.json</code> for the
+selected packages and runs
+<code>run-clang-tidy -p build/&lt;profile&gt; -quiet &lt;files&gt;</code> over every
+recognised C/C++ source.  The <code>-quiet</code> argument hides
+<code>run-clang-tidy</code>'s per-file progress chatter so only real
+diagnostics reach stderr; pass <code>-v</code> / <code>--verbose</code> to drop
+<code>-quiet</code> and see the driver's full progress output.</p>
+<p><code>cabin tidy</code> exits non-zero whenever <code>run-clang-tidy</code> exits
+non-zero, which is the standard way clang-tidy signals that at
+least one file produced a diagnostic.</p>
+<h3 id="applying-fixes">Applying fixes</h3>
+<pre><code class="language-text">cabin tidy --fix
+</code></pre>
+<p><code>--fix</code> enables <code>run-clang-tidy -fix</code>, which applies clang-tidy's
+suggested rewrites back to disk.  Cabin never enables this
+implicitly; the rewrites are off unless you pass the flag.  In
+fix mode Cabin clamps the effective parallelism to one
+clang-tidy instance so concurrent rewrites cannot race; verbose
+mode reports the override when <code>--jobs &lt;N&gt;</code> was supplied with
+<code>N &gt; 1</code>.</p>
+<h3 id="parallel-jobs">Parallel jobs</h3>
+<pre><code class="language-text">cabin tidy -j 8
+cabin tidy --jobs 8
+</code></pre>
+<p><code>-j</code> / <code>--jobs</code> controls how many <code>clang-tidy</code> instances
+<code>run-clang-tidy</code> runs in parallel.  Same precedence chain as
+<code>cabin build</code>:</p>
+<ol>
+<li><strong><code>-j</code> / <code>--jobs &lt;N&gt;</code></strong> on the command line.</li>
+<li><strong><code>CABIN_BUILD_JOBS=&lt;N&gt;</code></strong> environment variable.</li>
+<li><strong><code>[build] jobs = &lt;N&gt;</code></strong> in a config file.</li>
+<li><strong>Default</strong> — <code>run-clang-tidy</code>'s own default (today the host
+   CPU count).</li>
+</ol>
+<p><code>&lt;N&gt;</code> must be a positive integer.  <code>0</code>, negatives, and
+non-numeric values are rejected at parse time, the same way
+<code>cabin build</code> rejects them.</p>
+<h3 id="excluding-paths">Excluding paths</h3>
+<pre><code class="language-text">cabin tidy --exclude src/generated.cc --exclude vendored/
+</code></pre>
+<p><code>--exclude</code> may be repeated.  Each argument is a file or
+directory path resolved against the current working directory; a
+directory entry skips every descendant.</p>
+<h3 id="including-vcs-ignored-files">Including VCS-ignored files</h3>
+<pre><code class="language-text">cabin tidy --no-ignore-vcs
+</code></pre>
+<p>By default <code>cabin tidy</code> honours <code>.gitignore</code>, <code>.ignore</code>,
+parent-directory ignore files, and global git excludes.
+<code>--no-ignore-vcs</code> disables only the VCS ignore layer; Cabin's
+built-in build / cache / vendor exclusions still apply.</p>
+<h3 id="workspace-selection">Workspace selection</h3>
+<p><code>cabin tidy</code> accepts Cabin's standard workspace selection flags:</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--workspace</code></td>
+<td>Analyse every workspace member</td>
+</tr>
+<tr>
+<td><code>--package &lt;name&gt;</code>, <code>-p &lt;name&gt;</code></td>
+<td>Analyse the named workspace package; repeat for multiple</td>
+</tr>
+<tr>
+<td><code>--default-members</code></td>
+<td>Analyse <code>[workspace.default-members]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Without any of these flags, <code>cabin tidy</code> operates on the current
+package.</p>
+<h2 id="compile-database-generation">Compile database generation</h2>
+<p><code>cabin tidy</code> always generates (or refreshes) a
+<code>compile_commands.json</code> before invoking the tidy driver:</p>
+<ul>
+<li>the file is written to <code>build/&lt;profile&gt;/compile_commands.json</code>
+  using Cabin's existing build directory and per-profile layout —
+  the same path <code>cabin build</code> produces;</li>
+<li>the database is generated <em>without</em> invoking Ninja: tidy is
+  read-only analysis and a build is unnecessary.</li>
+</ul>
+<p>The build directory honours the same precedence chain as <code>cabin
+build</code>: <code>--build-dir</code> &gt; <code>CABIN_BUILD_DIR</code> &gt; <code>[paths] build-dir</code>
+config setting &gt; built-in default <code>build</code>.</p>
+<h2 id="choosing-the-tidy-driver-executable">Choosing the tidy driver executable</h2>
+<p>Cabin spawns <code>run-clang-tidy</code> from <code>PATH</code> by default.  Override
+the executable by setting
+<a href="../environment-variables/"><code>CABIN_TIDY</code></a>:</p>
+<pre><code class="language-text">CABIN_TIDY=/opt/llvm/bin/run-clang-tidy cabin tidy
+</code></pre>
+<p><code>CABIN_TIDY</code> is taken verbatim — typically an absolute path, but
+a bare command name works too (it is then resolved against
+<code>PATH</code>).  When the executable cannot be found Cabin emits an
+actionable error:</p>
+<pre><code class="language-text">error: run-clang-tidy was not found on PATH.
+  install `clang-tidy` (LLVM toolchain) and re-run, or set `CABIN_TIDY=/path/to/run-clang-tidy` to a specific binary
+</code></pre>
+<h2 id="clang-tidy-discovery"><code>.clang-tidy</code> discovery</h2>
+<p><code>clang-tidy</code> has its own file-based configuration mechanism
+called <code>.clang-tidy</code>.  Cabin does not generate or modify these
+files and does not pass any <code>-config=</code>, <code>-checks=</code>, or related
+flags to the tidy driver: it lets <code>clang-tidy</code> walk upward from
+each translation unit's directory to find the nearest
+<code>.clang-tidy</code>, exactly as it would in any other invocation.</p>
+<p>Commit a <code>.clang-tidy</code> to your repository if you want a
+project-wide configuration.  When no <code>.clang-tidy</code> is found
+anywhere, <code>clang-tidy</code> falls back to its built-in default
+checks — the same behaviour you would see invoking <code>clang-tidy</code>
+directly.</p>
+<h2 id="what-gets-analysed">What gets analysed</h2>
+<p>Source discovery applies the same rules as <code>cabin fmt</code> — see
+<a href="../fmt/#what-gets-formatted"><code>fmt.md</code></a>.  <code>cabin tidy</code> then
+narrows the discovered set to files that have a compile entry in
+the generated <code>compile_commands.json</code>; headers and undeclared
+sources are skipped because clang-tidy cannot meaningfully
+analyse a translation unit it has no compile command for.</p>
+<p>The walk skips the same directories <code>cabin fmt</code> skips:</p>
+<ul>
+<li>VCS-ignored files (unless <code>--no-ignore-vcs</code> is in effect);</li>
+<li>Cabin's resolved build directory;</li>
+<li><code>target</code>, <code>dist</code>, <code>out</code>, <code>.cabin</code>, <code>node_modules</code>, <code>.venv</code>,
+  <code>__pycache__</code>;</li>
+<li>VCS metadata (<code>.git</code>, <code>.hg</code>, <code>.svn</code>, <code>.jj</code>, <code>.pijul</code>);</li>
+<li>the manifest directories of <em>unselected</em> workspace members.</li>
+</ul>
+<h2 id="verbosity">Verbosity</h2>
+<p><code>cabin tidy</code> honours Cabin's standard verbosity flags:</p>
+<ul>
+<li><code>-q</code> / <code>--quiet</code> suppresses Cabin-owned status output but does
+  not suppress clang-tidy diagnostics — <code>run-clang-tidy</code>
+  inherits stderr directly.</li>
+<li><code>-v</code> / <code>--verbose</code> adds a per-invocation summary describing
+  the selected packages, the file count, the compile database
+  path, and the resolved jobs setting; it also drops <code>-quiet</code>
+  from the spawned <code>run-clang-tidy</code> command so the driver's own
+  progress output appears.</li>
+<li><code>-vv</code> (or <code>-v -v</code>) additionally echoes the spawned tidy
+  command line.</li>
+</ul>
+<h2 id="versioned-dependencies">Versioned dependencies</h2>
+<p><code>cabin tidy</code> does not run Cabin's artifact pipeline.  When the
+selected package closure declares a versioned registry dependency
+(<code>dep = "1.2"</code>), Cabin refuses to plan a tidy run and surfaces a
+clear diagnostic:</p>
+<pre><code class="language-text">error: package `hello` declares versioned registry dependencies; `cabin tidy` does not run the artifact pipeline, so registry-backed selections are not supported
+</code></pre>
+<p><code>cabin build</code> and <code>cabin fetch</code> can still materialise those
+dependencies for build workflows, but they do not make a
+registry-backed selection usable with <code>cabin tidy</code>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../fmt/" class="btn btn-neutral float-left" title="Formatting"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../dependency-kinds/" class="btn btn-neutral float-right" title="Dependency kinds">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../fmt/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../dependency-kinds/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

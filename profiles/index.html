@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Build profiles - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Build profiles";
+        var mkdocs_page_input_path = "profiles.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Build profiles</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#built-in-profiles">Built-in profiles</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cli-selection">CLI selection</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#manifest-syntax">Manifest syntax</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#supported-fields">Supported fields</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#inheritance">Inheritance</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#inheritance-and-array-flags">Inheritance and array flags</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#workspace-scope">Workspace scope</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#build-directories">Build directories</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#build-configuration-fingerprint">Build configuration fingerprint</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cabin-metadata">cabin metadata</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-profiles-do-not-do">What profiles do not do</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#limitations">Limitations</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Manifest and configuration</li>
+      <li class="breadcrumb-item active">Build profiles</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/profiles.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="build-profiles">Build profiles</h1>
+<p>A <strong>profile</strong> is a named preset of compile-time settings — debug
+information, optimisation level, assertions — that Cabin applies
+to a build. Profiles formalise the long-standing distinction
+between "debug" and "release" builds and let projects declare
+their own presets without having to drop into a raw compiler-flag
+system.</p>
+<p>This document is the canonical specification. The behaviour
+described here is what the manifest parser (<code>cabin-manifest</code>),
+the typed model and resolver (<code>cabin-core::profile</code>), the build
+planner (<code>cabin-build</code>), the CLI (<code>cabin-cli</code>), the canonical
+package metadata (<code>cabin-package</code>), and the local / sparse-HTTP
+index loaders (<code>cabin-index</code>, <code>cabin-index-http</code>) all agree on.</p>
+<h2 id="built-in-profiles">Built-in profiles</h2>
+<p>Cabin always provides two profiles, even when the manifest has no
+<code>[profile.*]</code> tables:</p>
+<table>
+<thead>
+<tr>
+<th>Profile</th>
+<th><code>debug</code></th>
+<th><code>opt-level</code></th>
+<th><code>assertions</code></th>
+<th>C compile flags</th>
+<th>C++ compile flags</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dev</code></td>
+<td><code>true</code></td>
+<td><code>0</code></td>
+<td><code>true</code></td>
+<td><code>-std=c11 -O0 -g</code></td>
+<td><code>-std=c++17 -O0 -g</code></td>
+</tr>
+<tr>
+<td><code>release</code></td>
+<td><code>false</code></td>
+<td><code>3</code></td>
+<td><code>false</code></td>
+<td><code>-std=c11 -O3 -DNDEBUG</code></td>
+<td><code>-std=c++17 -O3 -DNDEBUG</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>dev</code> is the default. It is also the profile a bare
+<code>cabin build</code> and a bare <code>cabin metadata</code> invocation produce.</p>
+<h2 id="cli-selection">CLI selection</h2>
+<p><code>cabin build</code> and <code>cabin metadata</code> accept <code>--profile &lt;name&gt;</code>:</p>
+<pre><code class="language-sh">cabin build --profile dev
+cabin build --profile release
+cabin build --profile relwithdebinfo
+</code></pre>
+<p><code>cabin build</code> also keeps the long-standing <code>--release</code> flag as a
+<strong>compatibility alias</strong> for <code>--profile release</code>. Passing both
+flags together is rejected:</p>
+<pre><code class="language-text">$ cabin build --release --profile release
+error: the argument '--release' cannot be used with '--profile &lt;NAME&gt;'
+</code></pre>
+<p><code>cabin resolve</code>, <code>cabin update</code>, <code>cabin fetch</code>, <code>cabin package</code>,
+and <code>cabin publish</code> deliberately do <strong>not</strong> accept a profile flag.
+Profiles are local build configuration; they have no effect on
+dependency resolution, the lockfile, or the on-disk archive.</p>
+<p>A <code>.cabin/config.toml</code> file may also pin a default profile via
+<code>[build] profile = "&lt;name&gt;"</code>. The CLI flag still wins when
+present; see <a href="../config/"><code>config.md</code></a> for the full discovery and
+precedence ladder.</p>
+<h2 id="manifest-syntax">Manifest syntax</h2>
+<p>Manifests may declare custom profiles or override built-in
+defaults under top-level <code>[profile.&lt;name&gt;]</code> tables:</p>
+<pre><code class="language-toml">[profile.dev]
+opt-level = 1            # override built-in: a faster dev cycle
+
+[profile.release]
+debug = true             # override built-in: keep debug info on
+
+[profile.relwithdebinfo]  # custom: must declare `inherits`
+inherits = &quot;release&quot;
+debug = true
+</code></pre>
+<h3 id="supported-fields">Supported fields</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>inherits</code></td>
+<td>string (profile name)</td>
+<td>Required on custom profiles; rejected on <code>dev</code> / <code>release</code>.</td>
+</tr>
+<tr>
+<td><code>debug</code></td>
+<td><code>true</code> / <code>false</code></td>
+<td>Whether <code>-g</code> is added to C and C++ compile commands.</td>
+</tr>
+<tr>
+<td><code>opt-level</code></td>
+<td><code>0</code> / <code>1</code> / <code>2</code> / <code>3</code> / <code>"s"</code> / <code>"z"</code></td>
+<td>Maps directly onto <code>-O0</code> … <code>-O3</code> / <code>-Os</code> / <code>-Oz</code>.</td>
+</tr>
+<tr>
+<td><code>assertions</code></td>
+<td><code>true</code> / <code>false</code></td>
+<td>When <code>false</code>, <code>-DNDEBUG</code> is added to C and C++ compile commands.</td>
+</tr>
+</tbody>
+</table>
+<p>The schema is closed: any other key is rejected with a clear
+error. Specifically, capability-style fields such as
+<code>link-libs</code>, <code>compiler</code>, <code>toolchain</code>, <code>target</code>, <code>cfg</code>, <code>env</code>,
+<code>rustflags</code>, <code>linker</code>, <code>ar</code>, <code>stdlib</code>, and <code>sanitizer</code> are
+<strong>not accepted</strong> here — toolchain selection lives under
+<code>[toolchain]</code>, and capability probing is out of scope.</p>
+<p>The array flag fields <code>cflags</code>, <code>cxxflags</code>, <code>ldflags</code>,
+<code>defines</code>, and <code>include-dirs</code> are written directly on the
+<code>[profile.&lt;name&gt;]</code> table. See
+<em>Inheritance and array flags</em> below for the merge semantics
+across an inherits chain.</p>
+<h3 id="inheritance">Inheritance</h3>
+<ul>
+<li>Built-in profiles (<code>dev</code>, <code>release</code>) have implicit defaults and
+  are always selectable, even without a manifest entry.</li>
+<li>A <code>[profile.dev]</code> or <code>[profile.release]</code> entry <strong>overrides</strong>
+  the matching built-in's defaults field-by-field. Unspecified
+  fields keep their defaults.</li>
+<li>Custom profiles <strong>must</strong> declare <code>inherits</code>, which must point
+  to a built-in or another custom profile.</li>
+<li>Inheritance is acyclic; cycles are rejected with a clear error.</li>
+<li>Final field values are resolved root-first: each layer in the
+  chain overrides anything an ancestor set, and missing fields
+  keep their inherited value.</li>
+</ul>
+<h3 id="inheritance-and-array-flags">Inheritance and array flags</h3>
+<p>A <code>[profile.&lt;name&gt;]</code> table can contribute <strong>array</strong> flag
+fields: <code>cflags</code>, <code>cxxflags</code>, <code>ldflags</code>, <code>defines</code>,
+and <code>include-dirs</code>. These compose differently from the scalar
+fields above:</p>
+<ul>
+<li><strong>Scalars replace</strong> across the inherits chain
+  (<code>opt-level</code>, <code>debug</code>, <code>assertions</code>). The leaf wins; an
+  unset leaf field keeps its inherited value.</li>
+<li><strong>Array flag fields append</strong>, root-first, across the
+  inherits chain. Each ancestor's values come first, in the
+  order the user wrote them; the selected profile's values
+  come last.</li>
+</ul>
+<p>The full effective order of array-flag layers, top to bottom
+in the resulting argv, is:</p>
+<ol>
+<li>The package's top-level <code>[profile]</code> block.</li>
+<li>Each matching <code>[target.'cfg(...)'.profile]</code> block, in
+   manifest order.</li>
+<li>The profile inherits chain, root → selected — each step's
+   <code>[profile.&lt;name&gt;]</code> flags appended after the previous step's.</li>
+</ol>
+<p>So with</p>
+<pre><code class="language-toml">[profile]
+cxxflags = [&quot;-Wall&quot;]
+
+[profile.release]
+cxxflags = [&quot;-O3&quot;]
+
+[profile.profiling]
+inherits = &quot;release&quot;
+cxxflags = [&quot;-pg&quot;]
+</code></pre>
+<p>selecting <code>profiling</code> resolves to</p>
+<pre><code>cxxflags = [&quot;-Wall&quot;, &quot;-O3&quot;, &quot;-pg&quot;]
+</code></pre>
+<p>This is Cabin adopting cargo-config-style array layering for
+its profile flag arrays. Cargo's own profile tables do not
+expose user-facing array fields; the closest analog is the
+<code>rustflags</code> layering inside <code>.cargo/config.toml</code>. Cabin
+profile flag arrays append across ancestors so a leaf profile
+can extend its parent without re-stating every flag.</p>
+<p><strong>Practical caveat.</strong> Because arrays append, parent and leaf
+flags coexist on every compile / link command. Mutually
+exclusive compiler or codegen flags placed in shared parent
+profiles will conflict with leaf overrides — <code>-O0</code> vs <code>-O3</code>,
+<code>-fno-rtti</code> vs <code>-frtti</code>, <code>-flto</code> vs <code>-fno-lto</code>, incompatible
+<code>-std=</code> / <code>/std:</code> flags. Cabin does not arbitrate; the
+compiler's own last-wins or conflict behaviour decides.
+Reserve shared parent profiles for non-conflicting policy
+flags (warnings, sanitizer-friendly debug-info knobs); keep
+leaf-specific optimization / codegen choices in the leaf
+profile itself.</p>
+<h3 id="workspace-scope">Workspace scope</h3>
+<p>Only the workspace root manifest's <code>[profile.*]</code> tables apply.
+Member or path-dep manifests that declare profile tables are
+rejected with the error
+<code>profile tables may only appear in the workspace root manifest</code>,
+so a single workspace key cannot mean different things in
+different members.</p>
+<h2 id="build-directories">Build directories</h2>
+<p>Build outputs are profile-aware:</p>
+<pre><code class="language-text">&lt;build-dir&gt;/&lt;profile&gt;/build.ninja
+&lt;build-dir&gt;/&lt;profile&gt;/compile_commands.json
+&lt;build-dir&gt;/&lt;profile&gt;/packages/&lt;package&gt;/&lt;target&gt;/...
+</code></pre>
+<p>Two effects:</p>
+<ul>
+<li><code>dev</code> and <code>release</code> builds never overwrite each other.</li>
+<li>A custom profile gets its own deterministic output tree.</li>
+</ul>
+<p>Profile names are validated up front (ASCII alphanumerics, <code>_</code>,
+<code>-</code>, <code>.</code>; non-empty; not <code>.</code> / <code>..</code>; not starting with <code>.</code>) so a
+malformed name is rejected at parse time instead of slipping into
+filesystem layout.</p>
+<h2 id="build-configuration-fingerprint">Build configuration fingerprint</h2>
+<p><code>BuildConfiguration::fingerprint</code> is a SHA-256 of every input
+that affects build output: enabled features <strong>and</strong> the resolved
+profile (its name, <code>debug</code>, <code>opt-level</code>, <code>assertions</code>). Switching
+profiles changes
+the fingerprint by design — a future cache layer would key on
+the same value.</p>
+<h2 id="cabin-metadata"><code>cabin metadata</code></h2>
+<p><code>cabin metadata</code> reports a top-level <code>profiles</code> block:</p>
+<pre><code class="language-jsonc">{
+  &quot;profiles&quot;: {
+    &quot;selected&quot;: {
+      &quot;name&quot;: &quot;relwithdebinfo&quot;,
+      &quot;debug&quot;: true,
+      &quot;opt_level&quot;: &quot;3&quot;,
+      &quot;assertions&quot;: false,
+      &quot;source&quot;: &quot;custom&quot;,
+      &quot;inherits_chain&quot;: [&quot;release&quot;, &quot;relwithdebinfo&quot;]
+    },
+    &quot;available&quot;: [&quot;dev&quot;, &quot;release&quot;, &quot;relwithdebinfo&quot;],
+    &quot;definitions&quot;: {
+      &quot;relwithdebinfo&quot;: { &quot;inherits&quot;: &quot;release&quot;, &quot;debug&quot;: true }
+    }
+  }
+}
+</code></pre>
+<p>The <code>available</code> array is sorted alphabetically; <code>definitions</code>
+keys iterate alphabetically; the <code>selected.inherits_chain</code> is
+deterministic (root first). Pass <code>--profile &lt;name&gt;</code> to compute
+the metadata view as if that profile were selected — useful for
+CI that wants to dump every profile's resolved fields without
+re-reading the manifest.</p>
+<h2 id="what-profiles-do-not-do">What profiles do <em>not</em> do</h2>
+<ul>
+<li>They do <strong>not</strong> affect dependency resolution. <code>cabin resolve</code>
+  and the lockfile are profile-independent.</li>
+<li>They do <strong>not</strong> enable or disable optional dependencies or
+  gate features. Those remain orthogonal axes (see
+  <a href="../features/"><code>features.md</code></a>).</li>
+<li>They do <strong>not</strong> introduce target-specific profile tables
+  (<code>[target.'cfg(...)'.profile.*]</code>) or profile-specific dep
+  tables (<code>[profile.&lt;name&gt;.dependencies]</code>).</li>
+</ul>
+<h2 id="limitations">Limitations</h2>
+<ul>
+<li>Cross-compilation is out of scope, so the build planner
+  evaluates profiles against the host toolchain.</li>
+<li>Toolchain selection and capability probing are explicitly out
+  of scope for profile tables.</li>
+<li>Profile names cannot escape the build root; invalid names are
+  rejected at parse time rather than sanitised silently.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../environment-variables/" class="btn btn-neutral float-left" title="Environment variables"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../toolchains/" class="btn btn-neutral float-right" title="Toolchains">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../environment-variables/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../toolchains/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

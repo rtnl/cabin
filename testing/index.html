@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Testing - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Testing";
+        var mkdocs_page_input_path = "testing.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Testing</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#declaring-a-test-target">Declaring a test target</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#running-tests">Running tests</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#output-and-exit-status">Output and exit status</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#working-directory-and-environment">Working directory and environment</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#determinism">Determinism</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dev-dependencies">Dev-dependencies</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lockfile-behaviour">Lockfile behaviour</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-cabin-test-is-not">What cabin test is not</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#test-portability-rules">Test portability rules</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-tool-gating-must-be-explicit">1. Tool gating must be explicit</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-environment-isolation">2. Environment isolation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-no-host-specific-absolute-paths">3. No host-specific absolute paths</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-driver-name-assertions">4. Driver-name assertions</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#5-generated-output-normalisation">5. Generated output normalisation</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ci-portability-boundary">CI portability boundary</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Targets and building</li>
+      <li class="breadcrumb-item active">Testing</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/testing.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="testing-with-cabin-test">Testing with <code>cabin test</code></h1>
+<p><code>cabin test</code> is a small wrapper around the existing build
+pipeline: it builds the selected <code>cpp_test</code> targets, runs each
+linked executable in deterministic order, and reports a summary.</p>
+<p>It is intentionally not a testing framework. It does no test-
+case discovery inside binaries and parses no framework-specific
+output. The unit of execution is the entire test executable —
+its exit status decides pass / fail.</p>
+<h2 id="declaring-a-test-target">Declaring a test target</h2>
+<pre><code class="language-toml">[target.demo_test]
+type = &quot;cpp_test&quot;
+sources = [&quot;tests/lib_test.cc&quot;]
+deps = [&quot;demo&quot;]
+</code></pre>
+<p>The full <code>cpp_test</code> syntax is documented in
+<a href="../targets/"><code>docs/targets.md</code></a>.</p>
+<h2 id="running-tests">Running tests</h2>
+<pre><code class="language-sh">cabin test                           # every cpp_test in the default selection
+cabin test --workspace               # every cpp_test in every workspace member
+cabin test -p demo                   # only demo's tests
+cabin test --release                 # compile with the release profile
+cabin test --features simd          # forward features to the test build
+</code></pre>
+<p><code>cabin test</code> does not offer a single-test selector flag.
+Narrow the run by narrowing the package selection (<code>--package</code>
+/ <code>--workspace</code> / <code>--exclude</code>).</p>
+<p><code>cabin test</code> shares its core flags with <code>cabin build</code>:
+<code>--profile</code>, <code>--release</code>, <code>--features</code>, <code>--no-default-features</code>,
+<code>--all-features</code>, <code>--locked</code>, <code>--frozen</code>, <code>--no-patches</code>, the
+toolchain
+overrides (<code>--cc</code> / <code>--cxx</code> / <code>--ar</code> / <code>--compiler-wrapper</code>),
+the workspace-selection bundle (<code>--workspace</code> / <code>-p</code> /
+<code>--default-members</code> / <code>--exclude</code>), and the index/cache
+locations (<code>--index-path</code> / <code>--index-url</code> / <code>--cache-dir</code>).</p>
+<p><code>--allow-no-tests</code> opts the user out of the empty-selection
+error: by default, <code>cabin test</code> exits with an error when the
+selected packages declare no <code>cpp_test</code> target, so CI does not
+silently pass when tests have not been added yet. Pass
+<code>--allow-no-tests</code> for cases where empty is expected.</p>
+<h2 id="output-and-exit-status">Output and exit status</h2>
+<p>For each test executable Cabin prints:</p>
+<pre><code>running test &lt;pkg&gt;:&lt;target&gt;
+... (the executable's stdout, prefixed by a &quot;stdout:&quot; header)
+... (the executable's stderr, prefixed by a &quot;stderr:&quot; header)
+test &lt;pkg&gt;:&lt;target&gt; ... ok
+</code></pre>
+<p>A failed test exits non-zero; Cabin records the exit code and
+writes:</p>
+<pre><code>test &lt;pkg&gt;:&lt;target&gt; ... FAILED (exit 17)
+</code></pre>
+<p>If any test fails, <code>cabin test</code> itself exits non-zero and
+writes the rendered test summary to stdout, followed by the
+top-level error on stderr:</p>
+<pre><code>test result: FAILED. P passed; F failed (of N)
+error: test failures: F of N test executables failed
+</code></pre>
+<p>A test killed by a signal renders as <code>FAILED (terminated by
+signal)</code>.</p>
+<h2 id="working-directory-and-environment">Working directory and environment</h2>
+<p>Each test executable runs with its working directory set to the
+<strong>owning package's manifest directory</strong>. Tests that read fixture
+data from paths relative to the package root therefore see the
+same files in CI and on a developer's machine.</p>
+<p>The environment the test inherits is the same as <code>cabin test</code>'s
+own — Cabin does not set test-framework-specific variables. If
+you need a particular variable, set it in the parent process.</p>
+<h2 id="determinism">Determinism</h2>
+<p>Test ordering is <code>(package_name, target_name)</code> ascending,
+regardless of the order targets appear in <code>cabin.toml</code>. The
+runner is sequential: each test runs to completion before the
+next starts.</p>
+<h2 id="dev-dependencies">Dev-dependencies</h2>
+<p><code>cabin test</code> activates <code>[dev-dependencies]</code> for the selected
+packages as real graph edges. A test target may therefore depend
+on packages declared only under <code>[dev-dependencies]</code>:</p>
+<pre><code class="language-toml">[dependencies]
+demo = { path = &quot;../demo&quot; }
+
+[dev-dependencies]
+gtest = &quot;^1.14&quot;
+
+[target.demo_test]
+type = &quot;cpp_test&quot;
+sources = [&quot;tests/lib_test.cc&quot;]
+deps = [&quot;demo&quot;, &quot;gtest&quot;]
+</code></pre>
+<p><code>cabin build</code> continues to ignore <code>[dev-dependencies]</code>, so
+ordinary production builds remain unaffected. Dev-dep
+activation never propagates: a transitive package's own
+<code>[dev-dependencies]</code> stay declaration-only even under
+<code>cabin test</code>.</p>
+<h2 id="lockfile-behaviour">Lockfile behaviour</h2>
+<p><code>--locked</code> and <code>--frozen</code> apply to <code>cabin test</code> exactly as they
+do to <code>cabin build</code>:</p>
+<ul>
+<li><code>--locked</code> requires the lockfile to satisfy the resolver's
+  pick (and the patch / source-replacement state to match);</li>
+<li><code>--frozen</code> additionally forbids state-writing side effects
+  (cache population, lockfile mutation).</li>
+</ul>
+<p>Because <code>cabin test</code> includes <code>[dev-dependencies]</code> in
+resolution, projects that have never run <code>cabin test</code> may need
+one un-<code>--locked</code> invocation to add dev-deps to the lockfile.</p>
+<h2 id="what-cabin-test-is-not">What <code>cabin test</code> is <em>not</em></h2>
+<ul>
+<li>It does not run examples. <code>cpp_example</code> targets are not
+  selectable from the command line — they reach the build
+  graph only as transitive deps of another selected target.</li>
+<li>It does not parse GoogleTest / Catch2 / doctest output, nor
+  emit XML / JUnit reports.</li>
+<li>It does not provide test filtering inside an executable, and
+  there is no single-test selector flag; narrow the run by
+  narrowing the package selection (<code>-p &lt;package&gt;</code> /
+  <code>--workspace</code> / <code>--exclude</code>).</li>
+</ul>
+<h2 id="test-portability-rules">Test portability rules</h2>
+<p>These rules apply to every test that lives under <code>cabin-cli</code>,
+the planner, the toolchain layer, and any future crate that
+exercises the build / test pipeline. They are normative —
+adding a test that violates them is a review-blocking change.</p>
+<h3 id="1-tool-gating-must-be-explicit">1. Tool gating must be explicit</h3>
+<p>Tests that compile real C or C++ sources gate on a tool
+availability helper from <code>cabin-cli/tests/cli.rs</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Helper</th>
+<th>Required tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ninja_available</code></td>
+<td><code>ninja</code></td>
+</tr>
+<tr>
+<td><code>c_compiler_available</code></td>
+<td>one of <code>cc</code> / <code>clang</code> / <code>gcc</code></td>
+</tr>
+<tr>
+<td><code>cxx_compiler_available</code></td>
+<td>one of <code>c++</code> / <code>clang++</code> / <code>g++</code></td>
+</tr>
+<tr>
+<td><code>build_tools_available</code></td>
+<td><code>ninja</code> + a C++ compiler</td>
+</tr>
+<tr>
+<td><code>c_and_cxx_build_tools_available</code></td>
+<td><code>ninja</code> + a C compiler + a C++ compiler</td>
+</tr>
+</tbody>
+</table>
+<p>A test that compiles <code>.c</code> sources <strong>must</strong> gate on
+<code>c_and_cxx_build_tools_available</code>, not on
+<code>build_tools_available</code>. Without that, the test would silently
+fall through to a planner-time <code>MissingCCompiler</code> error on a
+runner that has only <code>c++</code> / <code>clang++</code> / <code>g++</code> installed.</p>
+<p>Pure data-model tests that never spawn a compiler (planner
+unit tests, lockfile / metadata round-trips) do not need to
+gate on tool availability.</p>
+<p>The CLI suite also has external-tool smoke tests for the tools
+Cabin shells out to directly: <code>ninja</code>, <code>clang-format</code>,
+<code>run-clang-tidy</code>, and <code>pkg-config</code>. These tests intentionally
+fail by default when the real tools are absent, so CI catches a
+missing package instead of silently exercising only fake helpers.
+Set <code>CABIN_SKIP_EXTERNAL_TOOL_TESTS=1</code> only when you deliberately
+want those smoke tests to use the bundled fake-tool binaries.</p>
+<h3 id="2-environment-isolation">2. Environment isolation</h3>
+<p>Integration tests use the shared <code>cabin()</code> helper, which clears
+or pins the read-side environment that commonly affects test
+output and tool selection:</p>
+<ul>
+<li><code>CABIN_NO_CONFIG</code>, <code>CABIN_CONFIG</code>, <code>CABIN_CONFIG_HOME</code>
+  (config discovery);</li>
+<li><code>CC</code>, <code>CXX</code>, <code>AR</code> (toolchain selection);</li>
+<li><code>NINJA</code> (backend lookup);</li>
+<li><code>CPPFLAGS</code>, <code>CFLAGS</code>, <code>CXXFLAGS</code>, <code>LDFLAGS</code> (build-flag
+  ingestion);</li>
+<li><code>CABIN_NET_OFFLINE</code> (offline override);</li>
+<li><code>CABIN_COMPILER_WRAPPER</code> (compiler-cache wrapper);</li>
+<li><code>CABIN_CACHE_DIR</code> (artifact cache override);</li>
+<li><code>CABIN_FMT</code>, <code>CABIN_TIDY</code>, <code>CABIN_PKG_CONFIG</code>
+  (developer-tool and system-dependency executable overrides);</li>
+<li>standard pkg-config lookup variables (<code>PKG_CONFIG_PATH</code>,
+  <code>PKG_CONFIG_LIBDIR</code>, <code>PKG_CONFIG_SYSROOT_DIR</code>);</li>
+<li>terminal-colour controls (<code>NO_COLOR</code>, <code>CLICOLOR</code>,
+  <code>CLICOLOR_FORCE</code>), while pinning <code>CABIN_TERM_COLOR=never</code>.</li>
+</ul>
+<p>The helper does not remove every read-side Cabin variable. Tests
+whose assertions depend on build directory, job count, or
+verbosity must set or remove <code>CABIN_BUILD_DIR</code>,
+<code>CABIN_BUILD_JOBS</code>, <code>CABIN_TERM_VERBOSE</code>, and
+<code>CABIN_TERM_QUIET</code> explicitly.</p>
+<p>Tests that intentionally exercise env precedence (e.g. "CXX
+env wins over the manifest's <code>[toolchain]</code>") opt back in with a
+plain <code>.env(KEY, VALUE)</code> after <code>cabin()</code> returns — <code>assert_cmd</code>
+applies env mutations in declaration order, so a later
+<code>.env(...)</code> overrides the earlier <code>.env_remove(...)</code>.</p>
+<p>The shared <code>cabin_with_config()</code> helper in the patches module
+keeps the same scrubbing rules but additionally re-enables
+config discovery for tests that exercise config files; consult
+that module for the documented opt-in pattern.</p>
+<h3 id="3-no-host-specific-absolute-paths">3. No host-specific absolute paths</h3>
+<p>Integration tests must not use hardcoded host-specific
+absolute paths (<code>/tmp/...</code>, <code>/usr/bin/...</code>, <code>/this/path/does/not/exist/...</code>).
+Construct paths under <code>TempDir</code> instead — <code>dir.path().join("missing-cc")</code>
+is the canonical "non-existent path" idiom for tests that need a
+path that will fail to resolve.</p>
+<p>The planner unit tests use fake POSIX-shaped paths (<code>/abs/proj</code>,
+<code>/usr/bin/g++</code>) but never <em>execute</em> them — those tests are pure
+data-model assertions on the build graph that happens to take a
+<code>PathBuf</code> as input. That is the only place absolute fake paths
+are acceptable.</p>
+<h3 id="4-driver-name-assertions">4. Driver-name assertions</h3>
+<p>Tests that need to verify the link-driver pick should prefer
+<em>structural</em> assertions over driver-name substring matching:</p>
+<ul>
+<li>assert on the rule name (<code>c_compile</code>, <code>cxx_compile</code>,
+  <code>link_executable</code>) by walking generated <code>build.ninja</code> edges
+  rather than grepping for <code>c++</code> / <code>g++</code> / <code>clang++</code>;</li>
+<li>when the test must check the actual driver path, ask
+  <code>cabin metadata --format json</code> for the resolved
+  <code>toolchain.tools.cc.path</code> / <code>toolchain.tools.cxx.path</code> and
+  compare the link command's first argument against that.</li>
+</ul>
+<p>Substring checks are acceptable as a <em>belt-and-suspenders</em>
+sanity check, never as the primary assertion.</p>
+<h3 id="5-generated-output-normalisation">5. Generated output normalisation</h3>
+<p>Golden / fixture tests compare generated output (Ninja file,
+metadata JSON, package archive contents) against a snapshot.
+Output that contains absolute paths must be normalised before
+comparison so the snapshot does not bake in the developer's
+temp-directory prefix. The lockfile renderer is the canonical
+example: every value sorts deterministically, paths are stored
+relative to a documented anchor, and the tests assert on
+byte-equal output.</p>
+<h2 id="ci-portability-boundary">CI portability boundary</h2>
+<p>The Rust CI job in <code>.github/workflows/rust.yml</code> runs on both
+<code>ubuntu-latest</code> and <code>macos-latest</code>. Linux installs
+<code>ninja-build</code>, <code>gcc</code>, and <code>g++</code>; macOS installs Ninja and LLVM
+through Homebrew and uses the platform Clang drivers. The
+<code>cabin()</code> env scrubbing and the
+<code>c_and_cxx_build_tools_available</code> gating keep tests portable
+across both runners without silently masking C coverage.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../compiler-cache/" class="btn btn-neutral float-left" title="Compiler-cache wrappers"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../fmt/" class="btn btn-neutral float-right" title="Formatting">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../compiler-cache/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../fmt/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Metadata, tree, and explain - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Metadata, tree, and explain";
+        var mkdocs_page_input_path = "metadata-tree-explain.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Metadata, tree, and explain</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#when-to-use-which">When to use which</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cabin-tree">cabin tree</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cabin-explain">cabin explain</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-explain-package-name">cabin explain package &lt;name&gt;</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-explain-target-name">cabin explain target &lt;name&gt;</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-explain-source-name">cabin explain source &lt;name&gt;</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-explain-feature-packagefeature">cabin explain feature &lt;package&gt;/&lt;feature&gt;</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-explain-build-config-name">cabin explain build-config &lt;name&gt;</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#interactions-with-the-rest-of-the-toolchain">Interactions with the rest of the toolchain</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#determinism-guarantees">Determinism guarantees</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#architecture">Architecture</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Workspaces and observability</li>
+      <li class="breadcrumb-item active">Metadata, tree, and explain</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/metadata-tree-explain.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="metadata-tree-and-explain">Metadata, tree, and explain</h1>
+<p>Cabin gives you three complementary observability commands for
+the loaded workspace state:</p>
+<ul>
+<li><code>cabin metadata</code> — full deterministic JSON document covering
+  workspace, packages, lockfile, patches, source replacements,
+  profile, toolchain, config, and the resolved
+  <code>BuildConfiguration</code> per selected package.</li>
+<li><code>cabin tree</code> — the loaded workspace / local-path dependency graph, rooted at the
+  selected primary packages, as either a Unicode-drawing tree
+  (<code>--format human</code>, the default) or a structured JSON
+  document.</li>
+<li><code>cabin explain</code> — typed answers to "why is X selected?" /
+  "where does X come from?" / "what does the build configuration
+  for X look like?", available as five subcommands: <code>package</code>,
+  <code>target</code>, <code>source</code>, <code>feature</code>, <code>build-config</code>.</li>
+</ul>
+<p>All three commands operate on the same workspace + lockfile +
+patch set + source-replacement state, so two commands run
+back-to-back never see different answers about the same
+project inputs. They load the current manifests on each
+invocation, but do not resolve registry versions or touch the
+network: you can interleave metadata / tree / explain
+queries against a project without altering the lockfile, the
+artifact cache, or the working copy. None of these commands
+materialise registry-versioned dependencies. The graph-shaped
+views (<code>cabin tree</code> and <code>cabin explain package/source</code>) reflect
+the workspace closure (workspace members + local-path edges)
+plus any active <code>[patch]</code> overrides. Registry packages appear
+in <code>cabin metadata</code> through the lockfile section only; they are
+not turned into tree nodes and their dependency edges are not
+walked.</p>
+<h2 id="when-to-use-which">When to use which</h2>
+<table>
+<thead>
+<tr>
+<th>Want to...</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pipe the full state into <code>jq</code> or another tool</td>
+<td><code>cabin metadata --format json</code></td>
+</tr>
+<tr>
+<td>See the dep graph at a glance</td>
+<td><code>cabin tree</code></td>
+</tr>
+<tr>
+<td>Filter the tree to one dependency kind</td>
+<td><code>cabin tree --kind build</code></td>
+</tr>
+<tr>
+<td>See why a package is in the closure</td>
+<td><code>cabin explain package &lt;name&gt;</code></td>
+</tr>
+<tr>
+<td>See where a package's source bytes come from</td>
+<td><code>cabin explain source &lt;name&gt;</code></td>
+</tr>
+<tr>
+<td>See a target's kind, language, and deps</td>
+<td><code>cabin explain target &lt;name&gt;</code></td>
+</tr>
+<tr>
+<td>See whether a feature is enabled and what it implies</td>
+<td><code>cabin explain feature &lt;package&gt;/&lt;feature&gt;</code></td>
+</tr>
+<tr>
+<td>See the resolved build configuration for a package</td>
+<td><code>cabin explain build-config &lt;name&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>cabin metadata</code> is the contract for tooling. <code>cabin tree</code> and
+<code>cabin explain</code> are layered on top: their JSON output shares
+schema fragments with metadata where appropriate (for example,
+<code>cabin explain build-config &lt;pkg&gt;</code> emits exactly the same
+<code>BuildConfiguration</code> shape that appears under each package's
+<code>configuration</code> key in metadata).</p>
+<h2 id="cabin-tree"><code>cabin tree</code></h2>
+<pre><code>$ cabin tree
+app v0.1.0 (workspace)
+├── lib v0.1.0 [normal] (workspace)
+└── codegen v0.1.0 [build] (workspace)
+</code></pre>
+<p>Rules:</p>
+<ul>
+<li>Roots are the selected primary packages — <code>cabin tree
+  --package &lt;name&gt;</code> narrows the roots, <code>--workspace</code> widens
+  them. Without a selection flag, a workspace root uses
+  <code>[workspace.default-members]</code> when present and otherwise walks
+  every primary workspace package.</li>
+<li>Children sort by <code>(dependency_kind, name, version)</code>. The
+  canonical kind order is <code>normal → build</code>.</li>
+<li>Repeated <code>(name, version)</code> nodes are pruned with a <code>(*)</code>
+  marker on the first re-occurrence, so cyclic graphs render
+  finitely.</li>
+<li>Provenance labels are surfaced in parentheses: <code>workspace</code>
+  for workspace members, <code>local path</code> for <code>path = "..."</code>
+  dependencies outside the workspace, and <code>patched via &lt;layer&gt;</code>
+  for active <code>[patch]</code> overrides. Registry-versioned
+  dependencies are not materialised into <code>cabin tree</code> nodes;
+  inspect <code>cabin metadata</code> lockfile entries for their checksums.</li>
+<li>Edges show their dependency kind in <code>[brackets]</code>. Roots
+  carry no edge label.</li>
+</ul>
+<p><code>--format json</code> emits the same forest as a structured
+document. Each node carries <code>name</code>, <code>version</code>,
+<code>edge_kind</code> (omitted for roots), <code>source</code> (a tagged union
+matching the human label), <code>repeated</code>, and <code>children</code>. Output
+is byte-stable across runs for the same workspace + lockfile
++ config inputs.</p>
+<p><code>--kind {all|normal|build}</code> restricts the walk to one
+edge kind. <code>all</code> (the default) walks every kind. Dev edges are
+declaration-only and never appear in the tree. <code>cabin test</code>
+activates dev-dependencies for the selected primary packages;
+<code>cabin run</code> does not. The filter therefore exposes no <code>dev</code>
+value.</p>
+<p>Feature flags (<code>--features</code>, <code>--all-features</code>, and
+<code>--no-default-features</code>) are parsed and validated through the
+same feature resolver used by <code>cabin metadata</code>, so unknown
+features and invalid <code>dep:</code> entries surface here too.</p>
+<h2 id="cabin-explain"><code>cabin explain</code></h2>
+<p><code>cabin explain</code> runs the same workspace / config / patch /
+lockfile preamble <code>cabin metadata</code> runs, then dispatches to the
+selected subcommand. Every subcommand accepts workspace
+selection (<code>--package</code>, <code>--workspace</code>, <code>--exclude</code>), feature
+selection (<code>--features</code>, <code>--all-features</code>,
+<code>--no-default-features</code>), and <code>--no-patches</code>. <code>--format human</code>
+(the default) prints a concise summary; <code>--format json</code> prints a
+tagged document for tooling.</p>
+<p>Five subcommands:</p>
+<h3 id="cabin-explain-package-name"><code>cabin explain package &lt;name&gt;</code></h3>
+<p>Reports the resolved package's source provenance plus every
+minimal path from a selected root that reaches it. Paths are
+sorted by <code>(length, joined name sequence)</code> so the answer is
+deterministic. The <code>is_selected_root</code> flag distinguishes
+"this package is itself a root" from "this package was pulled
+in by a root".</p>
+<p>The JSON shape is <code>{ "kind": "package", "name", "version",
+"source", "paths": [ [ { "name", "version", "edge_kind" }, ...
+] ], "is_selected_root" }</code>.</p>
+<h3 id="cabin-explain-target-name"><code>cabin explain target &lt;name&gt;</code></h3>
+<p>Reports a target's owning package, kind (the same string the
+manifest uses — <code>cpp_library</code>, <code>cpp_executable</code>, <code>cpp_test</code>,
+…), source-language summary (any subset of <code>c</code>, <code>cxx</code>,
+<code>rust</code>), declared deps (in declaration order), and three
+classification flags (<code>is_buildable</code>, <code>is_test</code>, <code>is_dev_only</code>).</p>
+<p>The JSON shape uses <code>"target_kind"</code> for the target's kind so
+it does not collide with the outer <code>Explanation</code> discriminator
+field <code>"kind"</code>.</p>
+<p>If the name is ambiguous within the selected packages, every
+declaring package is listed in the diagnostic.</p>
+<h3 id="cabin-explain-source-name"><code>cabin explain source &lt;name&gt;</code></h3>
+<p>Reports where a package's source bytes come from. The
+provenance shape is the same <code>SourceProvenance</code> enum <code>cabin
+tree</code> uses. Active source-replacement entries from the merged
+effective config are listed alongside, since one chain may
+rewrite many packages.</p>
+<p>With <code>--no-patches</code>, <code>explain source</code> does not apply
+source-replacement policy to dependency / index inputs, but it
+still lists the configured source-replacement declarations as
+observability data. Use <code>cabin metadata --no-patches</code> when you
+need a metadata document whose <code>source_replacements</code> array is
+empty for that invocation.</p>
+<h3 id="cabin-explain-feature-packagefeature"><code>cabin explain feature &lt;package&gt;/&lt;feature&gt;</code></h3>
+<p>Reports a feature's enablement on a specific package: whether
+the resolver enabled it for the current selection, what other
+features it implies, and whether it is in the package's
+default group. The query string must contain a single <code>/</code>;
+querying <code>default</code> is supported.</p>
+<h3 id="cabin-explain-build-config-name"><code>cabin explain build-config &lt;name&gt;</code></h3>
+<p>Reports the resolved <code>BuildConfiguration</code> for the package —
+profile, toolchain (with the same per-tool source labels
+metadata uses), build flags (with profile / manifest /
+condition overlays), enabled features, and the SHA-256
+fingerprint of the configuration. A future cache layer would
+key on this value.</p>
+<p>The JSON shape wraps the existing
+<code>BuildConfiguration::as_json()</code> document under a top-level
+<code>{"kind": "build-config", "package", "configuration": ...}</code>
+envelope so the inner shape matches what <code>cabin metadata</code>
+already emits per package.</p>
+<h2 id="interactions-with-the-rest-of-the-toolchain">Interactions with the rest of the toolchain</h2>
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Workspace selection</td>
+<td><code>--package</code> / <code>--workspace</code> / <code>--exclude</code> apply uniformly across <code>metadata</code>, <code>tree</code>, and <code>explain</code> and constrain the closure both commands inspect</td>
+</tr>
+<tr>
+<td>Feature selection</td>
+<td>Feature flags run the cross-package feature resolver, so unknown features / <code>dep:</code> errors surface from <code>cabin metadata</code>, <code>cabin tree</code>, and <code>cabin explain</code> — not just from <code>cabin build</code></td>
+</tr>
+<tr>
+<td>Dependency kinds</td>
+<td>Tree's <code>--kind</code> filter walks one edge kind (<code>normal</code> or <code>build</code>); explain's <code>package</code> view reports edge kind on each step. Dev edges stay declaration-only — <code>cabin metadata</code> lists them, but tree and explain do not walk them</td>
+</tr>
+<tr>
+<td>Patches</td>
+<td><code>[patch]</code> entries (manifest + config) light up <code>patched via &lt;layer&gt;</code> provenance in tree and explain. <code>--no-patches</code> disables patch application and source-replacement resolution for package inputs</td>
+</tr>
+<tr>
+<td>Source replacements</td>
+<td>Surfaced in <code>cabin explain source</code> and <code>cabin metadata</code>; <code>explain source --no-patches</code> still lists configured declarations as observability data</td>
+</tr>
+<tr>
+<td>Vendoring / offline</td>
+<td><code>cabin tree</code> and <code>cabin explain</code> never reach the network and accept no <code>--index-path</code> / <code>--offline</code> flag of their own; they operate on the workspace closure plus active patches</td>
+</tr>
+<tr>
+<td>C and C++</td>
+<td>The language summary in <code>cabin explain target</code> reports <code>c</code>, <code>cxx</code>, or both, classified through the same <code>classify_source</code> helper Cabin uses elsewhere</td>
+</tr>
+</tbody>
+</table>
+<h2 id="determinism-guarantees">Determinism guarantees</h2>
+<p>Given the same workspace tree, the same lockfile, and the
+same merged effective config:</p>
+<ul>
+<li><code>cabin metadata --format json</code>,</li>
+<li><code>cabin tree --format json</code>,</li>
+<li>every <code>cabin explain ... --format json</code> subcommand,</li>
+</ul>
+<p>produce byte-identical output across runs and machines (modulo
+non-machine-specific paths that originate in the user's input).
+The human formats are also stable: tree children sort by
+<code>(dependency_kind, name, version)</code>, explanation paths sort by
+<code>(length, joined name sequence)</code>, and JSON object keys are
+emitted in struct-declaration order through <code>serde</code>.</p>
+<p>If you observe non-determinism, please file a bug — every
+consumer of these commands assumes byte-stability.</p>
+<h2 id="architecture">Architecture</h2>
+<p>The typed model lives in the dedicated <code>cabin-explain</code> crate.
+<code>cabin-cli</code> only orchestrates the workspace / config / patch /
+lockfile / feature preamble and hands typed values to that
+crate. This mirrors the existing split between thin CLI glue and
+dedicated domain crates.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../workspaces/" class="btn btn-neutral float-left" title="Workspaces"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../package-format/" class="btn btn-neutral float-right" title="Package archive and canonical metadata">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../workspaces/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../package-format/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

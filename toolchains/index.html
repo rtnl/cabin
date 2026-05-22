@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Toolchains - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Toolchains";
+        var mkdocs_page_input_path = "toolchains.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Toolchains</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#tool-kinds">Tool kinds</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#precedence">Precedence</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cli-surface">CLI surface</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment variables</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#manifest-syntax">Manifest syntax</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#profile-flags">[profile] flags</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#layer-order">Layer order</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#field-level-merging">Field-level merging</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#compiler-tool-capability-detection">Compiler / tool capability detection</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#recognised-compiler-families">Recognised compiler families</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#recognised-archiver-families">Recognised archiver families</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#capability-set">Capability set</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#validation-against-the-c-backend">Validation against the C++ backend</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#determinism-and-network-access">Determinism and network access</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#build-configuration-fingerprint">Build configuration fingerprint</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#inputs-that-are-not-part-of-the-fingerprint">Inputs that are not part of the fingerprint</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#direct-ninja-invocation">Direct ninja invocation</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#package-index-metadata">Package + index metadata</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#deferred-out-of-scope">Deferred / out of scope</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Manifest and configuration</li>
+      <li class="breadcrumb-item active">Toolchains</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/toolchains.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="toolchains-and-conditional-build-flags">Toolchains and conditional build flags</h1>
+<p>Cabin builds C and C++ packages with three external tools: a C
+compiler, a C++ compiler driver, and a static-library archiver.
+Cabin makes the choice of those tools, and the semantic flags
+applied during compile / link, <em>explicit, typed, and
+deterministic</em>.</p>
+<p>This document is the canonical specification for the toolchain
+selection model and the <code>[profile]</code> flag schema. The behaviour
+described here is what the manifest parser
+(<code>cabin-manifest</code>), the typed model (<code>cabin-core::toolchain</code> and
+<code>cabin-core::build_flags</code>), the resolver (<code>cabin-toolchain</code>), the
+build planner (<code>cabin-build</code>), the CLI (<code>cabin-cli</code>), and the
+canonical package metadata (<code>cabin-package</code>) all agree on.</p>
+<h2 id="tool-kinds">Tool kinds</h2>
+<p>Three tool kinds participate:</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Manifest key</th>
+<th>CLI flag</th>
+<th>Env var</th>
+<th>Default fallback list</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cc</code></td>
+<td><code>cc</code></td>
+<td><code>--cc</code></td>
+<td><code>CC</code></td>
+<td><code>cc</code>, <code>clang</code>, <code>gcc</code></td>
+</tr>
+<tr>
+<td><code>cxx</code></td>
+<td><code>cxx</code></td>
+<td><code>--cxx</code></td>
+<td><code>CXX</code></td>
+<td><code>c++</code>, <code>clang++</code>, <code>g++</code></td>
+</tr>
+<tr>
+<td><code>ar</code></td>
+<td><code>ar</code></td>
+<td><code>--ar</code></td>
+<td><code>AR</code></td>
+<td><code>ar</code></td>
+</tr>
+</tbody>
+</table>
+<p>The C compiler (<code>cc</code>) and the C++ compiler (<code>cxx</code>) are
+<strong>separate</strong> tool selections. They may resolve to the same
+underlying executable when the system installs a unified driver
+(<code>gcc</code> / <code>clang</code> is also a valid C front-end), but the model
+keeps the slots independent so Cabin can pick the right driver
+per source language. The build planner classifies each source
+file by its filename extension (<code>.c</code> is C; <code>.cc</code> / <code>.cpp</code> /
+<code>.cxx</code> / <code>.c++</code> / <code>.C</code> are C++) and dispatches each compile
+through the matching driver.</p>
+<p>The link driver is <em>also</em> selected per target: every linked
+executable inspects its own objects plus every transitively
+reachable library object, picks <strong>C++</strong> if any of those are C++,
+and otherwise picks <strong>C</strong>. There is no separate <code>--linker</code>
+selection; the C / C++ driver decision is what controls whether
+the C++ runtime (libstdc++ / libc++) is pulled in.</p>
+<p>A linker-style env variable (<code>LD</code>) is intentionally not honoured
+— adding linker selection would require a linker-command
+abstraction the backend lacks. MSVC <code>cl.exe</code> /
+<code>link.exe</code> are recognised and explicitly rejected with a clear
+error so a misconfigured build does not silently flow through a
+compiler that does not accept GCC-style flags.</p>
+<h2 id="precedence">Precedence</h2>
+<p>For every tool kind, the resolver walks the layers below in
+order and keeps the first one that yields a value:</p>
+<ol>
+<li><strong>CLI flag</strong> — <code>--cc</code>, <code>--cxx</code>, <code>--ar</code>. Highest precedence.</li>
+<li><strong>Environment variable</strong> — <code>CC</code>, <code>CXX</code>, <code>AR</code>. An empty value
+   is treated as unset; values are not shell-split.</li>
+<li><strong><code>[toolchain]</code> config-file layer</strong> — <code>[toolchain]</code> in
+   <code>&lt;root&gt;/.cabin/config.toml</code> (workspace or project) or
+   <code>~/.config/cabin/config.toml</code> (user). See
+   <a href="../config/"><code>config.md</code></a> for the full file-discovery rules.</li>
+<li><strong>Matching <code>[target.'cfg(...)'.toolchain]</code></strong> — the first
+   conditional toolchain block whose predicate evaluates to
+   <code>true</code> against the host platform.</li>
+<li><strong><code>[toolchain]</code></strong> — the workspace root manifest's general
+   toolchain table.</li>
+<li><strong>Built-in defaults</strong> — Cabin's documented fallback list.</li>
+</ol>
+<p>Each [<code>ResolvedTool</code>] records which layer it came from on its
+<code>source</code> field. <code>cabin metadata</code> surfaces the same value
+verbatim under <code>toolchain.tools.&lt;kind&gt;.source</code>, so users can
+audit a build without re-deriving the precedence by hand.</p>
+<h2 id="cli-surface">CLI surface</h2>
+<pre><code class="language-sh">cabin build --cxx clang++
+cabin build --cc /opt/llvm/bin/clang --cxx /opt/llvm/bin/clang++
+cabin metadata --cxx clang++         # report the toolchain a build *would* pick
+</code></pre>
+<p><code>--cc</code> / <code>--cxx</code> / <code>--ar</code> accept either a bare command name
+(resolved against <code>PATH</code>) or an explicit filesystem path.
+Whitespace-only values are rejected at parse time. The flags
+apply only to the current command invocation; nothing is written
+back to the manifest.</p>
+<p><code>cabin build</code> and <code>cabin metadata</code> accept the flags. <code>cabin
+resolve</code>, <code>cabin update</code>, <code>cabin fetch</code>, <code>cabin package</code>, and
+<code>cabin publish</code> deliberately do <strong>not</strong> accept them — toolchain
+selection has no effect on dependency resolution, the lockfile,
+or the published archive.</p>
+<h2 id="environment-variables">Environment variables</h2>
+<p>Cabin honours <code>CC</code>, <code>CXX</code>, and <code>AR</code> from the running process'
+environment. Values are interpreted as a single executable
+path or command name; they are not shell-split. Empty values
+are ignored, so <code>CXX=</code> looks identical to no <code>CXX</code> at all.</p>
+<p>Cabin also honours <code>CPPFLAGS</code>, <code>CFLAGS</code>, <code>CXXFLAGS</code>, and
+<code>LDFLAGS</code> as conventional C / C++ build flag sources. Each
+variable is shell-split into argv tokens with a deterministic,
+in-process parser (no shell is invoked) and the parsed tokens
+are appended to the corresponding <code>[profile]</code> bucket <em>after</em> the
+manifest and pkg-config layers have already contributed. The
+build configuration fingerprint folds in the per-bucket values,
+so changing a relevant variable moves the fingerprint exactly
+the way changing the matching <code>[profile]</code> field would. See
+<a href="../environment-variables/"><code>environment-variables.md</code></a>
+for the full per-variable routing table, parsing rules, and the
+list of commands that participate.</p>
+<p><code>LD</code> is intentionally <strong>not consumed</strong>. Linker selection would
+require a linker-command abstraction the backend lacks; the C /
+C++ driver decision is what controls whether the C++ runtime is
+pulled in.</p>
+<h2 id="manifest-syntax">Manifest syntax</h2>
+<p>The workspace root manifest may declare a general <code>[toolchain]</code>
+table plus any number of conditional <code>[target.'cfg(...)'.toolchain]</code>
+overrides. Member or path-dep manifests that declare a
+<code>[toolchain]</code> table are rejected with the error
+<code>toolchain selection may only appear in the workspace root manifest</code>.</p>
+<pre><code class="language-toml">[toolchain]
+cc = &quot;clang&quot;
+cxx = &quot;clang++&quot;
+ar = &quot;llvm-ar&quot;
+
+[target.'cfg(os = &quot;linux&quot;)'.toolchain]
+ar = &quot;llvm-ar-18&quot;
+</code></pre>
+<p><code>[profile.&lt;name&gt;.toolchain]</code> is <strong>not</strong> supported in this step.
+Profiles are presets for compile-time <em>behaviour</em> (debug,
+optimisation, assertions); they do not switch the compiler
+binary. Mixing profile-specific tool selection into the
+precedence model would create surprising interactions with
+target-conditioned overrides; it is deferred to a future step
+if a use case emerges.</p>
+<h2 id="profile-flags"><code>[profile]</code> flags</h2>
+<p><code>[profile]</code> declares semantic build flags that compose with each
+target's per-target <code>defines</code> / <code>include_dirs</code>:</p>
+<pre><code class="language-toml">[profile]
+defines = [&quot;MY_LIB_BUILD&quot;]
+include-dirs = [&quot;include&quot;]
+cflags = [&quot;-std=c99&quot;]
+cxxflags = [&quot;-fno-rtti&quot;]
+ldflags = [&quot;-Wl,--no-undefined&quot;]
+
+[target.'cfg(os = &quot;linux&quot;)'.profile]
+defines = [&quot;USE_EPOLL&quot;]
+
+[profile.release]
+defines = [&quot;NDEBUG_LITE&quot;]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>defines</code></td>
+<td><code>Array&lt;String&gt;</code></td>
+<td><code>"NAME"</code> or <code>"NAME=value"</code>. Sorted and deduplicated across layers; emitted as <code>-DNAME[=value]</code>. Applied to both C and C++ compiles.</td>
+</tr>
+<tr>
+<td><code>include-dirs</code></td>
+<td><code>Array&lt;Path&gt;</code></td>
+<td>Relative paths only. Absolute or <code>..</code>-traversal is rejected. Duplicates collapse to first-occurrence order. Emitted as <code>-I&lt;path&gt;</code>. Applied to both C and C++ compiles.</td>
+</tr>
+<tr>
+<td><code>cflags</code></td>
+<td><code>Array&lt;String&gt;</code></td>
+<td>Escape hatch. Passed verbatim only to <strong>C</strong> compile commands (e.g. <code>-std=c99</code>).</td>
+</tr>
+<tr>
+<td><code>cxxflags</code></td>
+<td><code>Array&lt;String&gt;</code></td>
+<td>Escape hatch. Passed verbatim only to <strong>C++</strong> compile commands (e.g. <code>-fno-rtti</code>, <code>-std=c++20</code>).</td>
+</tr>
+<tr>
+<td><code>ldflags</code></td>
+<td><code>Array&lt;String&gt;</code></td>
+<td>Escape hatch. Passed verbatim to the link command.</td>
+</tr>
+</tbody>
+</table>
+<p>CFLAGS and CXXFLAGS spaces are kept strictly separate: a flag in
+<code>cflags</code> never reaches the C++ compile line, and a flag in
+<code>cxxflags</code> never reaches the C compile line.</p>
+<p>Unknown fields — <code>compiler</code>, <code>toolchain</code>, etc. — are rejected at
+parse time.</p>
+<h3 id="layer-order">Layer order</h3>
+<p><code>[profile]</code> flags compose layered, in this order (later layers append
+to / override earlier ones per field):</p>
+<ol>
+<li>Built-in backend defaults (currently empty for <code>[profile]</code> —
+   Cabin's <code>-std=c11</code> (for C compiles), <code>-std=c++17</code> (for C++
+   compiles), <code>-O0</code>, <code>-g</code>, etc. come from the profile, not from
+   <code>[profile]</code>).</li>
+<li>The package's own general <code>[profile]</code> table.</li>
+<li>The package's matching <code>[target.'cfg(...)'.profile]</code> blocks.</li>
+<li>The selected profile's <code>[profile.&lt;name&gt;]</code> block from the
+   workspace root manifest.</li>
+</ol>
+<p>CLI flags for <code>[profile]</code> fields are not exposed in this step;
+adding <code>--define</code> / <code>--include-dir</code> requires a deliberate
+schema decision and is deferred.</p>
+<h3 id="field-level-merging">Field-level merging</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Merge rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>defines</code></td>
+<td>Union across layers, sorted and deduplicated. Define order does not matter for <code>-D</code>.</td>
+</tr>
+<tr>
+<td><code>include_dirs</code></td>
+<td>Concatenated in layer order, deduplicated keeping the first occurrence. Order matters for include search.</td>
+</tr>
+<tr>
+<td><code>cflags</code></td>
+<td>Concatenated in layer order, preserving user-given order within each layer. No deduplication.</td>
+</tr>
+<tr>
+<td><code>cxxflags</code></td>
+<td>Same as <code>cflags</code>, applied only to C++ compiles.</td>
+</tr>
+<tr>
+<td><code>ldflags</code></td>
+<td>Same as <code>cflags</code>, applied only to link commands.</td>
+</tr>
+</tbody>
+</table>
+<p>Per-package include directories declared under <code>[profile]</code> /
+<code>[target.'cfg(...)'.profile]</code> are resolved against the package
+manifest directory before they reach the planner.</p>
+<h2 id="compiler-tool-capability-detection">Compiler / tool capability detection</h2>
+<p>After tool resolution, Cabin runs each selected tool with
+<code>--version</code>, parses the output, and assembles a typed
+[<code>ToolchainDetectionReport</code>]. The CLI uses the report to validate
+that the compiler / archiver Cabin picked can actually run the
+commands the C++ backend emits before any Ninja file is written.
+<code>cabin metadata</code> surfaces the same report under
+<code>toolchain.detected</code> so users can audit detection without
+re-running anything.</p>
+<p>Each <code>--version</code> subprocess has a bounded deadline. A compiler,
+archiver, or wrapper that never exits is treated as a detection
+failure instead of hanging Cabin indefinitely.</p>
+<h3 id="recognised-compiler-families">Recognised compiler families</h3>
+<table>
+<thead>
+<tr>
+<th>Detected <code>kind</code></th>
+<th>Trigger in <code>--version</code> output</th>
+<th>Backend status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clang</code></td>
+<td><code>clang version &lt;semver&gt;</code></td>
+<td>Supported</td>
+</tr>
+<tr>
+<td><code>apple-clang</code></td>
+<td><code>Apple clang version &lt;semver&gt;</code></td>
+<td>Supported</td>
+</tr>
+<tr>
+<td><code>gcc</code></td>
+<td><code>g++</code> / <code>gcc</code> banner with the <code>Free Software Foundation</code> line</td>
+<td>Supported (GCC ≥ 5)</td>
+</tr>
+<tr>
+<td><code>msvc</code></td>
+<td><code>Microsoft (R) C/C++ Optimizing Compiler …</code></td>
+<td><strong>Detected, rejected with a clear error</strong> — the current backend emits GCC-style commands and cannot drive <code>cl.exe</code>.</td>
+</tr>
+<tr>
+<td><code>unknown</code></td>
+<td>Anything else (or a <code>--version</code> invocation that exits non-zero)</td>
+<td><strong>Detected, rejected</strong> when the build needs GCC-style flags. The compiler may still appear in <code>cabin metadata</code>, but <code>cabin build</code> refuses rather than emitting commands the tool likely cannot run.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recognised-archiver-families">Recognised archiver families</h3>
+<table>
+<thead>
+<tr>
+<th>Detected <code>kind</code></th>
+<th>Trigger in <code>--version</code> output</th>
+<th>Name-based fallback</th>
+<th>Backend status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ar</code></td>
+<td><code>GNU ar</code> / <code>GNU Binutils</code> banner</td>
+<td>basename <code>ar</code> / <code>ar-&lt;suffix&gt;</code> (covers BSD <code>ar</code>, which has no <code>--version</code>)</td>
+<td>Supported</td>
+</tr>
+<tr>
+<td><code>llvm-ar</code></td>
+<td><code>LLVM version &lt;semver&gt;</code> line in multi-line banner</td>
+<td>basename <code>llvm-ar</code> / <code>llvm-ar-&lt;suffix&gt;</code></td>
+<td>Supported</td>
+</tr>
+<tr>
+<td><code>lib</code></td>
+<td><code>Microsoft (R) Library Manager</code> banner</td>
+<td>basename <code>lib</code> / <code>lib.exe</code></td>
+<td><strong>Detected, rejected</strong> — <code>lib.exe</code> cannot run <code>ar crs</code></td>
+</tr>
+<tr>
+<td><code>unknown</code></td>
+<td>Anything else</td>
+<td>—</td>
+<td><strong>Detected, rejected</strong> when the build needs <code>ar crs</code>-compatible behaviour</td>
+</tr>
+</tbody>
+</table>
+<p>The basename-based fallback is intentionally narrow: only
+archivers literally named <code>ar</code>, <code>llvm-ar</code>, or <code>lib</code> (with optional
+version suffix or <code>.exe</code>) are reclassified by name. Anything else
+remains <code>unknown</code> and is rejected.</p>
+<h3 id="capability-set">Capability set</h3>
+<p>Each compiler detection records a typed
+[<code>CompilerCapabilities</code>] with these fields:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Used by the planner</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gcc_style_flags</code></td>
+<td>Yes</td>
+<td>Required for <code>-O…</code>, <code>-DNAME</code>, <code>-Idir</code>, <code>-c</code>, <code>-o</code>. Missing → unsupported.</td>
+</tr>
+<tr>
+<td><code>msvc_style_flags</code></td>
+<td>No</td>
+<td>Detection-only; the planner does not emit MSVC syntax.</td>
+</tr>
+<tr>
+<td><code>depfile_mmd_mf</code></td>
+<td>Yes</td>
+<td>Required for <code>-MMD -MF &lt;file&gt;</code>. Missing → unsupported.</td>
+</tr>
+<tr>
+<td><code>std_flag</code></td>
+<td>Yes</td>
+<td>Required for <code>-std=…</code>. Missing → unsupported.</td>
+</tr>
+<tr>
+<td><code>cxx_standard_17</code></td>
+<td>Yes</td>
+<td>The planner emits <code>-std=c++17</code>; detection rejects compilers older than GCC 5.</td>
+</tr>
+<tr>
+<td><code>color_diagnostics_flag</code></td>
+<td>No</td>
+<td>Detection-only.</td>
+</tr>
+<tr>
+<td><code>response_files</code></td>
+<td>No</td>
+<td>Detection-only.</td>
+</tr>
+<tr>
+<td><code>json_diagnostics</code></td>
+<td>No</td>
+<td>Detection-only — Cabin does not emit JSON diagnostics.</td>
+</tr>
+<tr>
+<td><code>sarif_diagnostics</code></td>
+<td>No</td>
+<td>Detection-only — Cabin does not emit SARIF.</td>
+</tr>
+</tbody>
+</table>
+<p>Each capability records both <code>supported: bool</code> and a
+<code>source: "version" | "probe" | "assumed-default" | "unsupported"</code>
+so <code>cabin metadata</code> shows whether the answer came from a
+recognised version banner or a conservative fallback.</p>
+<p>Archiver detection records a smaller [<code>ArchiverCapabilities</code>]
+set:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Used by the planner today</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ar_crs</code></td>
+<td>Yes</td>
+<td>Required for the <code>ar crs &lt;lib&gt; &lt;objs&gt;</code> archive command. Missing → unsupported.</td>
+</tr>
+<tr>
+<td><code>static_library_output</code></td>
+<td>Yes</td>
+<td>Required to produce <code>.a</code> archives. Missing → unsupported.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="validation-against-the-c-backend">Validation against the C++ backend</h3>
+<p>Before any Ninja file is written, <code>cabin build</code> runs the
+detection report through <code>cabin_build::validate_toolchain_for_backend</code>.
+The validator surfaces clear errors when:</p>
+<ul>
+<li>the C++ compiler is <code>msvc</code> or <code>unknown</code> (with a missing
+  <code>gcc_style_flags</code> capability);</li>
+<li>the C++ compiler lacks <code>depfile_mmd_mf</code> or <code>cxx_standard_17</code>;</li>
+<li>the archiver is <code>lib</code> or otherwise lacks <code>ar_crs</code>.</li>
+</ul>
+<p><code>cabin metadata</code> is fail-soft after toolchain resolution succeeds:
+detection failures, including version-probe timeouts, are logged to
+stderr and the JSON view's <code>toolchain.detected</code> field becomes
+<code>null</code>. Missing required tools are still resolution errors; set
+<code>CXX</code>, <code>AR</code>, or <code>[toolchain]</code> when metadata needs to report a build
+configuration on a machine without the default tool names.</p>
+<h3 id="determinism-and-network-access">Determinism and network access</h3>
+<p>Detection runs only <code>tool --version</code>. It never compiles probe
+sources, never reads sources outside the package being built,
+and never touches the network. Output is captured deterministically;
+identical toolchains on identical machines yield identical
+<code>ToolchainDetectionReport</code>s.</p>
+<h2 id="build-configuration-fingerprint">Build configuration fingerprint</h2>
+<p><code>BuildConfiguration::fingerprint</code> is a SHA-256 over the
+resolved build-configuration inputs that Cabin exposes to
+metadata, <code>cabin run</code>, and <code>cabin test</code>. The hash folds in:</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Inputs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>features</td>
+<td>every enabled feature, sorted</td>
+</tr>
+<tr>
+<td>profile</td>
+<td>name, debug, opt-level, assertions</td>
+</tr>
+<tr>
+<td>toolchain</td>
+<td><code>(kind, spec)</code> pairs, sorted by tool key</td>
+</tr>
+<tr>
+<td>compiler-wrapper</td>
+<td>kind, spec, version (or <code>none</code>)</td>
+</tr>
+<tr>
+<td>build-flags</td>
+<td><code>defines</code>, <code>include-dirs</code>, <code>cflags</code>, <code>cxxflags</code>, <code>ldflags</code>, plus language-neutral compile args from environment and system dependencies</td>
+</tr>
+</tbody>
+</table>
+<p>The build-flags section uses one labelled sub-bucket per field,
+so language-neutral, C-only, C++-only, and link arguments each
+contribute independently. Moving a flag between <code>cflags</code> and
+<code>cxxflags</code> produces a <em>different</em> fingerprint, even when the argv
+string is identical, because the two slots route to different
+compile commands.</p>
+<p>Switching <code>--cxx</code>, changing a <code>[profile]</code> define, flipping a
+target-conditioned <code>[target.'cfg(...)'.profile]</code> to a different
+host platform, adding a flag to <code>cflags</code>, or
+selecting a different profile all produce a different
+fingerprint by design — a future cache layer keys on the
+same value.</p>
+<p>The summary stored on the configuration deliberately records
+the user-visible <em>spec</em> (<code>clang++</code>, <code>/opt/llvm/bin/clang++</code>),
+not the absolute resolved path from PATH. That keeps the
+fingerprint stable across machines that happen to install the
+same compiler at different filesystem paths.</p>
+<h3 id="inputs-that-are-not-part-of-the-fingerprint">Inputs that are <em>not</em> part of the fingerprint</h3>
+<p>The fingerprint is keyed on Cabin's typed resolved inputs.
+Anything Cabin does not consume is not an input:</p>
+<ul>
+<li><code>LD</code> is not consumed by any layer of Cabin (see
+  "Environment variables" above); changing it never moves the
+  fingerprint.</li>
+<li><code>CPPFLAGS</code>, <code>CFLAGS</code>, <code>CXXFLAGS</code>, and <code>LDFLAGS</code> <em>are</em>
+  consumed and <em>do</em> move the fingerprint when they change.
+  They participate in exactly the same per-bucket fashion as
+  the matching compile or link argument bucket.</li>
+<li>The local absolute path to a config file (<code>.cabin/config.toml</code>,
+  <code>~/.config/cabin/config.toml</code>) is not part of the
+  fingerprint — only the <em>resolved values</em> the file
+  contributed. Two contributors who run Cabin from different
+  working directories with identical config content see the
+  same fingerprint.</li>
+<li>The <code>CABIN_CACHE_DIR</code> and <code>--cache-dir</code> selection drive where
+  artifacts land on disk but do not change the compile / link
+  argv, so they are not in the fingerprint either.</li>
+</ul>
+<h3 id="direct-ninja-invocation">Direct <code>ninja</code> invocation</h3>
+<p><code>cabin build</code> regenerates <code>build.ninja</code> and
+<code>compile_commands.json</code> from the current manifest / config /
+toolchain inputs every time it runs. Direct <code>ninja -C
+&lt;build-dir&gt;</code> invocations do <em>not</em> re-read <code>cabin.toml</code>,
+<code>.cabin/config.toml</code>, or the environment — Ninja rebuilds an
+output only when the command line, an explicit input, the
+depfile, or the output path changes. Run <code>cabin build</code> after
+manifest, config, or toolchain edits so the fingerprint and
+the generated commands reflect the new inputs; running Ninja
+directly against a stale <code>build.ninja</code> is intentionally
+supported (it's how IDEs and editor watchers re-invoke the
+incremental build) but does not pick up Cabin-level changes.</p>
+<h2 id="package-index-metadata">Package + index metadata</h2>
+<p><code>cabin package</code> writes the manifest's declared <code>[toolchain]</code> and
+<code>[profile]</code> tables into the canonical <code>&lt;name&gt;-&lt;version&gt;.json</code>
+so consumers who rebuild from source can reproduce the same
+compile flags. <strong>Environment- or
+CLI-derived selections are never written.</strong> A user-set <code>CXX=...</code>
+or <code>--cxx /opt/llvm/...</code> only affects the local invocation; it
+never leaks into a published archive.</p>
+<p>The local file registry and the sparse-HTTP index round-trip the
+same fields opaquely. Older registries that omit the new fields
+continue to load. The resolver itself does not consult any of
+these values — registry resolution remains profile- and
+toolchain-independent.</p>
+<h2 id="deferred-out-of-scope">Deferred / out of scope</h2>
+<ul>
+<li>Compiler probe compilations beyond running <code>--version</code>.</li>
+<li>Compiler-specific conditional flags
+  (<code>cfg(compiler = "clang")</code> / <code>cfg(compiler_version = ...)</code>).</li>
+<li>distcc / icecc wrapper integration. (<code>ccache</code> / <code>sccache</code> are
+  supported — see <a href="../compiler-cache/">docs/compiler-cache.md</a>.)</li>
+<li>Sysroot or SDK discovery.</li>
+<li>Full Windows / MSVC support (<code>cl.exe</code>, <code>link.exe</code>, MSBuild,
+  Visual Studio detection); MSVC is <em>detected</em> but the C++
+  backend cannot drive it.</li>
+<li>A diagnostics abstraction (SARIF / JSON output formats).
+  Capabilities for these are detected, but Cabin does not emit
+  either format.</li>
+<li>Per-package profile overrides for <code>[toolchain]</code>.</li>
+<li>A CLI escape hatch for raw compile / link flags (<code>--cflag</code>).</li>
+<li><code>LD</code> env-var honouring (linker selection requires a
+  linker-command abstraction the backend lacks).</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../profiles/" class="btn btn-neutral float-left" title="Build profiles"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../targets/" class="btn btn-neutral float-right" title="Targets">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../profiles/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../targets/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

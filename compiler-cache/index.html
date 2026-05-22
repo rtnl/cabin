@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Compiler-cache wrappers - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Compiler-cache wrappers";
+        var mkdocs_page_input_path = "compiler-cache.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Compiler-cache wrappers</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#what-gets-wrapped">What gets wrapped</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#compile_commandsjson-vs-buildninja">compile_commands.json vs. build.ninja</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#supported-wrappers">Supported wrappers</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#precedence">Precedence</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cli-surface">CLI surface</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment variables</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#manifest-syntax">Manifest syntax</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#detection">Detection</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#build-configuration-fingerprint">Build configuration fingerprint</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#build-script-environment">Build-script environment</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#package-index-metadata">Package + index metadata</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#deferred-out-of-scope">Deferred / out of scope</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Targets and building</li>
+      <li class="breadcrumb-item active">Compiler-cache wrappers</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/compiler-cache.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="compiler-cache-wrappers">Compiler-cache wrappers</h1>
+<p>Cabin can prefix every C++ compile command with a compiler-cache
+wrapper such as <code>ccache</code> or <code>sccache</code>. The wrapper sits <em>on top</em> of
+the C++ compiler driver — it does not replace it, and it never
+intercepts link, archive, or Cargo invocations.</p>
+<p>This document is the canonical specification for the wrapper
+selection model and how it interacts with the rest of the
+toolchain. The behaviour described here is what the manifest
+parser (<code>cabin-manifest</code>), the typed model
+(<code>cabin-core::compiler_wrapper</code>), the resolver
+(<code>cabin-toolchain::wrapper</code>), the build planner (<code>cabin-build</code>),
+the CLI (<code>cabin-cli</code>), and the canonical package metadata
+(<code>cabin-package</code>) all agree on.</p>
+<h2 id="what-gets-wrapped">What gets wrapped</h2>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Wrapped?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C++ compile (<code>cxx -c &lt;src&gt; -o &lt;obj&gt;</code>)</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>Static-library archive (<code>ar crs …</code>)</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Link (<code>cxx &lt;objs&gt; -o &lt;exe&gt;</code>)</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>Only compile commands benefit from caching. Wrapping link or
+archive would make every cache miss include the linker work and
+defeat the purpose. The split is deliberate and documented.</p>
+<h3 id="compile_commandsjson-vs-buildninja"><code>compile_commands.json</code> vs. <code>build.ninja</code></h3>
+<p>Both files are written for the same compile actions, but they
+record different argument lists when a wrapper is selected:</p>
+<ul>
+<li><code>build.ninja</code> — the <strong>wrapped</strong> command (<code>ccache cxx -std=c++17
+  …</code>). Ninja invokes this verbatim, so caching takes effect.</li>
+<li><code>compile_commands.json</code> — the <strong>unwrapped</strong> command (<code>cxx
+  -std=c++17 …</code>). IDE / clangd tooling sees the underlying
+  compiler, which is what they expect.</li>
+</ul>
+<p>There is no flag to flip this behaviour today.</p>
+<h2 id="supported-wrappers">Supported wrappers</h2>
+<p>Cabin recognises two wrappers by name today:</p>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>CLI / manifest value</th>
+<th>Bare command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ccache</code></td>
+<td><code>"ccache"</code></td>
+<td><code>ccache</code></td>
+</tr>
+<tr>
+<td><code>sccache</code></td>
+<td><code>"sccache"</code></td>
+<td><code>sccache</code></td>
+</tr>
+</tbody>
+</table>
+<p>The conservative initial surface accepts only these two named
+wrappers plus the special value <code>"none"</code> (explicit opt-out).
+Path-shaped values (<code>/usr/local/bin/ccache</code>) and unknown names
+(<code>fastcache</code>) are rejected with a clear error so a typo never
+silently disables caching. A future revision may extend the
+surface.</p>
+<h2 id="precedence">Precedence</h2>
+<p>The resolver walks the layers below in order and keeps the first
+that yields a value:</p>
+<ol>
+<li><strong>CLI flag</strong> — <code>--compiler-wrapper &lt;name&gt;</code> /
+   <code>--no-compiler-wrapper</code>. Highest precedence; the two flags are
+   mutually exclusive.</li>
+<li><strong>Environment variable</strong> — <code>CABIN_COMPILER_WRAPPER</code>. Empty
+   values are treated as unset.</li>
+<li><strong><code>[build.cache]</code> config-file layer</strong> — <code>[build.cache]</code> in
+   <code>&lt;root&gt;/.cabin/config.toml</code> (workspace or project) or
+   <code>~/.config/cabin/config.toml</code> (user). See
+   <a href="../config/"><code>config.md</code></a> for the full file-discovery rules.</li>
+<li><strong><code>[target.'cfg(...)'.profile.cache]</code></strong> matching the host
+   platform. Multiple matches settle in declaration order — the
+   last match wins, mirroring the build-flag merger.</li>
+<li><strong><code>[profile.cache]</code></strong> on the workspace root manifest.</li>
+<li><strong>Default</strong> — no wrapper.</li>
+</ol>
+<p>A layer that says <code>"none"</code> is a <em>hard</em> opt-out: any lower-priority
+layer that requested a wrapper is ignored.</p>
+<p>The resolver records which layer won under
+<code>toolchain.compiler_wrapper.source</code> in <code>cabin metadata</code> so users
+can audit the resolved selection without re-running anything.</p>
+<h2 id="cli-surface">CLI surface</h2>
+<pre><code class="language-sh">cabin build --compiler-wrapper ccache
+cabin build --no-compiler-wrapper          # disable for one run
+cabin metadata --compiler-wrapper sccache  # report what a build would pick
+</code></pre>
+<p><code>--compiler-wrapper</code> accepts <code>none</code>, <code>ccache</code>, or <code>sccache</code>.
+<code>--no-compiler-wrapper</code> is shorthand for <code>--compiler-wrapper none</code>
+and is mutually exclusive with <code>--compiler-wrapper</code>. The flags
+apply only to the current invocation; nothing is written back to
+the manifest.</p>
+<p><code>cabin build</code> and <code>cabin metadata</code> accept the flags. <code>cabin
+resolve</code>, <code>cabin update</code>, <code>cabin fetch</code>, <code>cabin package</code>, and
+<code>cabin publish</code> deliberately do <strong>not</strong> accept them — wrapper
+selection has no effect on dependency resolution, the lockfile,
+or the published archive.</p>
+<h2 id="environment-variables">Environment variables</h2>
+<pre><code>CABIN_COMPILER_WRAPPER=ccache cabin build
+</code></pre>
+<p>The variable accepts the same values as the CLI flag. Empty
+values look identical to no variable at all.</p>
+<h2 id="manifest-syntax">Manifest syntax</h2>
+<p>The workspace root manifest may declare a general <code>[profile.cache]</code>
+table plus any number of conditional overlays. Member or path-dep
+manifests that declare any cache settings are rejected with the
+error
+<code>compiler-cache wrapper settings may only appear in the workspace root manifest</code>.</p>
+<pre><code class="language-toml">[profile.cache]
+compiler-wrapper = &quot;ccache&quot;
+
+[target.'cfg(os = &quot;linux&quot;)'.profile.cache]
+compiler-wrapper = &quot;sccache&quot;
+</code></pre>
+<p>The schema is <code>compiler-wrapper = "&lt;name&gt;"</code>. Unknown sub-keys are
+rejected at parse time. The cache table is intentionally a
+sub-table of <code>[profile]</code> so it composes with the existing <code>[profile]</code>
+flag layers, but it does <strong>not</strong> merge into the per-package
+<code>ProfileFlags</code>: cache settings are workspace-wide while build
+flags remain per-package.</p>
+<h2 id="detection">Detection</h2>
+<p>Once the resolver has located the wrapper executable on <code>PATH</code> it
+runs <code>&lt;wrapper&gt; --version</code>, captures the first non-empty output
+line, and parses a <code>major[.minor[.patch]]</code> substring. The detected
+identity becomes available to <code>cabin metadata</code>'s
+<code>toolchain.compiler_wrapper.{kind, spec, source, version, raw_version_line}</code>
+block.</p>
+<p><code>cabin metadata</code> is fail-soft: if the wrapper executable is
+missing or its <code>--version</code> exits non-zero, the JSON view falls
+back to a <code>null</code> <code>toolchain.compiler_wrapper</code> block and emits a
+warning to stderr. <code>cabin build</code> is strict: a missing or
+unparseable wrapper executable surfaces a typed error
+(<code>compiler-cache wrapper '&lt;kind&gt;' was requested by &lt;source&gt; but
+could not be found on PATH</code>) before any Ninja file is written, so
+a regression that silently disabled caching never reaches a real
+build.</p>
+<h2 id="build-configuration-fingerprint">Build configuration fingerprint</h2>
+<p><code>BuildConfiguration::fingerprint</code> (the SHA-256 already hashed
+across features / profile / toolchain / build flags) now also folds
+in the resolved wrapper kind, spec,
+and detected version. Switching from no wrapper to <code>ccache</code>,
+upgrading <code>ccache</code> to a new version, or flipping
+<code>--no-compiler-wrapper</code> all produce a different fingerprint by
+design — a future cache layer keys on the same value.</p>
+<h2 id="build-script-environment">Build-script environment</h2>
+<pre><code class="language-text">CABIN_COMPILER_WRAPPER          # &quot;ccache&quot; | &quot;sccache&quot; — unset when no wrapper
+CABIN_COMPILER_WRAPPER_PATH     # absolute path to the resolved wrapper
+CABIN_COMPILER_WRAPPER_VERSION  # &quot;4.10.2&quot; — set only when version was parsed
+</code></pre>
+<p>Build scripts only see the workspace-wide wrapper selection; the
+wrapper applies uniformly to every package's C++ compile commands,
+so there is no per-package variant of these variables.</p>
+<h2 id="package-index-metadata">Package + index metadata</h2>
+<p><code>cabin package</code> writes the manifest's declared <code>[profile.cache]</code>
+and <code>[target.'cfg(...)'.profile.cache]</code> tables into the canonical
+<code>&lt;name&gt;-&lt;version&gt;.json</code> so consumers who rebuild from source can
+reproduce the same wrapper preferences.
+<strong>Environment- or CLI-derived selections are never written.</strong> A
+user's <code>CABIN_COMPILER_WRAPPER=...</code> or <code>--compiler-wrapper ...</code>
+only affects the local invocation; it never leaks into a published
+archive.</p>
+<p>The local file registry and the sparse-HTTP index round-trip the
+same fields opaquely. Older registries that omit the new fields
+continue to load. The resolver itself does not consult any of
+these values — registry resolution remains wrapper-independent.</p>
+<h2 id="deferred-out-of-scope">Deferred / out of scope</h2>
+<ul>
+<li>distcc / icecc / other compile-server wrappers.</li>
+<li>Per-language wrappers (C-only / C++-only). The current model
+  applies one wrapper to every C++ compile command in the build.</li>
+<li>Wrapper-specific configuration (e.g. <code>ccache --max-size</code>). Use
+  the wrapper's own configuration mechanism (<code>~/.config/ccache/ccache.conf</code>,
+  <code>SCCACHE_*</code> env vars).</li>
+<li>Path-shaped CLI / manifest values
+  (<code>--compiler-wrapper /opt/cache/bin/ccache</code>). Today only the
+  named kinds are accepted.</li>
+<li>Wrapping link / archive / Cargo invocations.</li>
+<li>A <code>--show-compiler-cache-stats</code>-style command. Use the
+  wrapper's own stats command (<code>ccache -s</code>, <code>sccache -s</code>).</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../targets/" class="btn btn-neutral float-left" title="Targets"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../testing/" class="btn btn-neutral float-right" title="Testing">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../targets/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../testing/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

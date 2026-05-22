@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Cargo-inspired interface - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Cargo-inspired interface";
+        var mkdocs_page_input_path = "cargo-inspired-interface.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Cargo-inspired interface</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#what-cabin-adopts-from-cargo">What Cabin adopts from Cargo</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#subcommands">Subcommands</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#flags-options">Flags / options</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#environment-variables">Environment variables</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-cabin-deliberately-diverges-on">What Cabin deliberately diverges on</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#-build-dir-instead-of-target-dir">--build-dir instead of --target-dir</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#no-target-overload-for-manifest-target-selection">No --target overload for manifest-target selection</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#per-language-separation">Per-language separation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#package-metadata-as-compile-time-macros">Package-metadata as compile-time macros</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-explain">cabin explain</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-cabin-intentionally-does-not-have">What Cabin intentionally does not have</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#where-the-audit-lives">Where the audit lives</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Overview</li>
+      <li class="breadcrumb-item active">Cargo-inspired interface</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/cargo-inspired-interface.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="cargo-inspired-interface">Cargo-inspired interface</h1>
+<p>Cabin is <em>Cargo-inspired</em>, not Cargo-compatible. The interface
+borrows Cargo's vocabulary where the semantics line up — so a
+Cargo user picks Cabin up quickly — and deliberately diverges
+where Cargo's terminology would be misleading for C/C++.</p>
+<p>This page is the audit checkpoint for that contract: it lists
+what Cabin adopts, what it renames, what it intentionally
+leaves out, and where to look for the rule when in doubt.</p>
+<h2 id="what-cabin-adopts-from-cargo">What Cabin adopts from Cargo</h2>
+<h3 id="subcommands">Subcommands</h3>
+<table>
+<thead>
+<tr>
+<th>Cabin command</th>
+<th>Cargo analogue</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cabin init</code></td>
+<td><code>cargo init</code></td>
+<td>Single-package generator (current directory).  <code>--bin</code> / <code>--lib</code> select scaffold kind (binary by default).  See <a href="../new-and-init/"><code>new-and-init.md</code></a>.</td>
+</tr>
+<tr>
+<td><code>cabin new</code></td>
+<td><code>cargo new</code></td>
+<td>Single-package generator (new directory).  <code>--bin</code> / <code>--lib</code> select scaffold kind (binary by default).  See <a href="../new-and-init/"><code>new-and-init.md</code></a>.</td>
+</tr>
+<tr>
+<td><code>cabin build</code></td>
+<td><code>cargo build</code></td>
+<td>Plans + invokes Ninja</td>
+</tr>
+<tr>
+<td><code>cabin clean</code></td>
+<td><code>cargo clean</code></td>
+<td>Removes Cabin-generated build artifacts</td>
+</tr>
+<tr>
+<td><code>cabin run</code></td>
+<td><code>cargo run</code></td>
+<td>Builds and runs an exec target; <code>--</code> forwards args</td>
+</tr>
+<tr>
+<td><code>cabin test</code></td>
+<td><code>cargo test</code></td>
+<td>Builds + runs <code>cpp_test</code> targets</td>
+</tr>
+<tr>
+<td><code>cabin fetch</code></td>
+<td><code>cargo fetch</code></td>
+<td>Downloads + verifies registry artifacts</td>
+</tr>
+<tr>
+<td><code>cabin update</code></td>
+<td><code>cargo update</code></td>
+<td>Re-resolves, refreshes lockfile</td>
+</tr>
+<tr>
+<td><code>cabin metadata</code></td>
+<td><code>cargo metadata</code></td>
+<td>Deterministic JSON state</td>
+</tr>
+<tr>
+<td><code>cabin tree</code></td>
+<td><code>cargo tree</code></td>
+<td>Resolved dependency tree</td>
+</tr>
+<tr>
+<td><code>cabin explain</code></td>
+<td>(no direct analogue)</td>
+<td>Typed answers about the resolved graph</td>
+</tr>
+<tr>
+<td><code>cabin vendor</code></td>
+<td><code>cargo vendor</code></td>
+<td>File-registry materialisation</td>
+</tr>
+<tr>
+<td><code>cabin package</code></td>
+<td><code>cargo package</code></td>
+<td>Source-archive + canonical metadata</td>
+</tr>
+<tr>
+<td><code>cabin publish</code></td>
+<td><code>cargo publish</code></td>
+<td>Local file-registry publish (no remote yet)</td>
+</tr>
+<tr>
+<td><code>cabin fmt</code></td>
+<td><code>cargo fmt</code></td>
+<td>Formats workspace C/C++ sources with <code>clang-format</code></td>
+</tr>
+<tr>
+<td><code>cabin version</code></td>
+<td>(no direct analogue)</td>
+<td>Prints Cabin's version; with <code>-v</code> adds release, commit, host triple, and OS fields when available. <code>cabin --version</code> keeps working as the concise framework spelling.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="flags-options">Flags / options</h3>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Semantics</th>
+<th>Cargo analogue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-p</code>, <code>--package &lt;name&gt;</code></td>
+<td>Workspace package selection</td>
+<td>identical</td>
+</tr>
+<tr>
+<td><code>--workspace</code> / <code>--exclude &lt;name&gt;</code></td>
+<td>Workspace-wide selection</td>
+<td>identical</td>
+</tr>
+<tr>
+<td><code>--manifest-path &lt;path&gt;</code></td>
+<td>Manifest discovery</td>
+<td>identical</td>
+</tr>
+<tr>
+<td><code>--features &lt;names&gt;</code></td>
+<td>Enable named features</td>
+<td>identical</td>
+</tr>
+<tr>
+<td><code>--all-features</code> / <code>--no-default-features</code></td>
+<td>Feature selection</td>
+<td>identical</td>
+</tr>
+<tr>
+<td><code>--release</code></td>
+<td>Compatibility alias for <code>--profile release</code></td>
+<td>identical</td>
+</tr>
+<tr>
+<td><code>--profile &lt;name&gt;</code></td>
+<td>Build profile</td>
+<td>identical</td>
+</tr>
+<tr>
+<td><code>-j</code>, <code>--jobs &lt;N&gt;</code></td>
+<td>Number of parallel jobs for the build backend</td>
+<td>identical</td>
+</tr>
+<tr>
+<td><code>--locked</code> / <code>--frozen</code></td>
+<td>Lockfile policy</td>
+<td>identical</td>
+</tr>
+<tr>
+<td><code>--offline</code></td>
+<td>Forbid network access</td>
+<td>identical</td>
+</tr>
+<tr>
+<td><code>--bin &lt;name&gt;</code></td>
+<td>Pick a <code>cpp_executable</code> to run (<code>cabin run</code> only)</td>
+<td>matches Cargo's <code>cargo run --bin</code>; Cabin does <em>not</em> offer a Cargo-style <code>--target &lt;name&gt;</code> manifest-target selector on <code>cabin build</code> / <code>cabin test</code> (see below)</td>
+</tr>
+<tr>
+<td><code>--color &lt;when&gt;</code></td>
+<td>Terminal-color choice (<code>auto</code> / <code>always</code> / <code>never</code>)</td>
+<td>identical wording; Cabin's env-var spelling is <code>CABIN_TERM_COLOR</code></td>
+</tr>
+<tr>
+<td><code>-v</code>, <code>--verbose</code></td>
+<td>Increase Cabin's status output volume; specify twice for very verbose output</td>
+<td>identical</td>
+</tr>
+<tr>
+<td><code>-q</code>, <code>--quiet</code></td>
+<td>Suppress Cabin-owned status messages (errors are unaffected)</td>
+<td>identical</td>
+</tr>
+<tr>
+<td><code>--list</code></td>
+<td>Print every subcommand (including distribution helpers hidden from <code>--help</code>) and exit</td>
+<td>identical wording; <code>cabin --help</code> is curated for day-to-day use, <code>cabin --list</code> is the full directory</td>
+</tr>
+</tbody>
+</table>
+<h3 id="environment-variables">Environment variables</h3>
+<p>Read-side and write-side <code>CABIN_*</code> env vars mirror Cargo's
+<code>CARGO_*</code> shape (see <a href="../environment-variables/"><code>environment-variables.md</code></a>
+for the full list). Highlights:</p>
+<ul>
+<li><code>CABIN_BUILD_DIR</code> analogous to <code>CARGO_TARGET_DIR</code>, but spelled
+  with Cabin's own name to match the <code>--build-dir</code> flag.</li>
+<li><code>CABIN_NET_OFFLINE</code> analogous to <code>CARGO_NET_OFFLINE</code>.</li>
+<li><code>CABIN_TERM_COLOR</code> analogous to <code>CARGO_TERM_COLOR</code>.</li>
+</ul>
+<h2 id="what-cabin-deliberately-diverges-on">What Cabin deliberately diverges on</h2>
+<h3 id="-build-dir-instead-of-target-dir"><code>--build-dir</code> instead of <code>--target-dir</code></h3>
+<p>Cabin keeps the word <em>target</em> for <strong>platform / toolchain
+targets</strong> (<code>x86_64-unknown-linux-gnu</code>, …). Cargo's
+<code>--target-dir</code> would be ambiguous in C/C++ where "target" also
+means a manifest-declared library / executable target. The
+build output directory flag is therefore <code>--build-dir</code>, the
+config key is <code>[paths] build-dir</code>, and the env var is
+<code>CABIN_BUILD_DIR</code>.</p>
+<p>Default build directory: <code>build/</code>.</p>
+<h3 id="no-target-overload-for-manifest-target-selection">No <code>--target</code> overload for manifest-target selection</h3>
+<p>Cargo overloads <code>--target</code> for binary selection in some
+contexts. Cabin does not offer a <code>--target &lt;name&gt;</code>
+manifest-target selector on any command.</p>
+<p>Selection works through three other surfaces:</p>
+<ul>
+<li><strong><code>cabin run --bin &lt;name&gt;</code></strong> picks a <code>cpp_executable</code> to
+  build and run — the same shape Cargo uses for
+  <code>cargo run --bin</code>. This is the only single-target selector
+  in the CLI.</li>
+<li><strong><code>cabin test</code></strong> builds every <code>cpp_test</code> target in the
+  selected packages. Narrow the run by narrowing the package
+  selection.</li>
+<li><strong><code>cabin build</code></strong> builds every default-buildable target
+  (<code>cpp_library</code>, <code>cpp_header_only</code>, <code>cpp_executable</code>) in the
+  selected packages. Dev-only kinds (<code>cpp_test</code>,
+  <code>cpp_example</code>) are excluded from this default and reach the
+  build graph only as transitive deps of a selected target.</li>
+</ul>
+<h3 id="per-language-separation">Per-language separation</h3>
+<p>Cabin keeps CC vs. CXX, and CFLAGS vs. CXXFLAGS (whether passed
+via manifest, profile, or env vars) strictly separated.
+Cargo's <code>RUSTFLAGS</code> is single-language by definition; C/C++ has
+two language slots and they do not share argv space. The
+fingerprint distinguishes the two, so a flag moved between
+slots has a distinct build identity even when the argv string
+is identical.</p>
+<h3 id="package-metadata-as-compile-time-macros">Package-metadata as compile-time macros</h3>
+<p>Cargo exposes <code>CARGO_PKG_*</code> to Rust code as compile-time env
+vars through <code>env!()</code>. C/C++ has no <code>env!()</code>: turning package
+metadata into compiler <code>-D</code> flags by default would (a) leak
+into public headers, (b) change ABI when the version bumps,
+and (c) churn every affected object file. Cabin's default is
+therefore <strong>no automatic <code>-DCABIN_PACKAGE_*</code> macros</strong>.
+<code>cabin run</code> and <code>cabin test</code> receive a scoped subset of the
+metadata as env vars; compile commands stay clean. Explicit
+opt-in macros may be added in a future change behind a manifest
+flag, with the orchestration layer threading them through the
+build-configuration fingerprint so a future binary-artifact
+cache can key on the changed inputs.</p>
+<h3 id="cabin-explain"><code>cabin explain</code></h3>
+<p><code>cabin explain</code> has no direct Cargo equivalent. It exposes a
+typed query model (<code>package</code>, <code>target</code>, <code>source</code>, <code>feature</code>,
+<code>build-config</code>) so users can ask "why is this package /
+target / feature / configuration in the resolved state?"
+without re-deriving it by hand. See
+<a href="../metadata-tree-explain/"><code>metadata-tree-explain.md</code></a>.</p>
+<h2 id="what-cabin-intentionally-does-not-have">What Cabin intentionally does not have</h2>
+<p>These are Cargo / Rust concepts that do not (yet) translate to
+Cabin's C/C++ scope:</p>
+<ul>
+<li><code>cargo doc</code> — Cabin has no doc generator yet; rustdoc has no
+  C/C++ equivalent that would justify the surface.</li>
+<li><code>cargo install</code> — install / prefix semantics are not designed.</li>
+<li><code>cargo search</code> / <code>cargo login</code> / <code>cargo logout</code> /
+  <code>cargo owner</code> / <code>cargo yank</code> — registry-server work is out
+  of scope until a Cabin registry server exists.</li>
+<li><code>cargo rustc</code> / <code>cargo rustdoc</code> / <code>cargo fix</code> — Rust-specific.</li>
+<li><code>cargo check</code> — C/C++ has no compile-without-link contract
+  shared across compilers; <code>cabin build</code> already covers the
+  typical "did this change compile?" use case.</li>
+<li><code>cargo bench</code> — Cabin has no benchmark target kind and no
+  benchmark harness model. Users who need to time a binary
+  declare a <code>cpp_executable</code> and run it themselves.</li>
+<li>Doctest / book / fix / clippy / miri analogues.</li>
+</ul>
+<p>If a later iteration wants to add one of these, it should
+land alongside an explicit motivation rather than as an
+opportunistic addition.</p>
+<h2 id="where-the-audit-lives">Where the audit lives</h2>
+<p>The full audit checklist is captured by the Cargo-inspired
+interface section in <a href="../architecture/"><code>architecture.md</code></a>.  When
+this page changes, that section in the architecture document
+should be updated in the same commit.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../installation/" class="btn btn-neutral float-left" title="Installation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../new-and-init/" class="btn btn-neutral float-right" title="Creating a new package">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../installation/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../new-and-init/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

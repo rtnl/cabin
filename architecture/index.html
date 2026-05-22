@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Architecture - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Architecture";
+        var mkdocs_page_input_path = "architecture.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Architecture</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#repository-shape-today">Repository shape today</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#crate-responsibilities-and-rules">Crate responsibilities and rules</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-core">cabin-core</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-manifest">cabin-manifest</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-workspace">cabin-workspace</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-index">cabin-index</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-resolver">cabin-resolver</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-lockfile">cabin-lockfile</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-artifact">cabin-artifact</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-package">cabin-package</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-index-http">cabin-index-http</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-publish">cabin-publish</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-registry-file">cabin-registry-file</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-toolchain">cabin-toolchain</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-build">cabin-build</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-test">cabin-test</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-ninja">cabin-ninja</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-explain">cabin-explain</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-env">cabin-env</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-source-discovery">cabin-source-discovery</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-fmt">cabin-fmt</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-tidy">cabin-tidy</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-system-deps">cabin-system-deps</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-diagnostics">cabin-diagnostics</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabin-cli">cabin-cli</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#data-flow-implemented-today">Data flow — implemented today</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#dependency-kinds-end-to-end">Dependency kinds end-to-end</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#manifest-parsing">Manifest parsing</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#workspace-loading">Workspace loading</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#local-build-planning-ninja-generation">Local build planning + Ninja generation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#local-index-resolution">Local index resolution</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#lockfile-aware-resolution">Lockfile-aware resolution</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#artifact-fetch-registry-aware-build">Artifact fetch + registry-aware build</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#package-archive-canonical-metadata">Package archive + canonical metadata</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#local-file-registry-publish">Local file-registry publish</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sparse-http-index-read-path">Sparse HTTP index read path</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#architectural-seams-to-preserve">Architectural seams to preserve</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#c-semantic-invariants">C++ semantic invariants</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#implemented-layers-quick-reference">Implemented layers — quick reference</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#artifact-layer">Artifact layer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#package-archive-layer">Package / archive layer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#file-registry-publish-layer">File registry publish layer</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sparse-http-index-artifact-client">Sparse HTTP index / artifact client</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#features-implemented-foundation">Features — implemented (foundation)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#build-profiles-implemented">Build profiles — implemented</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#toolchain-selection-and-build-flags-implemented">Toolchain selection and build flags — implemented</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#compiler-tool-capability-detection-implemented">Compiler / tool capability detection — implemented</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#patch-override-source-replacement">Patch / override / source replacement</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#configuration-files">Configuration files</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#compiler-cache-wrappers">Compiler-cache wrappers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#non-local-registry-control-planes">Non-Local Registry Control Planes</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scope-and-limitations">Scope and limitations</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#contributor-facing-architecture-guardrails">Contributor-facing architecture guardrails</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#why-a-separate-lockfile-crate">Why a separate lockfile crate?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#why-a-separate-build-graph-ir">Why a separate build graph IR?</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Overview</li>
+      <li class="breadcrumb-item active">Architecture</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/architecture.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="architecture">Architecture</h1>
+<p>This document describes the Cabin workspace, the responsibilities of
+each crate, the data flow for the currently implemented behaviour, and
+the planned shape of deferred layers. The codebase is organized as small
+crates with narrow ownership boundaries; the notes below describe which
+crate owns each implemented surface and where deferred work should land.</p>
+<p>The currently implemented surface, layered briefly: first-class
+dependency kinds (<code>normal</code> / <code>dev</code>), advanced workspace
+semantics, the local C / C++ / mixed-language build, the
+Cabin-native backtracking resolver, the lockfile, the
+content-addressed source-archive cache, the local file
+registry, the read-only sparse-HTTP index client,
+features with a cross-package feature resolver and the documented
+foundation limits,
+target / platform-specific
+dependencies, build profiles, typed toolchain selection with
+capability detection, <code>ccache</code> / <code>sccache</code> wrapper integration,
+the typed <code>.cabin/config.toml</code> system, patch / override and
+source replacement, the dev / test / example target kinds
+plus <code>cabin test</code>, vendoring + <code>--offline</code>,
+<code>cabin metadata</code> / <code>cabin tree</code> / <code>cabin explain</code>, the
+Cargo-inspired interface foundation (<code>cabin run</code>, the
+<code>cabin-env</code> crate), <code>cabin fmt</code> / <code>cabin tidy</code>,
+<code>pkg-config</code>-driven <code>`system = true</code> deps<code>,</code>CPPFLAGS<code>/</code>CFLAGS<code>/</code>CXXFLAGS<code>/</code>LDFLAGS<code>ingestion,</code>-j<code>/</code>--jobs<code>build / run / tidy parallelism,</code>cabin new --bin<code>/</code>--lib<code>scaffold parity, and</code>cabin version<code>plus</code>cabin --list`.</p>
+<p>See
+<a href="../dependency-kinds/"><code>dependency-kinds.md</code></a> for the
+dependency-kind protocol and command behaviour,
+<a href="../registry-design/"><code>registry-design.md</code></a> for the registry
+direction (including the file-registry layout that the sparse
+HTTP client consumes),
+<a href="../artifacts/"><code>artifacts.md</code></a> for the source-archive layout,
+<a href="../package-format/"><code>package-format.md</code></a> for the package archive +
+canonical metadata schema,
+<a href="../distribution/"><code>distribution.md</code></a> for the shell-completion and
+man-page surfaces.</p>
+<h2 id="repository-shape-today">Repository shape today</h2>
+<pre><code>crates/
+  cabin-core/        stable internal data model
+  cabin-manifest/    cabin.toml parsing
+  cabin-config/      typed `.cabin/config.toml` discovery + merge
+  cabin-toolchain/   C/C++ compiler / archiver / Ninja detection + wrappers
+  cabin-workspace/   local + registry package graph loader, patches, selection
+  cabin-feature/     cross-package feature resolver
+  cabin-build/       backend-independent build graph planner
+  cabin-ninja/       build.ninja + compile_commands.json writers
+  cabin-index/       local JSON package index loader
+  cabin-resolver/    dependency resolver with lockfile-aware modes
+  cabin-lockfile/    cabin.lock reader / writer / validator
+  cabin-artifact/    source-archive cache, checksum verifier, extractor
+  cabin-package/     deterministic source-archive + canonical metadata writer
+  cabin-publish/     publish-workflow orchestration
+  cabin-registry-file/ local file-registry layout, atomic-ish writes, lock
+  cabin-index-http/  sparse HTTP index client (read-only)
+  cabin-vendor/      typed VendorPlan + file-registry materialiser
+  cabin-test/        cpp_test plan + sequential runner
+  cabin-explain/     typed model for `cabin tree` / `cabin explain`
+  cabin-diagnostics/ user-facing diagnostic presentation + annotate-snippets boundary
+  cabin-env/         CABIN_* env-var names + run/test env builder
+  cabin-source-discovery/ shared C / C++ source walker for fmt / tidy
+  cabin-fmt/         clang-format runner used by `cabin fmt`
+  cabin-tidy/        run-clang-tidy runner used by `cabin tidy`
+  cabin-system-deps/ pkg-config runner used by ``system = true` deps`
+  cabin-cli/         `cabin` binary, command dispatch
+docs/
+  architecture.md    this file
+  manifest.md        cabin.toml schema reference
+  index.md           local JSON index format
+  lockfile.md        cabin.lock format reference
+  artifacts.md       source archive + cache layout
+  package-format.md  package archive + canonical metadata schema
+  distribution.md    shell completions + man pages
+  registry-design.md local registry interface boundary
+  features.md        features foundation
+  workspaces.md      workspace root discovery, member selection, inheritance
+  metadata-tree-explain.md  `cabin metadata` / `cabin tree` / `cabin explain`
+  cargo-inspired-interface.md  Cabin-vs-Cargo audit / classification
+  environment-variables.md  CABIN_* read-side / run / test env vars
+  fmt.md             `cabin fmt` (clang-format)
+  tidy.md            `cabin tidy` (run-clang-tidy)
+  system-dependencies.md  ``system = true` deps` and pkg-config
+  new-and-init.md    scaffold semantics for `cabin new` / `cabin init`
+  testing.md         `cabin test` runner and portability rules
+  targets.md         target kinds, `cpp_test` / `cpp_example`
+  toolchains.md      typed toolchain selection, capability detection
+  config.md          `.cabin/config.toml` schema, discovery, precedence
+  profiles.md        build profile model, inheritance, fingerprint inputs
+  compiler-cache.md  `ccache` / `sccache` integration
+  vendoring-offline.md  `cabin vendor` and `--offline` semantics
+  dependency-kinds.md  two dependency kinds (normal/dev)
+  target-dependencies.md  `[target.'cfg(...)'.&lt;kind&gt;]` predicates
+  patch-overrides.md  patch / override / source replacement
+  package-index.md   package index schema
+</code></pre>
+<h2 id="crate-responsibilities-and-rules">Crate responsibilities and rules</h2>
+<p>The split is by <strong>responsibility</strong>, not by feature. Each crate has a
+narrow public surface; future work adds new crates rather than widening
+existing ones.</p>
+<h3 id="cabin-core"><code>cabin-core</code></h3>
+<p>Stable, format-agnostic types: <code>Package</code>, <code>Target</code>, <code>TargetKind</code>,
+<code>PackageName</code>, <code>TargetName</code>, <code>Dependency</code>,
+<code>DependencySource::{Path, Version}</code>, plus the build-configuration
+model — <code>Features</code>, <code>SelectionRequest</code>, and <code>BuildConfiguration</code>
+(with a deterministic SHA-256 fingerprint that now also includes
+the selected profile's relevant fields). The cfg / target-condition
+AST also lives here as <code>Condition</code>, <code>ConditionKey</code>, and
+<code>TargetPlatform</code>, and the build-profile model lives here as
+<code>ProfileName</code>, <code>OptLevel</code>, <code>BuiltinProfile</code>, <code>ProfileDefinition</code>,
+<code>ProfileSelection</code>, <code>ResolvedProfile</code>, <code>ProfileSource</code>, and
+<code>resolve_profile</code>. Manifest, index, lockfile, resolver, build,
+and feature crates all share these typed values without
+depending on each other.
+The crate must:</p>
+<ul>
+<li>not depend on <code>clap</code>;</li>
+<li>not parse TOML or any other on-disk format;</li>
+<li>not know about Ninja, the build graph, the resolver, the lockfile,
+  or any registry / index transport;</li>
+<li>not invoke processes;</li>
+<li>stay reusable by client / server / shared tooling alike.</li>
+</ul>
+<h3 id="cabin-manifest"><code>cabin-manifest</code></h3>
+<p>Owns <code>cabin.toml</code> parsing. Raw serde structs are private to the crate
+and converted to <code>cabin-core</code> domain types at the boundary. The crate
+must:</p>
+<ul>
+<li>not load workspaces or follow path dependencies;</li>
+<li>not run dependency resolution;</li>
+<li>not write Ninja;</li>
+<li>not read or write <code>cabin.lock</code>.</li>
+</ul>
+<h3 id="cabin-workspace"><code>cabin-workspace</code></h3>
+<p>Owns local package and workspace loading: workspace member globbing,
+recursive local path-dep traversal, dedup-by-canonical-path, duplicate
+name detection, package cycle detection, and topological ordering.
+Versioned dependencies are preserved on each <code>Package</code> for the
+resolver but are intentionally not traversed here. Current
+invariants:</p>
+<ul>
+<li>Workspace discovery walks upward from the start path looking
+  for a <code>cabin.toml</code> whose root declares a <code>[workspace]</code> table.
+  With zero or one such manifest the walk returns it (or
+  <code>None</code>); with two or more stacked roots the walk errors with
+  a <code>nested workspace detected</code> diagnostic so the caller is
+  forced to disambiguate via <code>--manifest-path</code>.</li>
+<li><code>[workspace]</code> expansion supports <code>members</code>, <code>exclude</code>, and
+  <code>default-members</code>, plus workspace dependency inheritance via
+  <code>dep = { workspace = true }</code>.</li>
+<li>A <code>PackageSelection</code> model turns CLI flags into a
+  deterministic list of selected packages.
+  <code>ResolvedSelection::closure(graph)</code> and
+  <code>collect_closure_versioned_deps(graph, closure)</code> extend that
+  selection over local path-dep edges so commands scoped to one
+  member can still see the registry deps of the path-deps they
+  pull in.</li>
+<li>Workspace loading exposes two registry-aware entry points:
+  <code>load_workspace_with_registry</code> (strict — every versioned dep
+  in the workspace must be resolved) and
+  <code>load_workspace_with_registry_for_selection(manifest,
+  registry, strict_packages)</code>. The selection-aware variant is
+  what the CLI calls when the user has scoped a command to a
+  subset of the workspace: registry entries are required only
+  for packages reachable from the selected closure, so
+  unrelated workspace members' versioned deps are silently
+  skipped during loading rather than being materialized into
+  the package graph.</li>
+<li><code>cabin_core::is_path_safe_package_name</code> is the single
+  authoritative <code>PackageName</code> grammar: ASCII alphanumerics plus
+  <code>_-.</code>, non-empty, not <code>.</code>/<code>..</code>, no leading dot. It covers
+  filesystem path components, sparse-HTTP URL path segments,
+  and Windows-reserved filename characters in one rule, and is
+  enforced by <code>PackageName::new</code> so URL-reserved characters
+  cannot reach <code>Url::join</code> through any code path. The
+  diagnostic emitted on rejection echoes the offending name and
+  describes the grammar.</li>
+</ul>
+<p>The crate must:</p>
+<ul>
+<li>not run the resolver or any other resolver algorithm;</li>
+<li>not write Ninja;</li>
+<li>not fetch artifacts;</li>
+<li>not parse CLI flags (the CLI builds <code>PackageSelection</code> values);</li>
+<li>own every workspace graph algorithm (closure walks,
+  versioned-dep aggregation, nested-workspace detection) — none
+  of these may live in <code>cabin-cli</code>.</li>
+</ul>
+<h3 id="cabin-index"><code>cabin-index</code></h3>
+<p>Owns the local-filesystem JSON package index format and its loader.
+The crate must:</p>
+<ul>
+<li>not run the resolver;</li>
+<li>not fetch artifacts;</li>
+<li>not read or write <code>cabin.lock</code>.</li>
+</ul>
+<p>The sparse HTTP read path lives in <code>cabin-index-http</code>; <code>cabin-index</code>
+holds the local filesystem loader. Both feed the same typed index
+model, so downstream crates consume one shape regardless of transport.</p>
+<h3 id="cabin-resolver"><code>cabin-resolver</code></h3>
+<p>Owns dependency resolution. The current solver is a small backtracking
+engine; the public API exposes only Cabin-native types
+(<code>ResolveInput</code>, <code>ResolveOutput</code>, <code>ResolvedPackage</code>, <code>ResolvedSource</code>,
+<code>LockedVersion</code>, <code>ResolveMode</code>, <code>ResolveError</code>, <code>ResolverConstraint</code>)
+so a future algorithm change does not break consumers.
+The crate must:</p>
+<ul>
+<li>not expose the underlying solver type;</li>
+<li>not read or write <code>cabin.lock</code> directly (the CLI bridges
+  <code>cabin-lockfile</code> and <code>cabin-resolver</code>);</li>
+<li>not fetch artifacts.</li>
+</ul>
+<h3 id="cabin-lockfile"><code>cabin-lockfile</code></h3>
+<p>Owns the <code>cabin.lock</code> model and I/O: TOML serialisation, deterministic
+ordering, schema validation. The crate must:</p>
+<ul>
+<li>not run the resolver;</li>
+<li>not load indexes;</li>
+<li>not parse <code>cabin.toml</code>;</li>
+<li>not fetch artifacts;</li>
+<li>not write Ninja.</li>
+</ul>
+<h3 id="cabin-artifact"><code>cabin-artifact</code></h3>
+<p>Owns the source-archive cache. Given a checksum-and-path-bearing
+fetch plan, it copies archives into a checksum-addressed cache,
+verifies SHA-256 along the way, safely extracts <code>.tar.gz</code> archives
+into the same cache, and validates that each extracted package's
+<code>cabin.toml</code> matches the resolved name and version. The crate must:</p>
+<ul>
+<li>not run the resolver;</li>
+<li>not write Ninja;</li>
+<li>not invoke C/C++ compilers;</li>
+<li>not implement networking;</li>
+<li>not implement publishing;</li>
+<li>reject every tar entry that is not a regular file or directory,
+  every entry with <code>..</code> components or absolute paths, and every
+  entry whose joined destination escapes the cache target.</li>
+</ul>
+<h3 id="cabin-package"><code>cabin-package</code></h3>
+<p>Owns deterministic source-archive creation and canonical per-version
+metadata generation. Given a single-package manifest, it validates
+the source tree, walks it under a fixed include / exclude policy,
+writes a byte-deterministic <code>.tar.gz</code>, hashes it with SHA-256, and
+emits a JSON metadata document shaped like a future registry's
+<code>&lt;package&gt;.json</code> version entry. The crate must:</p>
+<ul>
+<li>not mutate any registry;</li>
+<li>not run the resolver;</li>
+<li>not fetch artifacts;</li>
+<li>not invoke C/C++ compilers;</li>
+<li>not implement networking;</li>
+<li>reject path dependencies (path deps are not publishable);</li>
+<li>refuse to overwrite an on-disk archive whose bytes differ from
+  what the current run would produce — identical bytes succeed
+  silently.</li>
+</ul>
+<h3 id="cabin-index-http"><code>cabin-index-http</code></h3>
+<p>Owns the read-only sparse HTTP index client. Wraps <code>ureq::Agent</code>
+for blocking <code>GET</code> requests; its public surface is intentionally
+small:</p>
+<ul>
+<li>[<code>cabin_index_http::HttpClient</code>] — <code>get_bytes</code> and <code>download</code>
+  helpers that map HTTP statuses (<code>404</code>, <code>5xx</code>) and transport errors
+  to <code>IndexHttpError</code> variants;</li>
+<li>[<code>cabin_index_http::HttpIndex</code>] — opens a registry by fetching
+  <code>&lt;base&gt;/config.json</code>, validates it, exposes
+  <code>fetch_package(name) -&gt; IndexEntry</code> and a transitive walker
+  <code>load_package_index(roots) -&gt; PackageIndex</code> that returns the
+  same shape as the local file loader.</li>
+</ul>
+<p>The crate must:</p>
+<ul>
+<li>not POST, PUT, or otherwise mutate a remote registry;</li>
+<li>not implement authentication, auth headers, or alternate-server
+  redirect handling;</li>
+<li>reject HTTP artifact URLs that resolve outside the package
+  metadata origin or contain <code>userinfo</code> credentials;</li>
+<li>not persist a metadata cache (<code>--frozen</code> with an effective HTTP
+  index URL therefore fails with a documented error message —
+  there is no offline HTTP path);</li>
+<li>never reach into HTTP from the artifact layer — downloaded
+  archive bytes are handed to <code>cabin-artifact</code> via
+  [<code>FetchSource::InMemoryArchive</code>] so checksum verification + safe
+  extraction stay HTTP-free.</li>
+</ul>
+<h3 id="cabin-publish"><code>cabin-publish</code></h3>
+<p>Owns publish-workflow orchestration. Combines <code>cabin-package</code>'s
+[<code>stage</code>] entry point with <code>cabin-registry-file</code>'s atomic writers to
+publish a single-package source tree into a local file registry.
+The crate must:</p>
+<ul>
+<li>not implement HTTP / sparse / OCI publish;</li>
+<li>not implement server-side functionality;</li>
+<li>keep registry mutation in <code>cabin-registry-file</code>;</li>
+<li>keep dry-run distinct from actual mutation — the dry-run path is
+  a no-op against any registry;</li>
+<li>return a clear error when invoked without <code>--dry-run</code> and without
+  <code>--registry-dir</code>.</li>
+</ul>
+<h3 id="cabin-registry-file"><code>cabin-registry-file</code></h3>
+<p>Owns the local file-registry layout and the atomic-ish writes that
+keep partially-written state from sticking around. Given a
+[<code>cabin_package::StagedPackage</code>] plus a registry root, it:</p>
+<ul>
+<li>creates the registry layout (<code>config.json</code>, <code>packages/</code>,
+  <code>artifacts/</code>) on first publish;</li>
+<li>validates <code>config.json</code> (<code>schema = 1</code>, <code>kind = "file-registry"</code>,
+  no <code>..</code> in <code>packages</code> / <code>artifacts</code>);</li>
+<li>detects duplicate versions and orphaned artifacts before any
+  bytes are written;</li>
+<li>places the artifact and updates the per-package index file via
+  <code>&lt;file&gt;.partial</code> rename guards, rolling back the artifact if the
+  index update fails;</li>
+<li>guards concurrent runs with a simple <code>&lt;registry&gt;/.cabin-registry.lock</code>
+  lock file (best-effort — recovery from a crashed publisher is
+  out of scope today);</li>
+<li>never parses arbitrary <code>cabin.toml</code>s, runs the resolver, builds
+  packages, or implements networking.</li>
+</ul>
+<h3 id="cabin-toolchain"><code>cabin-toolchain</code></h3>
+<p>Owns toolchain resolution, subprocess-based compiler / archiver
+detection, compiler-cache wrapper resolution, and Ninja lookup. The
+crate must:</p>
+<ul>
+<li>not parse TOML;</li>
+<li>not run dependency resolution;</li>
+<li>not read or write <code>cabin.lock</code>;</li>
+<li>not compile probe sources or write build plans.</li>
+</ul>
+<h3 id="cabin-build"><code>cabin-build</code></h3>
+<p>Owns backend-independent build planning: <code>PackageGraph</code> plus
+<code>ResolvedToolchain</code>, per-package build flags, and build settings
+become a <code>BuildGraph</code> of compile / archive / link actions. The
+crate must:</p>
+<ul>
+<li>not write Ninja syntax or any other backend's syntax;</li>
+<li>not invoke Ninja;</li>
+<li>not parse TOML directly.</li>
+</ul>
+<h3 id="cabin-test"><code>cabin-test</code></h3>
+<p>Owns the test plan and the sequential test runner used by
+<code>cabin test</code>. Given a finished
+[<code>cabin_build::BuildGraph</code>] and the originating
+[<code>cabin_workspace::PackageGraph</code>], it:</p>
+<ul>
+<li>builds a deterministic [<code>cabin_test::TestPlan</code>] of every
+  <code>cpp_test</code> target whose linked executable appears in the
+  graph's default outputs;</li>
+<li>runs each executable sequentially via [<code>cabin_test::run_tests</code>],
+  capturing stdout / stderr through a [<code>cabin_test::TestOutputSink</code>]
+  trait;</li>
+<li>returns a typed [<code>cabin_test::TestSummary</code>] (totals, per-test
+  status) plus stable rendering helpers
+  (<code>render_summary_line</code>, <code>render_result_line</code>,
+  <code>render_running_line</code>).</li>
+</ul>
+<p>The crate must:</p>
+<ul>
+<li>not parse manifests, plan builds, or resolve dependencies;</li>
+<li>not generate Ninja or invoke <code>ninja</code>;</li>
+<li>not know about config / patches / source replacement;</li>
+<li>not introduce parallel test execution, in-binary test
+  discovery, or test-framework output parsing — those are
+  documented limitations of the current model.</li>
+</ul>
+<p><code>cabin-cli/src/test_glue.rs</code> orchestrates <code>cabin test</code> by
+driving the existing build pipeline and handing the resulting
+<code>BuildGraph</code> to this crate.</p>
+<h3 id="cabin-ninja"><code>cabin-ninja</code></h3>
+<p>Owns Ninja file generation and Clang-compatible
+<code>compile_commands.json</code> generation. The crate must:</p>
+<ul>
+<li>not parse TOML;</li>
+<li>not resolve packages;</li>
+<li>not know about the resolver or the lockfile.</li>
+</ul>
+<h3 id="cabin-explain"><code>cabin-explain</code></h3>
+<p>Typed model for <code>cabin tree</code> and <code>cabin explain</code>. Consumes the
+already-loaded <code>PackageGraph</code>, optional <code>Lockfile</code>, optional
+<code>ActivePatchSet</code>, and the merged <code>SourceReplacementSettings</code>,
+and produces:</p>
+<ul>
+<li><code>TreeNode</code> forests (with <code>SourceProvenance</code>-tagged nodes,
+  edge-kind labels, deduplicated repeats, deterministic
+  sorting), rendered either as a Unicode-drawing tree or a
+  structured JSON document;</li>
+<li><code>Explanation</code> values (<code>Package</code>, <code>Target</code>, <code>Source</code>,
+  <code>Feature</code>) plus a typed entry point for <code>BuildConfig</code> that
+  reuses <code>BuildConfiguration::as_json</code> so metadata and explain
+  agree on the same shape.</li>
+</ul>
+<p>The crate must:</p>
+<ul>
+<li>not run the resolver, parse manifests, or plan builds;</li>
+<li>not perform I/O — the orchestration layer hands it typed
+  inputs;</li>
+<li>not invent new identity for packages: provenance comes from
+  <code>PackageKind</code>, the lockfile, the active patch set, and the
+  source-replacement table.</li>
+</ul>
+<p><code>cabin-cli</code>'s <code>tree_glue.rs</code> and <code>explain_glue.rs</code> modules are
+the orchestration layer that loads workspace + lockfile +
+patches + source-replacements + (for <code>build-config</code>) the full
+profile / toolchain / build-flags preamble, then hands the
+typed values to <code>cabin-explain</code>. Domain logic lives in
+<code>cabin-explain</code>; CLI glue stays thin.</p>
+<h3 id="cabin-env"><code>cabin-env</code></h3>
+<p>Single home for every <code>CABIN_*</code> environment variable name. Read-
+side names are <code>pub const &amp;str</code>; the run/test side provides one
+typed builder, <code>package_env</code>, returning the deterministic six-
+key overlay (<code>CABIN_MANIFEST_DIR</code>, <code>CABIN_MANIFEST_PATH</code>,
+<code>CABIN_PACKAGE_NAME</code>, <code>CABIN_PACKAGE_VERSION</code>, <code>CABIN_PROFILE</code>,
+<code>CABIN_BUILD_DIR</code>) that <code>cabin run</code> and <code>cabin test</code> apply on
+top of the user's environment, plus <code>parse_bool</code> for read-side
+boolean env vars.</p>
+<p>The crate must:</p>
+<ul>
+<li>not run processes;</li>
+<li>not read configuration files or touch the filesystem;</li>
+<li>not depend on <code>cabin-cli</code>, <code>cabin-build</code>, or other higher-
+  level crates that would create cyclic dependencies.</li>
+</ul>
+<p>Adding a new <code>CABIN_*</code> env var requires extending this crate's
+constants list (and the doc page) so every consumer of the
+name agrees byte-for-byte.</p>
+<h3 id="cabin-source-discovery"><code>cabin-source-discovery</code></h3>
+<p>Shared C / C++ source / header walker used by <code>cabin fmt</code>
+and <code>cabin tidy</code>. Consumes a typed
+<code>SourceDiscoveryRequest</code> (roots, excluded paths, excluded
+directories, VCS-ignore policy), honours <code>.gitignore</code> /
+<code>.ignore</code> via the <code>ignore</code> crate, skips a fixed built-in
+exclude list (<code>.git</code>, build / cache / vendor directories), and
+returns <code>DiscoveredSourceFile</code> values sorted by absolute path
+so output is byte-stable across platforms.</p>
+<p>The crate must:</p>
+<ul>
+<li>not own command construction or executable resolution — that
+  belongs to the matching tool runner crate;</li>
+<li>not read Cabin's configuration files — the orchestration
+  layer threads any config-derived inputs through the typed
+  request;</li>
+<li>not classify Cabin's notion of "compilable source" beyond
+  the per-extension grammar documented in the module head.</li>
+</ul>
+<h3 id="cabin-fmt"><code>cabin-fmt</code></h3>
+<p><code>clang-format</code> runner consumed by <code>cabin fmt</code>. Owns formatter
+executable resolution (<code>CABIN_FMT</code> override, otherwise
+<code>clang-format</code> on <code>PATH</code>), the <code>clang-format</code> command-line
+shape, and the typed <code>FormatRequest</code> / <code>FormatReport</code> boundary.
+Modes: <code>Write</code> (<code>-i</code> in place) and <code>Check</code> (<code>--dry-run -Werror</code>,
+no rewrites).</p>
+<p>The crate must:</p>
+<ul>
+<li>not walk the filesystem looking for sources — that is
+  <code>cabin-source-discovery</code>'s job;</li>
+<li>not read Cabin's configuration files — the orchestration
+  layer threads any config-derived inputs through the typed
+  <code>FormatRequest</code>.</li>
+</ul>
+<h3 id="cabin-tidy"><code>cabin-tidy</code></h3>
+<p><code>run-clang-tidy</code> runner consumed by <code>cabin tidy</code>. Owns tidy
+executable resolution (<code>CABIN_TIDY</code>), the <code>run-clang-tidy</code>
+command-line shape, typed jobs forwarding (<code>-j</code> from
+<code>cabin-core::BuildJobs</code>), and the fix-mode safety clamp
+(<code>--fix</code> forces jobs to 1 to avoid concurrent rewrites). The
+compile database the tool consumes is produced by <code>cabin build</code>
+through <code>cabin-ninja::compile_commands</code>; this crate never
+generates one.</p>
+<p>The crate must:</p>
+<ul>
+<li>not walk the filesystem — <code>cabin-source-discovery</code> does that;</li>
+<li>not plan builds or generate compile databases — those are
+  <code>cabin-build</code>'s and <code>cabin-ninja</code>'s jobs;</li>
+<li>not read Cabin's configuration files — <code>.clang-tidy</code>
+  discovery remains clang-tidy's responsibility.</li>
+</ul>
+<h3 id="cabin-system-deps"><code>cabin-system-deps</code></h3>
+<p><code>pkg-config</code> runner consumed when a workspace declares
+<code>`system = true</code> deps<code>. Owns executable resolution
+(</code>CABIN_PKG_CONFIG<code>),</code>pkg-config<code>command-line construction,
+and the typed</code>SystemDependencyProbeRequest<code>/</code>SystemDependencyProbeReport<code>boundary. Probes only fire when at
+least one selected primary package declares an active system
+dependency; dependency manifests outside that primary set
+preserve declarations but do not spawn</code>pkg-config<code>. The
+orchestration layer merges the resolved cflags / libs into</code>ResolvedProfileFlags<code>so they reach</code>build.ninja<code>and</code>compile_commands.json` in deterministic order.</p>
+<p>The crate must:</p>
+<ul>
+<li>not read Cabin's configuration files;</li>
+<li>not walk the filesystem or generate the build graph;</li>
+<li>not assume any specific <code>pkg-config</code> implementation (the
+  POSIX-style command-line surface is the contract).</li>
+</ul>
+<h3 id="cabin-diagnostics"><code>cabin-diagnostics</code></h3>
+<p>User-facing diagnostic presentation for Cabin's typed domain
+errors. Owns the stable diagnostic-code registry
+(<code>cabin::workspace::manifest_not_found</code>,
+<code>cabin::manifest::parse_error</code>, …), the deterministic
+formatter, and the <code>annotate-snippets</code> boundary used to draw
+source-annotated snippets for parse / validation errors.</p>
+<p>Depends only on <code>miette</code>, <code>annotate-snippets</code>, and
+<code>thiserror</code>. Domain crates that own source spans (today:
+<code>cabin-manifest</code>'s <code>ManifestParseError</code>) depend on <code>miette</code>
+for the <code>Diagnostic</code> derive and pass the typed value up; the
+CLI orchestrator (<code>cabin-cli</code>) routes it through
+<code>cabin_diagnostics::render</code> so the user sees a stable
+<code>error[code]: message</code> block plus optional <code>help:</code> text and
+snippet.</p>
+<p>The crate must:</p>
+<ul>
+<li>not depend on <code>cabin-cli</code>, <code>cabin-build</code>, or other higher-
+  level crates that would create cyclic dependencies;</li>
+<li>not run processes, read configuration files, or touch the
+  filesystem — the renderer takes typed inputs and produces a
+  string;</li>
+<li>emit byte-stable output (no terminal colour, no Unicode-only
+  flourishes that vary with terminal capabilities).</li>
+</ul>
+<p>Adding a new diagnostic-bearing error is a three-step pattern:</p>
+<ol>
+<li>derive <code>miette::Diagnostic</code> on the error type, attach a
+   <code>#[diagnostic(code(cabin::&lt;area&gt;::&lt;symbol&gt;))]</code> attribute,
+   add <code>help(...)</code> when there is an actionable next step;</li>
+<li>for source-annotated cases, expose <code>#[source_code]</code> /
+   <code>#[label]</code> so <code>cabin-diagnostics::render_with_snippet</code>
+   picks the values up automatically;</li>
+<li>extend <code>cabin-cli/src/main.rs::downcast_diagnostic</code> so the
+   typed error participates in the renderer.</li>
+</ol>
+<h3 id="cabin-cli"><code>cabin-cli</code></h3>
+<p>Owns CLI flags and user-facing command orchestration. May call
+any other crate. Should keep clap-driven argument parsing
+separate from command execution where practical, and must not
+contain business logic that belongs in a reusable crate.</p>
+<p><strong><code>cabin-cli/src/cli.rs</code> must not grow further with new business
+logic.</strong> When new behaviour lands, the implementation belongs in
+the owning crate (e.g.
+<code>cabin-workspace</code> for workspace algorithms, <code>cabin-resolver</code> for
+resolution, <code>cabin-build</code> for build planning, <code>cabin-publish</code>
+for publish orchestration), exposed through a typed API; the CLI
+layer should only translate clap inputs into that API and render
+the result. This invariant is enforced socially through review:
+PRs that add non-trivial command logic, helpers, or types to
+<code>cli.rs</code> must move them into either the owning crate or a new
+per-command module under <code>cabin-cli/src/cli/</code> (one file per
+top-level subcommand) before they can land. A small,
+behaviour-preserving split of view structs or dispatch helpers
+into a private module is acceptable inside a routine PR; a broad
+rewrite of <code>cli.rs</code> is not in scope for a routine change.</p>
+<h2 id="data-flow-implemented-today">Data flow — implemented today</h2>
+<h3 id="dependency-kinds-end-to-end">Dependency kinds end-to-end</h3>
+<p>Every Cabin dependency is classified into one of two kinds via
+<code>cabin_core::DependencyKind</code>:</p>
+<pre><code>Normal -&gt; Dev          (Cabin package dependency kinds)
+</code></pre>
+<p>Any entry in those tables can additionally set <code>system = true</code> to
+mark it as externally provided; system-flagged entries route to a
+separate <code>system_dependencies</code> collection and never enter the
+resolver / fetcher / build pipeline.</p>
+<p>The kind information flows through the system at each layer:</p>
+<pre><code>[dependencies]            ----+
+[dev-dependencies]        ----+--&gt; cabin_manifest      (typed BTreeMaps + system_dependencies
+                                   -&gt; ManifestError      vec; entries with `system = true`
+                                                         route to the system vec, others to the
+                                                         per-kind dep map. Both also fold
+                                                         [target.'cfg(...)'.&lt;kind&gt;] in with an
+                                                         optional Condition predicate.)
+                                       |
+                                       v
+                            cabin_core::Package
+                              dependencies: Vec&lt;Dependency&gt;      // kind on every entry
+                              system_dependencies: Vec&lt;SystemDependency&gt;
+                                       |
+                                       v
+                            cabin_workspace::Package
+                              deps: Vec&lt;DependencyEdge { index, kind }&gt;
+                                       |
+                                       v
+                  +------------------+--+--+----------------------+
+                  |                     |                          |
+                  v                     v                          v
+            collect_closure        cabin-build target         cabin-package
+            _versioned_deps        dep resolution             canonical metadata
+            (Normal-only)          (Normal-only edges)        (per-kind tables +
+            -&gt; ResolveInput        for `target.&lt;X&gt;.deps`)      system-dependencies)
+                  |
+                  v
+            cabin_resolver         (resolver never sees Dev or System)
+                  |
+                  v
+            cabin.lock + artifact cache
+            (kind metadata is intentionally not duplicated here —
+             the resolver re-decides included kinds on each run)
+</code></pre>
+<p>System dependencies branch off at the manifest layer and never
+enter the resolver / fetcher / cache. Dev dependencies flow
+through <code>Package::dependencies</code> for metadata round-tripping but
+are filtered out at the <code>collect_closure_versioned_deps</code>
+boundary and at the workspace path-dep traversal so they do
+not affect ordinary builds.</p>
+<p>Workspace inheritance is kind-specific: a member's
+<code>{ workspace = true }</code> opt-in under <code>[&lt;kind&gt;-dependencies]</code> looks
+up the matching <code>[workspace.&lt;kind&gt;-dependencies]</code> table only —
+there is no cross-kind fallback. <code>workspace = true</code> is also
+rejected inside <code>[target.'cfg(...)'.&lt;kind&gt;]</code> tables so a single
+workspace key cannot silently mean different things on different
+hosts.</p>
+<p>Conditional dependencies declared via <code>[target.'cfg(...)'.&lt;kind&gt;]</code>
+travel the same path. Each <code>Dependency</code> / <code>SystemDependency</code> /
+<code>DependencyEdge</code> carries an optional
+<code>condition: Option&lt;Condition&gt;</code> field. The host <code>TargetPlatform</code>
+filters out non-matching declarations at three boundaries: the
+workspace loader skips them when building path-dep edges, the
+closure walker skips them in
+<code>collect_closure_versioned_deps_filtered</code>, and the feature
+resolver skips them when expanding <code>dep:</code> and per-edge feature
+requests. The resolver also skips conditional <code>IndexPackageDependency</code>
+entries on registry packages. The <code>condition</code> itself is
+preserved on <code>Package::dependencies</code> and round-trips through
+<code>PackageMetadata</code> and the index loaders, so <code>cabin metadata</code>
+can surface inactive declarations without losing the predicate
+text. Full protocol in
+<a href="../target-dependencies/"><code>target-dependencies.md</code></a>.</p>
+<h3 id="manifest-parsing">Manifest parsing</h3>
+<pre><code>cabin.toml  --&gt;  cabin_manifest::parse_manifest_str / load_manifest
+                   |
+                   v
+            ParsedManifest  (private serde structs already shed)
+                   |
+                   v
+            cabin_core::Package + WorkspaceTable
+</code></pre>
+<h3 id="workspace-loading">Workspace loading</h3>
+<pre><code>cwd or --manifest-path  --&gt;  cabin_workspace::discover_workspace_root
+                              |  upward walk for cabin.toml with [workspace]
+                              |  (no walk when --manifest-path is explicit)
+                              v
+                            workspace root manifest
+                              |
+                              v
+                    cabin_workspace::load_workspace
+                      |  member globbing
+                      |  exclude filtering
+                      |  default-members validation
+                      |  workspace.dependencies inheritance
+                      |  nested-workspace rejection
+                      |  recursive local path-dep traversal
+                      |  dedup, cycle, name-collision checks
+                      v
+                   PackageGraph (topologically sorted)
+                   - root_package: Option&lt;usize&gt;
+                   - primary_packages: Vec&lt;usize&gt;
+                   - default_members: Vec&lt;usize&gt;         
+                   - excluded_members: Vec&lt;PathBuf&gt;      
+                   - packages: Vec&lt;WorkspacePackage { package, manifest_path }&gt;
+</code></pre>
+<p>Versioned dependencies are kept on each <code>Package</code> but are not
+traversed here. CLI workspace flags (<code>--workspace</code>, <code>-p / --package</code>,
+<code>--exclude</code>, <code>--default-members</code>) flow through
+<code>cabin_workspace::resolve_package_selection</code>, which validates the
+request against the loaded <code>PackageGraph</code> and returns the
+deterministic ordered list of selected primary-package indices the
+downstream commands (build / metadata / package / publish / fetch)
+operate on.</p>
+<h3 id="local-build-planning-ninja-generation">Local build planning + Ninja generation</h3>
+<pre><code>PackageGraph + ResolvedToolchain --&gt;  cabin_build::plan(PlanRequest)
++ build flags / settings     |  cycle detection
+                                       |  cross-package target resolution
+                                       |  language-specific compile dispatch
+                                       v
+                                    BuildGraph (Vec&lt;Action&gt;, CompileCommand[])
+                                       |
+                                       v
+                          cabin_ninja::write_build_ninja        --&gt; build.ninja
+                          cabin_ninja::write_compile_commands   --&gt; compile_commands.json
+                                       |
+                                       v
+                               `ninja -C &lt;build_dir&gt;`           (cabin-cli)
+</code></pre>
+<h3 id="local-index-resolution">Local index resolution</h3>
+<pre><code>&lt;index&gt;/&lt;package&gt;.json files  --&gt;  cabin_index::load_index
+                                     |  per-file schema validation
+                                     |  filename / name agreement
+                                     |  SemVer of every version
+                                     v
+                                  PackageIndex
+                                     |
+ResolveInput (root package + versioned deps + locked map + mode)
+                                     |
+                                     v
+                                cabin_resolver::resolve
+                                     |
+                                     v
+                                ResolveOutput { packages: [Root, Index, ...] }
+</code></pre>
+<h3 id="lockfile-aware-resolution">Lockfile-aware resolution</h3>
+<pre><code>cabin.toml  --&gt;  PackageGraph
+                  |
+cabin.lock  --&gt;  cabin_lockfile::read_lockfile  --&gt;  Lockfile
+                                                       |
+                                                       v
+                                                  LockedVersion entries
+                                                       |
+                                                       v
+                                            ResolveInput { mode, locked }
+                                                       |
+                                                       v
+                                            cabin_resolver::resolve
+                                                       |
+                                                       v
+                                            ResolveOutput
+                                                       |
+                                                       v   PackageIndex meta
+                                                       \  /
+                                                        ||
+                                            Lockfile (rebuilt)
+                                                       |
+                                                       +--  write to &lt;manifest_dir&gt;/cabin.lock
+                                                       |    if the mode permits writing
+                                                       v
+                                            human / json output (cabin-cli)
+</code></pre>
+<p>The resolver receives <code>LockedVersion</code> values constructed by the CLI
+from a <code>Lockfile</code>. The resolver never reads the lockfile itself; the
+lockfile crate never runs the solver. They meet only inside
+<code>cabin-cli</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Locked map effect</th>
+<th>Writes lockfile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PreferLocked</code> (default <code>cabin resolve</code>)</td>
+<td>Tries the locked version first; falls back to newest compatible if locked no longer satisfies constraints.</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>Locked</code> (<code>cabin resolve --locked</code> / <code>--frozen</code>)</td>
+<td>Restricts each candidate set to <code>[locked.version]</code>; surfaces precise errors when missing / yanked / constraint-violating / checksum-mismatched.</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>UpdateAll</code> (<code>cabin update</code>)</td>
+<td>Ignores the locked map entirely.</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>UpdatePackage(name)</code> (<code>cabin update --package &lt;name&gt;</code>)</td>
+<td>Drops just one entry from the locked map.</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p>Once the artifact cache is involved, <code>--frozen</code> becomes
+operationally distinct from <code>--locked</code>: both forbid writing the
+lockfile, but <code>--frozen</code> additionally forbids the artifact cache
+from being populated. Already-cached and already-extracted
+artifacts may still be reused.</p>
+<h3 id="artifact-fetch-registry-aware-build">Artifact fetch + registry-aware build</h3>
+<pre><code>ResolveOutput + PackageIndex
+   |
+   |  cabin-cli builds a FetchPlan: per resolved registry package,
+   |  pull `source.path` + `checksum` straight off the index entry.
+   |
+   v
+cabin_artifact::fetch
+   |  for each entry:
+   |    - hash the cached archive; reuse if it already matches;
+   |    - else (and not --frozen) copy from source.path while
+   |      hashing, fail on checksum mismatch;
+   |    - extract safely into &lt;cache&gt;/sources/sha256/&lt;hex&gt;/;
+   |    - validate &lt;source&gt;/cabin.toml name + version.
+   v
+FetchResult { packages: [FetchedPackage { name, version, archive_path,
+                                          source_dir, checksum }] }
+   |
+   v
+cabin_workspace::load_workspace_with_registry(manifest, fetched)
+   |  walk root + every extracted source manifest;
+   |  versioned dependencies resolve via the registry map by name;
+   |  return a unified PackageGraph (Local + Registry packages).
+   v
+cabin_build::plan + cabin_ninja::write_*  --&gt;  build.ninja + ninja
+</code></pre>
+<p>The artifact crate never runs the resolver or invokes the C/C++
+toolchain. The workspace crate never verifies checksums. The CLI is
+the only place where these layers meet.</p>
+<h3 id="package-archive-canonical-metadata">Package archive + canonical metadata</h3>
+<pre><code>cabin.toml
+   |
+   |  cabin_manifest::load_manifest
+   v
+ParsedManifest -&gt; Package
+   |
+   |  cabin_package::validate (no path deps, no escaping sources)
+   v
+ValidatedPackage
+   |
+   |  cabin_package::archive::collect_package_files
+   |    - sorted, fixed include / exclude policy
+   |    - regular files and directories only
+   v
+[PackageFile, ...]
+   |
+   |  cabin_package::archive::build_tar_gz
+   |    - tar entries: mtime/uid/gid/uname/gname zeroed, mode 0o644
+   |    - gzip header: mtime = 0, OS = 0xff (unknown)
+   v
+archive bytes (Vec&lt;u8&gt;) ---&gt; sha256_hex ---&gt; sha256:&lt;hex&gt;
+   |
+   |  cabin_package::canonical_metadata
+   v
+PackageMetadata { schema, name, version, dependencies,
+                  yanked, checksum, source }
+   |
+   |  cabin_package::package writes both files into --output-dir
+   v
+dist/&lt;name&gt;-&lt;version&gt;.tar.gz
+dist/&lt;name&gt;-&lt;version&gt;.json
+</code></pre>
+<p><code>cabin-publish::dry_run</code> calls into the same pipeline and returns a
+<code>DryRunReport</code> whose <code>registry_modified</code> flag is always <code>false</code>. No
+registry, no network, no server is involved in the dry-run flow.
+The canonical metadata's <code>source</code> block matches the existing
+index <code>source</code> shape (<code>type = "archive"</code>, <code>format = "tar.gz"</code>,
+<code>path = "../artifacts/&lt;name&gt;/&lt;name&gt;-&lt;version&gt;.tar.gz"</code>).</p>
+<h3 id="local-file-registry-publish">Local file-registry publish</h3>
+<pre><code>cabin.toml
+   |
+   |  cabin_package::stage  (no disk write)
+   v
+StagedPackage { name, version, archive_bytes, checksum, metadata }
+   |
+   |  cabin_publish::publish_to_file_registry
+   v
+cabin_registry_file::publish_to_registry
+   |
+   |  RegistryLock::acquire(&lt;registry&gt;/.cabin-registry.lock)
+   |  FileRegistry::open_or_initialise (writes config.json on first run)
+   |
+   |  Read the existing packages/&lt;name&gt;.json (if any), validate name,
+   |  reject duplicate versions and orphaned artifacts.
+   |
+   |  Phase 1: write artifact via &lt;artifact&gt;.partial rename
+   |  Phase 2: write packages/&lt;name&gt;.json via &lt;file&gt;.partial rename;
+   |           on failure, delete the just-placed artifact so the
+   |           registry never carries an orphan.
+   |
+   |  RegistryLock::drop  (lock file removed)
+   v
+RegistryPublishReport
+   {
+     registry_dir, package_index_path, artifact_path,
+     checksum, source_path, registry_modified, registry_initialised
+   }
+</code></pre>
+<p><code>cabin_publish::dry_run_against_file_registry</code> runs the same
+validation (<code>FileRegistry::inspect</code> + the duplicate / orphan
+checks) without acquiring a lock or writing anything; the
+<code>registry_modified</code> flag in the returned report is always <code>false</code>.</p>
+<p>The registry written by this flow lands at:</p>
+<pre><code>&lt;registry&gt;/
+  config.json
+  packages/&lt;name&gt;.json
+  artifacts/&lt;name&gt;/&lt;name&gt;-&lt;version&gt;.tar.gz
+</code></pre>
+<p><code>cabin-index::load_index</code> detects <code>config.json</code> and reads packages
+out of the configured <code>packages/</code> subdirectory, so the same path
+that publish wrote to is consumable by <code>cabin resolve</code>,
+<code>cabin fetch</code>, and <code>cabin build --index-path</code> without any
+repackaging step.</p>
+<h3 id="sparse-http-index-read-path">Sparse HTTP index read path</h3>
+<pre><code>--index-url http://host/registry
+   |
+   |  cabin_index_http::HttpIndex::open
+   |    GET &lt;base&gt;/config.json   -&gt; RegistryConfig
+   v
+HttpIndex { base, config, packages_base, client }
+   |
+   |  cabin_index_http::HttpIndex::load_package_index(roots)
+   |    BFS over (root deps + transitive):
+   |      GET &lt;base&gt;/&lt;config.packages&gt;/&lt;name&gt;.json
+   |    Each `&lt;name&gt;.json` is parsed via
+   |    `cabin_index::parse_package_entry` with a `SourceContext::HttpUrl`
+   |    closure, so `source.path` resolves to an absolute URL using
+   |    RFC 3986 relative resolution against the package metadata URL,
+   |    then must remain on that package metadata origin.
+   v
+PackageIndex { packages: BTreeMap&lt;PackageName, IndexEntry&gt; }   (same shape as the local file loader)
+   |
+   v
+cabin_resolver::resolve
+   |
+   v
+ResolveOutput
+   |
+   |  cabin-cli::build_fetch_plan(output, index, IndexAccess::Http(client))
+   |    For each registry-source package:
+   |      - LocalPath  → FetchSource::LocalArchive(path)  (file index)
+   |      - HttpUrl    → http_client.download(url) → FetchSource::InMemoryArchive(bytes)
+   v
+cabin_artifact::fetch
+   |  Same checksum + cache + extraction as the local-file path:
+   |  bytes are hashed against the index's sha256, written into
+   |  &lt;cache&gt;/archives/sha256/&lt;hex&gt;.tar.gz, and extracted into
+   |  &lt;cache&gt;/sources/sha256/&lt;hex&gt;/.
+   v
+FetchedPackage { archive_path, source_dir, checksum }
+</code></pre>
+<p>The HTTP path is <strong>read-only</strong>. There is no persistent metadata
+cache, so <code>--frozen</code> with an effective HTTP index URL fails with
+a documented error message. <code>--locked --index-url</code> works because
+the lockfile is on disk locally and the resolver can validate
+fetched metadata against it.</p>
+<h2 id="architectural-seams-to-preserve">Architectural seams to preserve</h2>
+<ul>
+<li>Raw TOML serde structs stay private to <code>cabin-manifest</code>.</li>
+<li><code>clap</code> only appears in <code>cabin-cli</code>.</li>
+<li>The stable domain model lives in <code>cabin-core</code>.</li>
+<li>Workspace loading and resolver are independent: the workspace loader
+  emits unresolved versioned dependencies; the resolver consumes them.</li>
+<li>Build graph IR is backend-independent. Ninja serialisation lives in
+  a separate crate.</li>
+<li>Index format and resolver are independent: the index crate produces
+  data; the resolver consumes it.</li>
+<li>Lockfile I/O and the resolver are independent: <code>cabin-resolver</code>
+  receives <code>LockedVersion</code> values, not <code>Lockfile</code> itself.</li>
+<li>The underlying solver type is never exposed from <code>cabin-resolver</code>.</li>
+</ul>
+<h2 id="c-semantic-invariants">C++ semantic invariants</h2>
+<p>Cabin's resolver and lockfile are Cargo-shaped on purpose, but the
+build graph the resolver feeds into is not. The list below states
+the C++-specific invariants Cabin's build planning maintains today,
+so future contributors do not silently regress them by porting more
+Cargo-like assumptions:</p>
+<ul>
+<li>
+<p><strong>Public vs. private include directories.</strong> Header reachability
+  is part of a <code>cpp_library</code> target's interface, not a free-floating
+  workspace property. A target's <code>include_dirs</code> are <em>public</em>: every
+  consumer of the target inherits them transitively. Sources that
+  exist only to compile the library must live under <code>sources</code> /
+  internal subdirectories that the public include path does not
+  expose. There is no <code>private_include_dirs</code> field today; adding
+  one is a deliberate language change, not a build-graph fix-up.</p>
+</li>
+<li>
+<p><strong>Link interface propagation.</strong> A <code>cpp_library</code> target propagates
+  its public link interface (the link line consumers must add) to
+  every direct and transitive dependent automatically. Build-time
+  link-only deps (linker libraries that are not Cabin packages) are
+  still represented as <code>system-dependencies</code>; active declarations
+  are probed through <code>pkg-config</code>, and the resulting flags are wired
+  into consumers that link the producing target. Cabin does not model
+  CMake's <code>INTERFACE</code> / <code>PUBLIC</code> / <code>PRIVATE</code> distinction at the
+  package boundary, and the resolver intentionally does not
+  re-implement the C++ link-order rules — Ninja + the linker do.</p>
+</li>
+<li>
+<p><strong>No header-only optional flag.</strong> Cabin's package types are
+  <code>cpp_library</code> / <code>cpp_binary</code> / system-only. Header-only libraries
+  are modelled as <code>cpp_library</code> with no <code>sources</code> (or with
+  <code>sources = []</code>) — the build graph emits no compile actions and the
+  link interface stays purely include-dir + system deps.
+  There is no <code>header-only = true</code> toggle to reach for; if the
+  target needs to compile something, it is no longer header-only.</p>
+</li>
+<li>
+<p><strong>Patch/override targets a name, not a target inside it.</strong>
+  <code>[patch] foo = { path = "../foo" }</code> replaces the <em>entire</em> package
+  named <code>foo</code>. There is no per-target patch surface. Consumers
+  resolve targets the same way they would for the registry version
+  of <code>foo</code>; the patched manifest must keep target names stable for
+  consumers to keep building.</p>
+</li>
+<li>
+<p><strong>Dev-only targets are scoped to dev commands.</strong> <code>cpp_test</code>
+  and <code>cpp_example</code> link as ordinary executables but are
+  excluded from the default <code>cabin build</code> enumeration.
+  <code>cpp_test</code> targets are built and run by <code>cabin test</code>, which
+  selects every test target in the selected packages.
+  <code>cpp_example</code> targets reach the build graph only as
+  transitive deps of a selected target — Cabin does not yet
+  expose a single-example selector flag, because the historic
+  <code>--target</code> overload has been removed and the flag name is
+  reserved for the future platform/toolchain target. A future
+  explicit-kind selector (<code>--example &lt;name&gt;</code>) may land later
+  under a distinct flag name. Dependencies of dev-only targets
+  follow the same <code>target.&lt;X&gt;.deps</code> rules as a
+  <code>cpp_executable</code>: include and link interfaces propagate from
+  the libraries they pull in, but the dev-only targets never
+  contribute include or link interface back to ordinary
+  production targets.</p>
+</li>
+<li>
+<p><strong><code>[dev-dependencies]</code> activate per-package, not transitively.</strong>
+  <code>cabin test</code> activates the <code>[dev-dependencies]</code> of the
+  <em>selected</em> primary packages so test executables can link
+  against test-only packages. The activation does not
+  propagate: a transitive dep's own dev-deps stay
+  declaration-only even under <code>cabin test</code>. <code>cabin build</code>
+  continues to ignore every dev-dep, so production builds are
+  unaffected.</p>
+</li>
+</ul>
+<p>These invariants are normative: a change that breaks one of them
+is a language / build-system change and needs an explicit design
+update, not an implementation tweak.</p>
+<h2 id="implemented-layers-quick-reference">Implemented layers — quick reference</h2>
+<p>The crate boundaries above stay aligned with the responsibilities
+listed here. Each item names the crate that owns the layer today;
+future transports / modes should be added to the named crate
+rather than carved out into ad-hoc places.</p>
+<h3 id="artifact-layer">Artifact layer</h3>
+<p>A content-addressed cache and source / archive fetcher that turns
+a locked package set into actual on-disk source trees, verifying
+checksums recorded in <code>cabin.lock</code>. Implemented as
+<code>cabin-artifact</code> for local filesystem <code>.tar.gz</code> archives. Future
+transports (OCI / Git) may be added without changing the cache
+shape.</p>
+<h3 id="package-archive-layer">Package / archive layer</h3>
+<p>Source-archive creation for publishable packages. Pure local
+operation: take a package directory, produce a deterministic
+archive plus a per-version metadata digest. Implemented as
+<code>cabin-package</code>. The archive contract matches the extractor: a
+<code>.tar.gz</code> whose root contains <code>cabin.toml</code>, regular files and
+directories only.</p>
+<h3 id="file-registry-publish-layer">File registry publish layer</h3>
+<p>Local file-registry publish path that drops a freshly created
+package archive plus updated <code>&lt;package&gt;.json</code> index entries into
+a directory. No network, no auth, no server. Implemented as
+<code>cabin-registry-file</code> with atomic-ish rename writes and a simple
+<code>.cabin-registry.lock</code> lock file.</p>
+<h3 id="sparse-http-index-artifact-client">Sparse HTTP index / artifact client</h3>
+<p>Read-path client for fetching <code>&lt;package&gt;.json</code> and tarballs over
+HTTP from a static layout. Implemented as <code>cabin-index-http</code>. The
+on-disk index format and the transport stay separate by design:
+local file reading lives in <code>cabin-index</code>, HTTP reading in
+<code>cabin-index-http</code>, and they emit the same
+<code>cabin_index::PackageIndex</code> / <code>IndexEntry</code> shape so the resolver
+and lockfile layers stay HTTP-free.</p>
+<h3 id="features-implemented-foundation">Features — implemented (foundation)</h3>
+<p>Public additive named-boolean capabilities the user (or a
+downstream consumer) selects at build time.</p>
+<p>What ships today: manifest declarations (<code>[features]</code>),
+<code>cabin-core</code>'s <code>BuildConfiguration</code> value with a deterministic
+SHA-256 fingerprint, CLI selection flags
+(<code>--features</code> / <code>--all-features</code> / <code>--no-default-features</code>), and
+round-trip preservation through <code>cabin package</code> and <code>cabin publish
+--registry-dir</code>. Older index entries that omit the field continue
+to load. Full protocol in <a href="../features/"><code>features.md</code></a>.</p>
+<p>Optional dependencies and per-edge feature requests,
+target-cfg dependencies, and build profiles all layer on top of
+the same surface; toolchain conditional flags are documented in
+<a href="../toolchains/"><code>toolchains.md</code></a>. Target / platform-specific
+dependencies are documented in
+<a href="../target-dependencies/"><code>target-dependencies.md</code></a>; build
+profiles are documented in <a href="../profiles/"><code>profiles.md</code></a>.</p>
+<h3 id="build-profiles-implemented">Build profiles — implemented</h3>
+<p>Named build-configuration presets (<code>dev</code>, <code>release</code>, plus any
+custom <code>[profile.&lt;name&gt;]</code> declarations the manifest adds).
+Resolution lives entirely in <code>cabin-core::profile</code>:
+<code>ProfileSelection</code> (the user's pick) plus a typed definition
+table go through <code>resolve_profile</code>, which walks <code>inherits</code>
+chains, detects cycles, applies built-in defaults under
+manifest overrides, and returns a fully-typed
+<code>ResolvedProfile { name, debug, opt_level, assertions, source,
+inherits_chain }</code>.</p>
+<pre><code>[profile.&lt;name&gt;]   ----&gt; cabin_manifest        (typed ProfileDefinition;
+                                                rejects unsupported fields)
+                          |
+                          v
+ProfileSelection ----&gt; cabin_core::resolve_profile
+                          |                    (cycle / unknown-parent / built-in
+                          v                     `inherits` rejection)
+                       ResolvedProfile
+                          |
+       +------------------+----------------------+----------------------+
+       v                                         v                      v
+   cabin_build (compile flags,            BuildConfiguration       cabin_metadata
+   per-profile output dir)                 fingerprint              JSON view
+</code></pre>
+<p>Profile selection does <strong>not</strong> affect dependency resolution, the
+lockfile, the package archive, the index, or registry behaviour;
+those remain profile-independent by design. Output paths are
+profile-segregated (<code>&lt;build-dir&gt;/&lt;profile&gt;/...</code>) so dev / release
+/ custom builds never overwrite each other; the build-
+configuration fingerprint includes the resolved profile so a
+cache layer can key on it. Full protocol in
+<a href="../profiles/"><code>profiles.md</code></a>.</p>
+<h3 id="toolchain-selection-and-build-flags-implemented">Toolchain selection and build flags — implemented</h3>
+<p>Explicit, typed C/C++ toolchain selection plus a small set of
+semantic <code>[profile]</code> flags. <code>cabin-core::toolchain</code> owns the data
+model (<code>ToolKind</code>, <code>ToolSpec</code>, <code>ToolSource</code>, <code>ToolSelection</code>,
+<code>ResolvedTool</code>, <code>ResolvedToolchain</code>, <code>ToolchainSettings</code>);
+<code>cabin-core::build_flags</code> owns the parallel flag model
+(<code>ProfileFlags</code>, <code>ConditionalProfileFlags</code>,
+<code>ProfileSettings</code>, <code>ResolvedProfileFlags</code>, the
+<code>resolve_build_flags</code> merge); <code>cabin-toolchain::resolve</code> walks
+precedence (CLI ▶ env ▶ matching
+<code>[target.'cfg(...)'.toolchain]</code> ▶ <code>[toolchain]</code> ▶ default
+fallback list) per kind, searches <code>PATH</code>, and rejects
+unsupported MSVC executables. The build planner consumes a
+<code>ResolvedToolchain</code> directly for compile / link / archive
+commands and a per-package <code>ResolvedProfileFlags</code> map to layer
+<code>-D</code> / <code>-I</code> / extra args onto each target.</p>
+<pre><code>[toolchain]   ----+
+                  +--&gt; cabin_manifest      (typed ToolchainDecl /
+[target.'cfg'.toolchain]                    ProfileFlags;
+                                            unknown fields rejected)
+[profile]                                |
+[target.'cfg'.profile]   --------------+
+                          |
+                          v
+ToolchainSelection ----&gt; cabin_toolchain::resolve_toolchain
+                          (CLI &gt; env &gt; [target.'cfg(...)'.toolchain]
+                           &gt; [toolchain] &gt; defaults; PATH search;
+                           cl.exe / link.exe rejection)
+                          |
+                          v
+                       ResolvedToolchain  +  ResolvedProfileFlags
+                          |                    (per-package)
+                          v
+       +------------------+----------------------+----------------------+
+       v                                         v                      v
+   cabin_build (compile flags,         BuildConfiguration         cabin_metadata
+   per-package -D/-I,                  fingerprint                JSON view
+   extra-{compile,link}-args,          (toolchain + flags)
+   archive command)
+</code></pre>
+<p>Manifest-declared <code>[toolchain]</code> and <code>[profile]</code> tables round-trip
+through <code>PackageMetadata</code> and the index loaders; environment- or
+CLI-derived selections are never published. Registry resolution
+remains toolchain- and build-flag-independent. Full protocol in
+<a href="../toolchains/"><code>toolchains.md</code></a>.</p>
+<h3 id="compiler-tool-capability-detection-implemented">Compiler / tool capability detection — implemented</h3>
+<p>After <code>cabin-toolchain::resolve_toolchain</code> returns a
+<code>ResolvedToolchain</code>, <code>cabin-toolchain::detect_toolchain</code> runs
+each picked tool with <code>--version</code>, captures the output, and
+hands it to the pure parsers in <code>cabin-core::compiler</code>. The
+result is a typed <code>ToolchainDetectionReport</code> carrying a
+<code>CompilerIdentity</code> / <code>ArchiverIdentity</code> (kind, version, target
+where reported) and a <code>CompilerCapabilities</code> /
+<code>ArchiverCapabilities</code> set per tool. Capability decisions
+record their source (<code>version</code>, <code>assumed-default</code>,
+<code>unsupported</code>) so consumers can audit the inference chain.</p>
+<pre><code>ResolvedToolchain ----+
+                                +----&gt; cabin_toolchain::detect_toolchain
+                                       (ToolRunner trait;
+                                        ProcessRunner spawns
+                                        `tool --version`;
+                                        parsers in cabin_core::compiler)
+                                            |
+                                            v
+                              ToolchainDetectionReport
+                                            |
+       +------------------------------------+
+       v                                    v
+cabin_build::validate_toolchain_for_backend  cabin_cli MetadataView
+(rejects MSVC cl.exe, lib.exe,                (toolchain.detected)
+ unknown compilers without GCC-style
+ flags, archivers without ar crs)
+</code></pre>
+<p>Recognised compiler families: <code>clang</code>, <code>apple-clang</code>, <code>gcc</code>.
+MSVC (<code>cl.exe</code>) and the <code>lib.exe</code> archiver are <em>detected</em> —
+<code>cabin metadata</code> reports their kind and version — but
+<code>cabin build</code> rejects them with a clear unsupported-backend
+error rather than emitting GCC-style commands they cannot run.
+Unknown compilers are conservative: capabilities default to
+<code>unsupported</code>, and the build flow rejects them when the planner
+needs GCC-style flags.</p>
+<p>Detection results are deliberately <strong>not</strong> serialised into
+package or index metadata. They are local-environment state and
+would create reproducibility problems if they leaked into a
+published archive. The build configuration fingerprint is
+unaffected because the planner still emits the same fixed
+command shapes whether the detected compiler is Clang 17 or GCC
+13. Cabin does not yet emit JSON or SARIF diagnostics;
+capabilities for those formats are detected only so a future
+diagnostics layer can read them without re-parsing version
+output.</p>
+<p>Why probing is deferred: a probe-based capability layer would
+require staging temporary translation units, deciding their
+content, and interpreting non-zero exit codes — a much larger
+change than the parser-only path Cabin uses today. Adding it is
+straightforward when needed: <code>CapabilitySource::Probe</code> is
+already part of the typed model, and <code>ToolRunner</code> has a
+single-method surface, so a future probe runner can plug in
+without rewriting consumers.</p>
+<p>Full protocol in <a href="../toolchains/"><code>toolchains.md</code></a>.</p>
+<h3 id="patch-override-source-replacement">Patch / override / source replacement</h3>
+<p>A typed local-policy layer that swaps registry-resolved package
+candidates for local working copies (<em>patches</em>) and redirects
+one supported index source to another (<em>source replacement</em>).</p>
+<pre><code>[patch]                   manifest [patch] table  (workspace root only)
+  fmt = ...      ┌───────────────────────────────────────────┐
+                 ▼                                           │
+                cabin_workspace::resolve_active_patches      │
+                  ├── walks user → workspace → project →     │
+                  │   explicit config patches and overlays   │
+                  │   the manifest patch with config wins    │
+                  ├── validates path exists / cabin.toml /   │
+                  │   name match / version satisfies every   │
+                  │   active dep requirement                 │
+                  ├── canonicalises paths                    │
+                  ▼                                          │
+[patch]                ActivePatchSet (sorted by name) ──────┘
+  fmt = ...
+  in EffectiveConfig
+                 │
+                 │      cabin_workspace::load_workspace_with_registry_and_patches
+                 ▼      stitches each patched manifest as kind = Local
+              [PackageGraph augmented with patched packages]
+                 │
+                 │      cabin-cli filters patched names from the
+                 │      versioned-dep closure / artifact pipeline so
+                 │      patched packages never re-fetch from a registry
+                 ▼
+              Build / metadata / lockfile / publish
+</code></pre>
+<p>Source replacement is config-only and lives next to patches in
+<code>EffectiveConfig</code>:</p>
+<pre><code>[source-replacement]                cabin_core::SourceReplacementSettings::resolve()
+&quot;https://example.com/index&quot;       ┌────────────────────────────────────────────────┐
+  = { index-path = &quot;../mirror&quot; }  ▼                                                │
+                                  walk one hop at a time, detect cycles,           │
+                                  reject credentials in URLs, only swap            │
+                                  between existing IndexPath / IndexUrl kinds      │
+                                                                                   │
+                                                                                   │
+   resolved index source ── feeds cabin-cli's artifact pipeline ──────────────────┘
+                              and the lockfile's [[source-replacement]] array
+</code></pre>
+<p><code>cabin-cli</code>'s <code>patch_glue</code> module owns the orchestration glue:
+typed inputs in, typed values out, no business logic in
+<code>cli.rs</code>. The lockfile gains optional <code>[[patch]]</code> and
+<code>[[source-replacement]]</code> arrays (default-empty so old lockfiles
+remain valid), and <code>--locked</code> errors if the recorded arrays
+differ from the active policy. <code>cabin metadata</code> adds two
+top-level arrays (<code>patches</code>, <code>source_replacements</code>) for
+deterministic auditability.</p>
+<p>Local override policy never enters published artefacts:
+<code>cabin-package</code> rejects manifests with a non-empty <code>[patch]</code>
+table; <code>.cabin/config.toml</code> (which carries config patches +
+source replacement) is already in <code>EXCLUDED_DIR_NAMES</code>. Git
+sources, vendoring, registry authentication, HTTP publish, new
+registry protocols, and registry-server work all remain
+deferred.</p>
+<p>Full protocol in <a href="../patch-overrides/"><code>patch-overrides.md</code></a>.</p>
+<h3 id="configuration-files">Configuration files</h3>
+<p>Cabin reads typed TOML configuration files for <em>local policy</em> —
+defaults the user, the workspace, or a single project want to
+apply across many invocations. Config sits between the manifest
+(which is <em>package source spec</em>) and the CLI / environment so
+existing per-command flags keep their highest precedence.</p>
+<p><code>cabin-config</code> (a new crate) owns the entire surface:</p>
+<pre><code>[user, workspace/project, explicit]
+       config files
+            |
+            v
+cabin_config::discover_config_files
+   ├── env-driven discovery: CABIN_NO_CONFIG / CABIN_CONFIG /
+   │                         CABIN_CONFIG_HOME / XDG_CONFIG_HOME / HOME
+   ├── deny_unknown_fields parsing of [registry] / [paths] /
+   │   [profile] / [profile.cache] / [toolchain] (private serde shape)
+   ├── reject [target.'cfg(...)'.&lt;...&gt;] tables, auth/token/
+   │   credentials/registries tables, registry index-path/url
+   │   conflicts, empty / invalid values
+   v
+cabin_config::merge_loaded_files
+   ├── lower-priority files first, higher overrides per field
+   ├── attaches every effective value to its ConfigSource
+   v
+EffectiveConfig
+   ├── registry source           (with file provenance)
+   ├── paths.cache_dir/build_dir (resolved relative to the config file)
+   ├── build.profile             (string, validated against the
+   │                              project's profile definitions)
+   ├── compiler_wrapper          (CompilerWrapperRequest)
+   └── toolchain.cc/cxx/ar       (ToolSpec)
+</code></pre>
+<p><code>cabin-cli</code> orchestrates only — <code>cabin-cli/src/config_glue.rs</code>
+maps <code>EffectiveConfig</code> into the typed layers the existing
+resolvers consume:</p>
+<ul>
+<li><code>cabin_toolchain::ConfigToolchainLayer</code> slots between the env
+  variable and the manifest in
+  <code>cabin_toolchain::resolve_toolchain</code>.</li>
+<li><code>cabin_toolchain::ConfigWrapperLayer</code> slots between the
+  <code>CABIN_COMPILER_WRAPPER</code> env variable and the manifest in
+  <code>cabin_toolchain::resolve_compiler_wrapper</code>.</li>
+<li>The build-side helpers (<code>profile_selection_for_build</code>,
+  <code>resolve_index_source</code>, <code>resolve_cache_dir</code>,
+  <code>resolve_build_dir</code>) consult the same <code>EffectiveConfig</code> and
+  return a typed value plus its <code>ConfigValueSource</code>.</li>
+</ul>
+<p>The metadata view emits a top-level <code>config</code> block with the
+loaded files plus every effective config-derived setting, paired
+with its <code>value_source</code> so consumers can audit provenance without
+re-running discovery. <code>BuildConfiguration::fingerprint</code> already
+covers the per-tool spec + wrapper kind / version, so a config
+that picks <code>clang++</code> or <code>ccache</code> produces a different fingerprint
+than one that does not — without the config layer needing to
+emit anything new into the hash.</p>
+<p>Local config never enters package archives, the canonical
+per-version metadata, the lockfile, or the registry index:</p>
+<ul>
+<li><code>cabin-package::archive::EXCLUDED_DIR_NAMES</code> already filters
+  the <code>.cabin/</code> directory out of deterministic source archives.</li>
+<li><code>cabin-package::metadata</code> and <code>cabin-index</code> consume <code>Package</code>
+  values from <code>cabin-core</code>, which never contain config-derived
+  fields.</li>
+<li><code>cabin-publish</code> does not read config for authentication.</li>
+</ul>
+<p>Auth tokens and new registry protocols are <em>deliberately</em> out of
+scope; <code>cabin-config</code>'s parser rejects auth/credential/token
+keys with a dedicated error message so a typo cannot smuggle a
+secret into a published archive. Source replacement and
+vendoring are implemented local-policy/read-path features; they
+remain excluded from package archives, canonical package
+metadata, and registry authentication. Full protocol in
+<a href="../config/"><code>config.md</code></a>.</p>
+<h3 id="compiler-cache-wrappers">Compiler-cache wrappers</h3>
+<p>Cabin can prefix C++ compile commands with <code>ccache</code> or <code>sccache</code>.
+The wrapper sits <em>on top</em> of the resolved toolchain — it does not
+replace the compiler driver, and it never wraps link / archive
+commands.</p>
+<p><code>cabin-core::compiler_wrapper</code> owns the typed model (<code>CompilerWrapperKind</code>,
+<code>CompilerWrapperRequest</code>, <code>CompilerWrapperManifestSettings</code>,
+<code>ConditionalCompilerWrapperDecl</code>, <code>CompilerWrapperSource</code>,
+<code>CompilerWrapperIdentity</code>, <code>ResolvedCompilerWrapper</code>,
+<code>CompilerWrapperSummary</code>) plus a pure parser for <code>none</code> /
+<code>ccache</code> / <code>sccache</code>. <code>cabin-toolchain::wrapper::resolve_compiler_wrapper</code>
+walks the precedence ladder and returns an <code>Option&lt;ResolvedCompilerWrapper&gt;</code>,
+reusing the same <code>EnvLookup</code> / <code>ExecutableProbe</code> / <code>ToolRunner</code>
+abstractions as the rest of the toolchain layer:</p>
+<pre><code>[ToolchainSelectionArgs]
+  --compiler-wrapper / --no-compiler-wrapper
+            |
+            v
+CompilerWrapperRequest -+
+                        |
+CABIN_COMPILER_WRAPPER -+--&gt; cabin_toolchain::resolve_compiler_wrapper
+                        |    (CLI &gt; env &gt; config [build.cache]
+[target.'cfg'.profile.cache]+ &gt; [target.'cfg(...)'.profile.cache]
+[profile.cache]            ----+ &gt; manifest [profile.cache]; PATH search;
+                              |  optional `--version` probe)
+                              |
+                              v
+                    Option&lt;ResolvedCompilerWrapper&gt;
+                              |
+                              v
+            cabin_build::PlanRequest.compiler_wrapper
+                              |
+            +-----------------+-----------------+
+            v                                   v
+build.ninja: prefixed `ccache cxx ...`   compile_commands.json:
+(Ninja invokes the wrapped command)      unchanged `cxx ...` (clangd
+                                         keeps seeing the underlying
+                                         compiler)
+</code></pre>
+<p><code>cabin metadata</code> surfaces the resolved wrapper under
+<code>toolchain.compiler_wrapper</code>. The build-configuration fingerprint
+folds in the wrapper kind / spec / version, so a cache layer keys
+on whether <code>ccache</code> is present and which version is in use.</p>
+<p>Workspace member manifests that declare any cache settings are
+rejected with <code>MemberDeclaresCompilerWrapper</code>, mirroring the
+existing profile / toolchain rules so a single <code>cabin build</code>
+invocation cannot silently apply different wrapper choices to
+different packages. Manifest-declared cache settings round-trip
+through <code>cabin package</code>; CLI / env-derived selections never do.</p>
+<p>Full protocol in <a href="../compiler-cache/"><code>compiler-cache.md</code></a>.</p>
+<h3 id="non-local-registry-control-planes">Non-Local Registry Control Planes</h3>
+<p>This repository implements the local registry interface: local file
+registries, package archives, and a read-only sparse HTTP client for a
+static layout. Account systems, hosted write paths, ownership workflows,
+package yanking, signing policy, and administrative control planes are
+outside this local-core boundary. See
+<a href="../registry-design/"><code>registry-design.md</code></a> for the concrete read-path
+and file-registry shape this repository supports.</p>
+<h2 id="scope-and-limitations">Scope and limitations</h2>
+<p>Cabin is pre-1.0 and intentionally focused on the local OSS
+package-manager-and-build-system core. The following are <em>not</em>
+part of this repository today:</p>
+<ul>
+<li><strong>No Git dependencies.</strong> A Git-backed registry index is
+  intentionally never planned; see
+  <a href="../registry-design/"><code>registry-design.md</code></a>. Source registries
+  are local file directories or sparse HTTP today.</li>
+<li><strong>No non-local registry control plane.</strong> Every command that needs
+  an index expects <code>--index-path &lt;dir&gt;</code> or <code>--index-url &lt;url&gt;</code>.
+  There is no default remote registry, no <code>cabin login</code>, and no
+  package upload over the network.</li>
+<li><strong>No account / ownership workflows.</strong> Ownership, signing, package
+  yanking, and restricted package access are out of scope.</li>
+<li><strong>No administrative policy surfaces.</strong></li>
+<li><strong>No remote / binary build cache.</strong> The artifact cache stores
+  source archives only.</li>
+<li><strong>No compile-server wrapper integration.</strong> <code>ccache</code> and
+  <code>sccache</code> are the supported compiler-cache wrappers; distcc,
+  icecc, and other distributed compile-server wrappers are out of
+  scope.</li>
+<li><strong>No full Windows / MSVC support.</strong> CI runs on Linux and macOS;
+  Windows is best-effort. C/C++ on Windows works as far as Ninja
+  and the configured toolchain allow but is not a supported
+  configuration.</li>
+<li><strong>No workspace-level profile or toolchain overrides beyond the
+  documented root-owned settings.</strong> Member manifests cannot carry
+  root-only build policy, and workspace-level profile/toolchain
+  expansion beyond the current model is out of scope.</li>
+<li><strong>Not a CMake / Meson drop-in replacement.</strong> Cabin does not
+  consume <code>CMakeLists.txt</code> or <code>meson.build</code> files. Existing
+  CMake / Meson projects cannot be migrated without rewriting the
+  build description as <code>cabin.toml</code>.</li>
+<li><strong>No shared-library linkage model.</strong> The current build model is
+  based on executables, static archives, header-only libraries,
+  and system-library link flags; broad shared
+  library generation / ABI policy is out of scope.</li>
+<li><strong>No lockfile capture of resolved build configurations.</strong> The
+  lockfile records dependency and local-override state, not
+  profile / toolchain / environment-derived build configuration
+  fingerprints.</li>
+<li><strong>No C++ modules, no generated-source bindings.</strong> Header-generation
+  tools (<code>cxx</code>, <code>autocxx</code>, <code>bindgen</code>) and the C++ modules build flow
+  are out of scope.</li>
+<li><strong>No cross-compilation.</strong> <code>--target &lt;triple&gt;</code> is reserved for the
+  future cross-compilation flow.</li>
+</ul>
+<p>Per-feature limitations live with each feature page (for example
+<a href="../targets/"><code>targets.md</code></a>, <a href="../profiles/"><code>profiles.md</code></a>).</p>
+<h2 id="contributor-facing-architecture-guardrails">Contributor-facing architecture guardrails</h2>
+<p>The architecture document is the canonical source for crate
+boundaries, ownership rules, and scope limits. <code>CONTRIBUTING.md</code>
+points here rather than restating those rules. If code moves across
+crate boundaries, update this document and <code>AGENTS.md</code> in the same
+change.</p>
+<p>Architecture-sensitive behavior changes should add focused unit
+coverage in the owning crate and CLI integration coverage when the
+behavior is user-facing. Observable output used by tooling or tests
+must stay deterministic: workspace selections, generated Ninja,
+<code>compile_commands.json</code>, metadata / tree / explain JSON, package
+archives, lockfiles, and registry files should sort or normalise
+their output explicitly.</p>
+<p>Tests must not require external network access. Network protocol
+tests boot an in-process server on <code>127.0.0.1:0</code> and point Cabin at
+that server. CLI integration tests use the shared <code>cabin()</code> helper
+to scrub process environment variables Cabin reads; tests that
+exercise config discovery opt back in through the documented
+<code>cabin_with_config()</code> helper. The full portability rules live in
+<a href="../testing/"><code>testing.md</code></a>.</p>
+<h2 id="why-a-separate-lockfile-crate">Why a separate lockfile crate?</h2>
+<p><code>cabin-lockfile</code> and <code>cabin-resolver</code> solve unrelated problems:</p>
+<ul>
+<li><strong>Lockfile I/O</strong>: TOML serialisation, deterministic ordering, schema
+  validation. Pure data, no algorithms.</li>
+<li><strong>Resolution</strong>: constraint satisfaction over an index. Algorithmic.</li>
+</ul>
+<p>Keeping them apart means the artifact layer can hash into
+<code>cabin.lock</code> without churning the resolver, and a future resolver
+algorithm change can land in <code>cabin-resolver</code> without touching the
+lockfile crate.</p>
+<h2 id="why-a-separate-build-graph-ir">Why a separate build graph IR?</h2>
+<p>Same reasoning as the lockfile split: the build graph in <code>cabin-build</code>
+is a small, dumb data structure on purpose so future backends (a
+direct in-process executor, a remote-cache hook, a Bazel-style
+exporter) can consume the same shape without reaching into Ninja
+specifics.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../new-and-init/" class="btn btn-neutral float-left" title="Creating a new package"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../manifest/" class="btn btn-neutral float-right" title="cabin.toml reference">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../new-and-init/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../manifest/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

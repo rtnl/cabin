@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Dependency kinds - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Dependency kinds";
+        var mkdocs_page_input_path = "dependency-kinds.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Dependency kinds</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#manifest-syntax">Manifest syntax</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#resolver-behaviour">Resolver behaviour</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lockfile-behaviour">Lockfile behaviour</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#workspace-dependency-inheritance">Workspace dependency inheritance</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#command-behaviour">Command behaviour</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#package-and-index-metadata">Package and index metadata</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#optional-dependencies">Optional dependencies</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scope">Scope</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#library-with-a-system-dependency">Library with a system dependency</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Dependencies</li>
+      <li class="breadcrumb-item active">Dependency kinds</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/dependency-kinds.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="dependency-kinds">Dependency kinds</h1>
+<p>Cabin classifies every dependency into one of two <strong>kinds</strong>, each
+declared under its own manifest section:</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Kind</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[dependencies]</code></td>
+<td><code>normal</code></td>
+<td>Linked into ordinary builds.</td>
+</tr>
+<tr>
+<td><code>[dev-dependencies]</code></td>
+<td><code>dev</code></td>
+<td>For tests / examples / local development tasks.</td>
+</tr>
+</tbody>
+</table>
+<p>An individual entry inside either of these tables can additionally
+opt out of the Cabin registry / resolver / fetcher path and be
+sourced from the system instead by setting <code>system = true</code>:</p>
+<pre><code class="language-toml">[dependencies]
+zlib = { version = &quot;&gt;=1.2&quot;, system = true }
+</code></pre>
+<p>This is <em>where the dependency comes from</em>; the <em>when</em> (always or
+test-time) is still driven by which table the entry lives in. For
+selected primary packages, Cabin probes active <code>system = true</code>
+entries through <code>pkg-config</code> at build time to obtain compile and
+link flags. Declarations in local path dependencies and registry
+packages are preserved as metadata but are not probed for the
+downstream build — see
+<a href="../system-dependencies/"><code>system-dependencies.md</code></a> for the full
+probe behaviour.</p>
+<p>Every kind also accepts the platform-conditional form
+<code>[target.'cfg(...)'.&lt;kind&gt;]</code>. The condition is evaluated against
+the host platform; non-matching declarations are filtered out
+before they reach resolution / fetch / build. The full grammar
+and evaluation rules live in
+<a href="../target-dependencies/"><code>target-dependencies.md</code></a>.</p>
+<h2 id="manifest-syntax">Manifest syntax</h2>
+<pre><code class="language-toml">[package]
+name = &quot;demo&quot;
+version = &quot;0.1.0&quot;
+
+[dependencies]
+fmt = &quot;&gt;=10 &lt;11&quot;
+zlib = { version = &quot;&gt;=1.2&quot;, system = true }
+
+[dev-dependencies]
+gtest = &quot;^1.14&quot;
+</code></pre>
+<p><code>[dependencies]</code> and <code>[dev-dependencies]</code> accept the following
+value forms:</p>
+<ul>
+<li>bare version-requirement string (<code>name = "&gt;=10"</code>),</li>
+<li><code>{ version = "..." }</code>,</li>
+<li><code>{ path = "../local" }</code>,</li>
+<li><code>{ workspace = true }</code> (looks up the matching
+  <code>[workspace.&lt;kind&gt;-dependencies]</code> table — see below),</li>
+<li><code>{ version = "...", system = true }</code> —
+  externally-provided system dep, probed via <code>pkg-config</code> at
+  build time.</li>
+</ul>
+<p><code>system = true</code> is mutually exclusive with <code>path</code>, <code>workspace</code>,
+<code>git</code>, <code>registry</code>, <code>source</code>, <code>features</code>, <code>default-features</code>, and
+<code>optional</code>; mixing the flag with any of those surfaces a clear
+parser error. Every declared <code>system = true</code> dependency is
+required — the manifest has no <code>required</code> field.</p>
+<h2 id="resolver-behaviour">Resolver behaviour</h2>
+<p>The Cabin resolver runs over the union of dependency kinds that
+participate in <em>ordinary</em> commands:</p>
+<ul>
+<li><strong>Normal</strong> dependencies — included.</li>
+<li><strong>Dev</strong> dependencies — <strong>excluded by default</strong>. Declaration
+  only for ordinary commands. They round-trip through metadata
+  but are not resolved, fetched, or built. <code>cabin test</code>
+  activates them as real graph edges for the <em>selected</em> primary
+  packages so test executables can link against test-only
+  packages — see <a href="../testing/"><code>docs/testing.md</code></a>. The activation
+  never propagates: a transitive dep's own dev-deps stay
+  declaration-only.</li>
+<li><strong>System</strong> dependencies — <strong>never resolved</strong>. They never reach
+  the resolver.</li>
+</ul>
+<p>The same package name may appear under multiple kinds (e.g. a
+package used both as a normal dep and as a dev dep). The resolver
+sees only the normal-kind requirement during ordinary commands;
+<code>cabin test</code> joins the selected packages' dev-kind requirements on
+top.</p>
+<h2 id="lockfile-behaviour">Lockfile behaviour</h2>
+<p>The lockfile records resolved package versions; dependency-kind
+metadata is not duplicated there because the resolver re-runs from
+the manifest on every command and re-decides which kinds to
+include.</p>
+<h2 id="workspace-dependency-inheritance">Workspace dependency inheritance</h2>
+<p><code>[workspace]</code> roots may declare shared requirements per kind:</p>
+<pre><code class="language-toml">[workspace]
+members = [&quot;packages/*&quot;]
+
+[workspace.dependencies]
+fmt = &quot;&gt;=10&quot;
+
+[workspace.dev-dependencies]
+gtest = &quot;^1.14&quot;
+</code></pre>
+<p>A member then opts into the workspace requirement with
+<code>{ workspace = true }</code>:</p>
+<pre><code class="language-toml">[package]
+name = &quot;app&quot;
+version = &quot;0.1.0&quot;
+
+[dependencies]
+fmt = { workspace = true }       # looks up [workspace.dependencies]
+
+[dev-dependencies]
+gtest = { workspace = true }     # looks up [workspace.dev-dependencies]
+</code></pre>
+<p>The lookup is <strong>strictly kind-specific</strong>: a <code>{ workspace = true }</code>
+under <code>[dev-dependencies]</code> does not fall back to
+<code>[workspace.dependencies]</code>. If the matching workspace table does
+not declare the dependency, Cabin reports an explicit error
+naming the section pair. <code>system = true</code> entries cannot use
+<code>workspace = true</code>; the two flags are mutually exclusive (the
+parser rejects the combination).</p>
+<h2 id="command-behaviour">Command behaviour</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cabin metadata</code></td>
+<td>Reports each Cabin package dep with its <code>dependency_kind</code>, plus a separate <code>system_dependencies</code> array.</td>
+</tr>
+<tr>
+<td><code>cabin resolve</code> / <code>update</code> / <code>fetch</code></td>
+<td>Walks normal deps; excludes dev deps; never sees system deps.</td>
+</tr>
+<tr>
+<td><code>cabin build</code></td>
+<td>Same resolution as above. Only <strong>normal</strong>-kind edges link into ordinary C/C++ targets — dev deps cannot resolve through <code>target.&lt;X&gt;.deps</code>.</td>
+</tr>
+<tr>
+<td><code>cabin test</code></td>
+<td>Walks normal deps <strong>plus</strong> <code>[dev-dependencies]</code> of the selected primary packages, so <code>cpp_test</code> targets can depend on test-only packages. Dev-dep activation never propagates to transitive deps.</td>
+</tr>
+<tr>
+<td><code>cabin package</code></td>
+<td>Includes per-kind dependency tables and <code>system-dependencies</code> in the canonical metadata document.</td>
+</tr>
+<tr>
+<td><code>cabin publish --dry-run</code></td>
+<td>Validates the same metadata; never touches the registry.</td>
+</tr>
+<tr>
+<td><code>cabin publish --registry-dir</code></td>
+<td>Publishes the per-kind metadata into the local file registry.</td>
+</tr>
+</tbody>
+</table>
+<p>Output ordering is deterministic in every command: dependency
+kinds iterate in canonical order (<code>normal</code>, <code>dev</code>), names sort
+ascending within each kind, and system deps sort by name.</p>
+<h2 id="package-and-index-metadata">Package and index metadata</h2>
+<p><code>cabin package</code> emits a canonical per-version metadata document
+that round-trips dependency kinds. The on-disk shape is:</p>
+<pre><code class="language-json">{
+  &quot;schema&quot;: 1,
+  &quot;name&quot;: &quot;demo&quot;,
+  &quot;version&quot;: &quot;0.1.0&quot;,
+  &quot;dependencies&quot;:      { &quot;fmt&quot;:     &quot;&gt;=10 &lt;11&quot; },
+  &quot;dev-dependencies&quot;:  { &quot;gtest&quot;:   &quot;^1.14&quot; },
+  &quot;system-dependencies&quot;: {
+    &quot;zlib&quot;: { &quot;version&quot;: &quot;&gt;=1.2&quot; }
+  },
+  &quot;yanked&quot;:   false,
+  &quot;checksum&quot;: &quot;sha256:...&quot;,
+  &quot;source&quot;:   { &quot;type&quot;: &quot;archive&quot;, &quot;path&quot;: &quot;...&quot;, &quot;format&quot;: &quot;tar.gz&quot; }
+}
+</code></pre>
+<p>Empty kind tables are omitted, so manifests that only use
+<code>[dependencies]</code> produce the exact byte-for-byte metadata they
+always did.</p>
+<p>The local file index and the sparse HTTP index use the same
+shape.</p>
+<h2 id="optional-dependencies">Optional dependencies</h2>
+<p>Cabin package dependencies in <code>[dependencies]</code> may declare
+<code>optional = true</code>:</p>
+<pre><code class="language-toml">[dependencies]
+openssl = { version = &quot;^3&quot;, optional = true }
+</code></pre>
+<p>Optional dependencies only enter ordinary resolution / fetch /
+build when a feature enables them via <code>dep:&lt;name&gt;</code> or
+<code>&lt;name&gt;/&lt;feature&gt;</code> from <code>[features]</code>. Until then they appear in
+package / index metadata but never in the resolver input or the
+lockfile. Per-edge <code>features = [...]</code> and <code>default-features =
+false</code> are also supported and are applied additively across all
+dependency edges that include the same package — see
+<a href="../features/"><code>features.md</code></a> for the full feature-resolution
+behaviour.</p>
+<p><code>optional = true</code> is <strong>not</strong> supported on <code>[dev-dependencies]</code>
+or on <code>system = true</code> entries. The manifest layer reports the
+violation as <code>OptionalNotSupportedForKind</code> (dev) or
+<code>SystemConflictsWith</code> (system).</p>
+<h2 id="scope">Scope</h2>
+<ul>
+<li><strong>Registry optional-dep activation is conservative.</strong> Optional
+  dependencies declared by registry packages are preserved in
+  metadata; the resolver activates them only from feature state
+  visible on local (workspace / path) packages.</li>
+<li><strong>System deps are primary-only and pkg-config-only.</strong> Cabin
+  invokes pkg-config for active <code>system = true</code> entries declared
+  by selected primary packages. It does not probe system
+  declarations from local path or registry dependencies and does
+  not invoke any other system package manager.</li>
+</ul>
+<h2 id="examples">Examples</h2>
+<h3 id="library-with-a-system-dependency">Library with a system dependency</h3>
+<pre><code class="language-toml">[package]
+name = &quot;app&quot;
+version = &quot;0.1.0&quot;
+
+[dependencies]
+mylib = &quot;&gt;=2&quot;
+zlib = { version = &quot;&gt;=1.2&quot;, system = true }
+</code></pre>
+<p><code>zlib</code> is the responsibility of whoever builds the package — it
+is not fetched through Cabin. At build time, Cabin probes it
+via <code>pkg-config</code> and merges the resulting cflags / ldflags into
+the compile commands; <code>cabin metadata</code> reports the declaration
+in a separate <code>system-dependencies</code> block alongside the regular
+<code>dependencies</code> array.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../tidy/" class="btn btn-neutral float-left" title="Static analysis"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../system-dependencies/" class="btn btn-neutral float-right" title="System dependencies">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../tidy/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../system-dependencies/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

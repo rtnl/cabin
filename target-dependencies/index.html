@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Target / platform-specific dependencies - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Target / platform-specific dependencies";
+        var mkdocs_page_input_path = "target-dependencies.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Target / platform-specific dependencies</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#manifest-syntax">Manifest syntax</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#supported-cfg-grammar">Supported cfg grammar</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#evaluation-context">Evaluation context</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#round-trip-through-publishing">Round-trip through publishing</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lockfile">Lockfile</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cli-behaviour">CLI behaviour</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#errors">Errors</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Dependencies</li>
+      <li class="breadcrumb-item active">Target / platform-specific dependencies</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/target-dependencies.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="target-platform-specific-dependencies">Target / platform-specific dependencies</h1>
+<p>Cabin supports declaring a dependency only for a particular host
+platform via <code>[target.'cfg(...)'.&lt;kind&gt;]</code> tables in <code>cabin.toml</code>.
+The shape mirrors Cargo's syntax so the manifest stays familiar,
+but the supported predicates and evaluation context are pinned
+down to a small, deterministic set.</p>
+<p>This document is the canonical specification. The behaviour
+described here is what the manifest parser, the workspace loader,
+the resolver, the feature resolver, the fetch / build pipeline,
+the canonical package metadata, the local and sparse-HTTP index
+loaders, and the <code>cabin metadata</code> JSON view all agree on.</p>
+<h2 id="manifest-syntax">Manifest syntax</h2>
+<p>A target-conditional dependency table is a TOML table whose key is
+the literal string <code>target</code> followed by a TOML key that is a
+quoted <code>cfg(...)</code> expression. The dependency-kind sub-tables
+inside are the same dependency kinds:</p>
+<pre><code class="language-toml">[target.'cfg(os = &quot;linux&quot;)'.dependencies]
+fmt = &quot;&gt;=10&quot;
+
+[target.'cfg(arch = &quot;x86_64&quot;)'.dev-dependencies]
+gtest = &quot;^1.14&quot;
+
+[target.'cfg(env = &quot;musl&quot;)'.dependencies]
+zlib = { version = &quot;&gt;=1.2&quot;, system = true }
+</code></pre>
+<p>Each dependency entry inside a conditional table accepts the same
+fields as the top-level kind table (per-edge <code>features</code>,
+<code>optional</code>, <code>default-features</code> for Cabin package deps; <code>system =
+true</code> with <code>version</code> for system deps). Every declared system
+dependency is required.</p>
+<p>The same <code>[target.'cfg(...)']</code> machinery also applies to the
+<code>[toolchain]</code> and <code>[profile]</code> tables introduced for explicit
+toolchain selection and conditional build flags:</p>
+<pre><code class="language-toml">[target.'cfg(os = &quot;linux&quot;)'.toolchain]
+ar = &quot;llvm-ar-18&quot;
+
+[target.'cfg(os = &quot;linux&quot;)'.profile]
+defines = [&quot;USE_EPOLL&quot;]
+</code></pre>
+<p>Conditional <code>[toolchain]</code> tables follow the same workspace-root-
+only rule as the unconditional <code>[toolchain]</code> table. Conditional
+<code>[profile]</code> tables are per-package, like the rest of <code>[profile]</code>.
+Full protocol in <a href="../toolchains/"><code>toolchains.md</code></a>.</p>
+<p><code>workspace = true</code> is <strong>not</strong> allowed inside a conditional table.
+Workspace inheritance only flows through the unconditional
+<code>[workspace.&lt;kind&gt;-dependencies]</code> tables; mixing the two would
+allow a single workspace key to silently mean different things
+on different hosts. Use a workspace dep without a condition, or
+declare the dep directly inside the conditional table.</p>
+<h2 id="supported-cfg-grammar">Supported <code>cfg</code> grammar</h2>
+<p>A predicate is one of:</p>
+<ul>
+<li><code>&lt;key&gt; = "&lt;value&gt;"</code> — a key/value test;</li>
+<li><code>all(&lt;expr&gt;, &lt;expr&gt;, …)</code> — every nested predicate must hold
+  (zero arguments is allowed and is always true);</li>
+<li><code>any(&lt;expr&gt;, &lt;expr&gt;, …)</code> — at least one nested predicate must
+  hold (zero arguments is allowed and is always false);</li>
+<li><code>not(&lt;expr&gt;)</code> — exactly one nested predicate, negated.</li>
+</ul>
+<p>Keys are bare identifiers; values are double-quoted strings.
+Unknown keys, unquoted values, missing parentheses, and wrong
+arity in <code>not(...)</code> are rejected at parse time with a clear
+error that names the offending input.</p>
+<p>The supported keys are fixed:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Source</th>
+<th>Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>os</code></td>
+<td><code>std::env::consts::OS</code></td>
+<td><code>"linux"</code>, <code>"macos"</code>, <code>"windows"</code></td>
+</tr>
+<tr>
+<td><code>arch</code></td>
+<td><code>std::env::consts::ARCH</code></td>
+<td><code>"x86_64"</code>, <code>"aarch64"</code></td>
+</tr>
+<tr>
+<td><code>family</code></td>
+<td><code>std::env::consts::FAMILY</code></td>
+<td><code>"unix"</code>, <code>"windows"</code></td>
+</tr>
+<tr>
+<td><code>env</code></td>
+<td>derived from the host triple (<code>""</code> when the triple has no env)</td>
+<td><code>"gnu"</code>, <code>"musl"</code>, <code>"msvc"</code></td>
+</tr>
+<tr>
+<td><code>abi</code></td>
+<td>derived from the host triple (<code>""</code> when the triple has no abi)</td>
+<td><code>"eabihf"</code>, <code>"sim"</code></td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td>the full host triple</td>
+<td><code>"aarch64-apple-darwin"</code></td>
+</tr>
+</tbody>
+</table>
+<p>Only those six keys are accepted. Adding more requires a
+spec-level decision because it widens the public manifest grammar
+and the canonical metadata schema.</p>
+<h2 id="evaluation-context">Evaluation context</h2>
+<p>Cabin evaluates predicates against the <strong>host</strong> platform, derived
+once via <code>cabin_core::TargetPlatform::current()</code>. There is no
+cross-compilation in this step, so the evaluation context is
+deterministic for a given machine and is reported back to the
+user under <code>target_platform</code> in <code>cabin metadata</code> so dependency
+filtering is auditable.</p>
+<p>The evaluation rules are:</p>
+<ul>
+<li><code>key = "value"</code> matches when the host's value for <code>key</code>
+  equals <code>value</code> exactly (string equality, case-sensitive).</li>
+<li><code>all</code> / <code>any</code> short-circuit and recurse.</li>
+<li><code>not</code> inverts.</li>
+<li>Unknown keys never reach evaluation — the parser rejects them.</li>
+</ul>
+<p>A dependency whose predicate fails on the host is filtered out
+<strong>before</strong> it reaches:</p>
+<ul>
+<li>the workspace closure walker
+  (<code>cabin_workspace::collect_closure_versioned_deps_filtered</code>);</li>
+<li>the resolver input (no constraint reaches the solver);</li>
+<li>the feature resolver (<code>cabin_feature::resolve_features</code> skips
+  it when computing <code>dep:</code> entries);</li>
+<li>the artifact fetch path;</li>
+<li>the build planner;</li>
+<li>the canonical metadata document and the <code>cabin metadata</code> JSON
+  view's "active" flag.</li>
+</ul>
+<p>The <code>condition</code> is preserved on <code>Dependency::condition</code> and
+<code>DependencyEdge::condition</code> so the JSON view can still surface it
+as <code>target</code> plus an <code>active: false</code> marker; the dependency
+itself does not participate in resolution or build.</p>
+<h2 id="round-trip-through-publishing">Round-trip through publishing</h2>
+<p><code>cabin package</code> and <code>cabin publish</code> carry the predicate through
+the canonical <a href="../package-format/"><code>PackageMetadata</code></a> document
+under a <code>target</code> field on each dependency table entry, and the
+local-file plus sparse-HTTP index loaders parse the same field
+back into <code>IndexPackageDependency::condition</code> /
+<code>IndexSystemDependency::condition</code>. Older metadata that omits
+<code>target</code> continues to load — the field is optional in every
+schema.</p>
+<p>The on-disk encoding of a <code>Condition</code> is its canonical
+inner-expression form (<code>os = "linux"</code>,
+<code>all(os = "linux", arch = "x86_64")</code>, …). The wrapping
+<code>cfg(...)</code> is implicit because the field name already carries
+that meaning in the schema.</p>
+<h2 id="lockfile">Lockfile</h2>
+<p>The lockfile records the resolved closure for the host platform,
+exactly as before. Because filtering happens before resolution,
+the lockfile always describes a valid, host-evaluated set; it is
+not partitioned per-platform. If the host platform changes, the
+closure may change and the lockfile is updated by re-running
+<code>cabin update</code> or by removing and regenerating it. Cross-platform
+lockfile partitioning is deliberately out of scope for this step.</p>
+<h2 id="cli-behaviour">CLI behaviour</h2>
+<p><code>cabin metadata</code> reports two new pieces of information:</p>
+<ul>
+<li>a top-level <code>target_platform</code> block listing the values used to
+  evaluate predicates (<code>os</code>, <code>arch</code>, <code>family</code>, <code>env</code>, <code>abi</code>,
+  <code>target</code>);</li>
+<li>per-dependency <code>target</code> (when present) and <code>active</code> flags so
+  consumers can decide whether to surface or filter inactive
+  declarations without re-evaluating the predicate.</li>
+</ul>
+<p><code>cabin resolve</code>, <code>cabin fetch</code>, <code>cabin build</code>, and
+<code>cabin update</code> apply the host-platform filter implicitly. They do
+not gain new flags — cross-compilation lives outside this step.</p>
+<h2 id="errors">Errors</h2>
+<p>Errors are rendered without referring to internal step numbers.
+Examples (the precise wording lives in the manifest / index error
+types):</p>
+<ul>
+<li>"invalid <code>cfg(...)</code> expression in <code>[target.'…'.dependencies]</code>:
+  unknown key <code>host_endian</code>"</li>
+<li>"<code>cfg(...)</code> expressions do not accept <code>workspace = true</code> —
+  declare the dependency in <code>[workspace.dependencies]</code> and use
+  <code>dep = { workspace = true }</code> outside any <code>target.cfg</code> table"</li>
+<li>"expected double-quoted string after <code>os =</code>"</li>
+</ul>
+<p>The CLI surfaces them through the same channel as ordinary
+manifest errors: <code>cabin metadata</code>, <code>cabin resolve</code>, and
+<code>cabin build</code> all stop early and report the offending line.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../system-dependencies/" class="btn btn-neutral float-left" title="System dependencies"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../features/" class="btn btn-neutral float-right" title="Features">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../system-dependencies/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../features/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

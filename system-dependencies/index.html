@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>System dependencies - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "System dependencies";
+        var mkdocs_page_input_path = "system-dependencies.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">System dependencies</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#manifest-declaration">Manifest declaration</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-cabin-does-with-system-sourced-entries">What Cabin does with system-sourced entries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#version-requirements">Version requirements</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#missing-dependency-semantics">Missing dependency semantics</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#executable-resolution">Executable resolution</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pkg-config-environment">Pkg-config environment</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#fingerprint-and-rebuild">Fingerprint and rebuild</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#output-diagnostics">Output / diagnostics</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#diagnostics">Diagnostics</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-cabin-does-not-do">What Cabin does not do</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Dependencies</li>
+      <li class="breadcrumb-item active">System dependencies</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/system-dependencies.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="system-dependencies">System dependencies</h1>
+<p>System dependencies are external libraries that Cabin does not
+fetch, build, or install.  Users provide them through their OS
+package manager (or any other local installation mechanism) and
+Cabin discovers their compile / link flags by querying
+<code>pkg-config</code>.</p>
+<p>See <a href="../dependency-kinds/"><code>docs/dependency-kinds.md</code></a> for the
+dependency kinds and the declaration syntax; this page covers
+the build-time behaviour of system-sourced (<code>system = true</code>)
+entries specifically.</p>
+<h2 id="manifest-declaration">Manifest declaration</h2>
+<p>A system-sourced dependency lives in one of the regular
+dependency tables (<code>[dependencies]</code>, <code>[dev-dependencies]</code>) with
+<code>system = true</code> set:</p>
+<pre><code class="language-toml">[dependencies]
+zlib    = { version = &quot;&gt;=1.2&quot;, system = true }
+fmt     = { version = &quot;^9.0&quot;,  system = true }
+</code></pre>
+<p>Every declared <code>system = true</code> dependency is required. There is
+no <code>required</code> field; declaring <code>required</code> on any dependency
+entry is rejected with a clear "unknown field" diagnostic.</p>
+<p>Per-kind activation matches the Cabin-package rule for the
+table the entry lives in:</p>
+<table>
+<thead>
+<tr>
+<th>Table</th>
+<th>Probed by <code>cabin build</code> / <code>run</code> / <code>metadata</code></th>
+<th>Probed by <code>cabin test</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[dependencies]</code></td>
+<td>always</td>
+<td>always</td>
+</tr>
+<tr>
+<td><code>[dev-dependencies]</code></td>
+<td><strong>no</strong></td>
+<td>selected primaries</td>
+</tr>
+</tbody>
+</table>
+<p>A test-only system dep (e.g. <code>gtest</code>) is declared under
+<code>[dev-dependencies]</code> with <code>system = true</code>, so an ordinary
+<code>cabin build</code> does not require it to be installed.</p>
+<p>Conditional declarations work the same way as the other
+dependency kinds:</p>
+<pre><code class="language-toml">[target.'cfg(os = &quot;linux&quot;)'.dependencies]
+systemd = { version = &quot;&gt;=240&quot;, system = true }
+</code></pre>
+<p>A conditional system dependency is probed only when its
+condition matches the host platform.</p>
+<h2 id="what-cabin-does-with-system-sourced-entries">What Cabin does with system-sourced entries</h2>
+<p>When the selected primary packages declare at least one active
+system dependency, Cabin invokes <code>pkg-config</code> (once per
+dependency) to:</p>
+<ol>
+<li>verify the library is present
+   (<code>pkg-config --exists 'name op version'</code>),</li>
+<li>retrieve compile-time flags
+   (<code>pkg-config --cflags name</code>),</li>
+<li>retrieve link-time flags
+   (<code>pkg-config --libs name</code>).</li>
+</ol>
+<p>Discovered include directories from <code>--cflags</code> are added to the
+package's include-dir set.  All other <code>--cflags</code> tokens are
+appended verbatim to the package's language-neutral compile
+argument bucket.
+All <code>--libs</code> tokens are appended verbatim to the package's
+<code>ldflags</code> list, preserving the order <code>pkg-config</code> emitted them
+so C / C++ link semantics are not disturbed.</p>
+<p>Probe scope is intentionally primary-only. For a single-package
+project, the root package is primary; for a workspace, the
+members selected by the command are primary. Local path
+dependencies and registry / extracted dependencies may preserve
+<code>system = true</code> declarations in metadata, package archives, and
+index entries, but those dependency manifests do not trigger
+<code>pkg-config</code> probing for the downstream build.</p>
+<p>Probing happens for every command that produces compile or link
+commands (<code>cabin build</code>, <code>cabin run</code>, <code>cabin test</code>,
+<code>cabin tidy</code>) and for <code>cabin metadata</code> and
+<code>cabin explain build-config</code> so the build-configuration
+fingerprint stays consistent across those commands. Other
+<code>cabin explain</code> subcommands (<code>package</code>, <code>target</code>, <code>source</code>,
+<code>feature</code>) do not invoke <code>pkg-config</code> because they never
+materialise a build configuration.</p>
+<h2 id="version-requirements">Version requirements</h2>
+<p>Cabin tries to convert each Cabin / npm-flavoured SemVer
+requirement into a list of <code>pkg-config</code>-native operator pairs:</p>
+<table>
+<thead>
+<tr>
+<th>Cabin requirement</th>
+<th>pkg-config form</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>^1.2</code></td>
+<td><code>&gt;= 1.2</code>, <code>&lt; 2.0.0</code></td>
+</tr>
+<tr>
+<td><code>~1.2.3</code></td>
+<td><code>&gt;= 1.2.3</code>, <code>&lt; 1.3.0</code></td>
+</tr>
+<tr>
+<td><code>&gt;=1.2 &lt;2</code></td>
+<td><code>&gt;= 1.2</code>, <code>&lt; 2</code></td>
+</tr>
+<tr>
+<td><code>=1.0.0</code></td>
+<td><code>= 1.0.0</code></td>
+</tr>
+</tbody>
+</table>
+<p>Requirements that do not parse as SemVer are forwarded to
+<code>pkg-config</code> verbatim provided they include an explicit
+operator.  A bare non-SemVer token (e.g. <code>vendor-special</code>)
+produces a clear error rather than being silently dropped.</p>
+<p><code>pkg-config</code> itself does the version comparison.</p>
+<h2 id="missing-dependency-semantics">Missing dependency semantics</h2>
+<p>A declared <code>system = true</code> dependency that fails to probe stops
+the build with an actionable diagnostic that names the package,
+the requirement Cabin attempted, and the installed version when
+available. Cabin never silently drops a missing system
+dependency from the build graph.</p>
+<h2 id="executable-resolution">Executable resolution</h2>
+<p>Cabin uses the <code>pkg-config</code> executable from <code>PATH</code> by default.
+The <code>CABIN_PKG_CONFIG</code> environment variable overrides the
+default with a verbatim executable path or command name:</p>
+<pre><code class="language-sh">CABIN_PKG_CONFIG=/opt/pkgconf/bin/pkg-config cabin build
+</code></pre>
+<p>If a project declares no <code>system = true</code> entries, Cabin never
+spawns <code>pkg-config</code> and the executable is not required.  When
+the project does declare system dependencies and the resolved
+executable is missing, Cabin produces a single diagnostic
+suggesting the install / override fix.</p>
+<h2 id="pkg-config-environment">Pkg-config environment</h2>
+<p>Cabin does not sanitise the standard <code>pkg-config</code> environment.
+Variables <code>PKG_CONFIG_PATH</code>, <code>PKG_CONFIG_LIBDIR</code>, and
+<code>PKG_CONFIG_SYSROOT_DIR</code> are inherited by the child process,
+so users can point Cabin at custom <code>.pc</code> search paths the same
+way they would for any other <code>pkg-config</code> consumer.</p>
+<h2 id="fingerprint-and-rebuild">Fingerprint and rebuild</h2>
+<p>Discovered compile / link flags participate in
+<code>cabin_core::BuildConfiguration::fingerprint</code> through the
+per-package <code>ResolvedProfileFlags</code>. When <code>pkg-config</code> reports
+different flags (for example because the user upgraded the
+system library or changed <code>PKG_CONFIG_PATH</code>), the build
+configuration fingerprint moves; Ninja then rebuilds from the
+changed command lines.</p>
+<h2 id="output-diagnostics">Output / diagnostics</h2>
+<p>Normal mode: Cabin prints no probe-specific output on
+successful runs.</p>
+<p>Verbose mode (<code>cabin -v ...</code>): Cabin prints one line per
+probed dependency naming the resolved version, and one summary
+line per workspace identifying the <code>pkg-config</code> executable
+that was used.</p>
+<p>Very-verbose mode (<code>cabin -vv ...</code>): Cabin also prints the
+per-dependency probe request (name, version requirement)
+before the probe runs.</p>
+<p>All probe-related output is written to stderr so that
+machine-readable stdout (<code>cabin metadata</code>, <code>cabin explain
+--format json</code>) stays a parseable document.</p>
+<p>Quiet mode (<code>cabin -q ...</code>): probe status output is suppressed.
+Errors are not.</p>
+<h2 id="diagnostics">Diagnostics</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cabin::system_deps::executable_not_found</code></td>
+<td>Cabin tried to spawn pkg-config but the binary was missing.</td>
+</tr>
+<tr>
+<td><code>cabin::system_deps::package_not_found</code></td>
+<td><code>pkg-config --exists</code> reported the package as absent.</td>
+</tr>
+<tr>
+<td><code>cabin::system_deps::version_mismatch</code></td>
+<td>The installed version does not satisfy the manifest requirement.</td>
+</tr>
+<tr>
+<td><code>cabin::system_deps::invalid_version_requirement</code></td>
+<td>The requirement string could not be interpreted.</td>
+</tr>
+<tr>
+<td><code>cabin::system_deps::pkg_config_failed</code></td>
+<td><code>pkg-config</code> exited non-zero for <code>--cflags</code> / <code>--libs</code>.</td>
+</tr>
+<tr>
+<td><code>cabin::system_deps::invocation_failed</code></td>
+<td>A <code>pkg-config</code> invocation failed for a reason other than not-found.</td>
+</tr>
+<tr>
+<td><code>cabin::system_deps::malformed_output</code></td>
+<td><code>pkg-config</code> produced output Cabin could not split into argv tokens.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-cabin-does-not-do">What Cabin does not do</h2>
+<p>Cabin does not install system packages.  Use your OS package
+manager (<code>apt</code>, <code>dnf</code>, <code>brew</code>, <code>pacman</code>, ...), an external
+toolchain manager, or a manual install.  Cabin does not bundle
+or wrap any third-party package manager.</p>
+<p>Cabin does not integrate with vcpkg, Conan, or Cargo-style
+system probes beyond the <code>pkg-config</code> query path described
+above.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../dependency-kinds/" class="btn btn-neutral float-left" title="Dependency kinds"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../target-dependencies/" class="btn btn-neutral float-right" title="Target / platform-specific dependencies">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../dependency-kinds/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../target-dependencies/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

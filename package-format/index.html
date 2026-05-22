@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Package archive and canonical metadata - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Package archive and canonical metadata";
+        var mkdocs_page_input_path = "package-format.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Package archive and canonical metadata</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#source-archive-format">Source archive format</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#determinism">Determinism</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#include-exclude-policy">Include / exclude policy</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#package-validation">Package validation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#canonical-metadata">Canonical metadata</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cli-surface">CLI surface</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#output-layout">Output layout</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#file-registry-publish">File-Registry Publish</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scope">Scope</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Distribution and registry interface</li>
+      <li class="breadcrumb-item active">Package archive and canonical metadata</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/package-format.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="package-archive-and-canonical-metadata">Package Archive And Canonical Metadata</h1>
+<p><code>cabin package</code> and <code>cabin publish --dry-run</code> run the same staging
+pipeline:</p>
+<ol>
+<li>Validate the package's <code>cabin.toml</code>.</li>
+<li>Walk the source tree under a fixed include / exclude policy.</li>
+<li>Build a deterministic <code>.tar.gz</code> archive whose root holds
+   <code>cabin.toml</code>.</li>
+<li>Compute the archive's SHA-256 digest.</li>
+<li>Generate canonical per-version JSON metadata in the same shape
+   a Cabin file registry serves to consumers.</li>
+<li>Write both files into <code>--output-dir</code> (default <code>dist/</code>).</li>
+</ol>
+<p><code>cabin publish --dry-run</code> adds a "no registry was modified" report.
+The dry-run path is <strong>local-only</strong>: nothing is uploaded, no registry
+mutation happens, and <code>cabin publish</code> without <code>--dry-run</code> exits with
+a clear error unless a local <code>--registry-dir</code> is provided.</p>
+<h2 id="source-archive-format">Source archive format</h2>
+<p>Archives are gzipped tar files conforming to the extractor contract:</p>
+<ul>
+<li>the archive root contains a file named <code>cabin.toml</code>;</li>
+<li>only regular files and directories are emitted; symlinks, hard
+  links, char/block devices, fifos, and other tar entry types are
+  rejected with a clear error;</li>
+<li>all entry paths are relative; a path containing <code>..</code>, an absolute
+  path, or one that would escape the package root is rejected.</li>
+</ul>
+<p>The default <code>&lt;output-dir&gt;/&lt;name&gt;-&lt;version&gt;.tar.gz</code> filename is
+conventional; the in-archive path layout is what registries and
+extractors care about.</p>
+<h2 id="determinism">Determinism</h2>
+<p>The same logical input always produces byte-identical archives:</p>
+<ul>
+<li>the file enumeration is sorted lexicographically by relative
+  path;</li>
+<li>each tar header has <code>mtime</code>, <code>uid</code>, <code>gid</code> zeroed and <code>username</code>
+  and <code>groupname</code> cleared so the archive does not embed who built
+  it;</li>
+<li>mode is <code>0o644</code> for regular files; directories are implied by
+  the extractor and are not emitted as explicit entries;</li>
+<li>the gzip header carries <code>mtime = 0</code> and OS code <code>0xff</code> (unknown)
+  so the archive bytes do not depend on when or where the build
+  ran.</li>
+</ul>
+<p><code>cabin package</code> re-running with identical input succeeds silently
+because the on-disk artifact already matches what the current run
+would produce. If the on-disk archive or metadata file has
+different bytes the run fails with <code>output file already exists with
+different bytes</code>; remove the file and re-run.</p>
+<h2 id="include-exclude-policy">Include / exclude policy</h2>
+<p>By default the archive includes every regular file under the
+package root and excludes a small fixed list of generated /
+dependency / VCS artefacts:</p>
+<table>
+<thead>
+<tr>
+<th>Excluded</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.git/</code>, <code>.hg/</code>, <code>.svn/</code></td>
+<td>VCS state.</td>
+</tr>
+<tr>
+<td><code>.cabin/</code></td>
+<td>Package-local Cabin caches plus the typed <code>.cabin/config.toml</code> file (config patches and <code>[source-replacement]</code> declarations live here). Local config is <em>user policy</em>, not package source spec, so it never enters published archives. See <a href="../config/"><code>config.md</code></a> and <a href="../patch-overrides/"><code>patch-overrides.md</code></a>.</td>
+</tr>
+<tr>
+<td><code>build/</code></td>
+<td>Default <code>cabin build</code> output directory.</td>
+</tr>
+<tr>
+<td><code>dist/</code></td>
+<td>Default <code>cabin package</code> output directory.</td>
+</tr>
+<tr>
+<td><code>node_modules/</code></td>
+<td>Convention for JavaScript-style dependencies.</td>
+</tr>
+<tr>
+<td><code>.DS_Store</code></td>
+<td>macOS Finder metadata.</td>
+</tr>
+<tr>
+<td><code>compile_commands.json</code></td>
+<td>Generated tooling index.</td>
+</tr>
+<tr>
+<td><code>build.ninja</code></td>
+<td>Generated Ninja build file.</td>
+</tr>
+<tr>
+<td><code>cabin.lock</code></td>
+<td>Generated lockfile.</td>
+</tr>
+</tbody>
+</table>
+<p>Directory names are matched anywhere in the tree, not only at the
+root, so nested submodules / build trees do not leak in.</p>
+<p>A <code>.cabinignore</code> file format is <strong>not</strong> part of the current local
+archive format and should not be implemented opportunistically.</p>
+<h2 id="package-validation">Package validation</h2>
+<p>Before archive bytes are written, <code>cabin-package</code> validates:</p>
+<ul>
+<li>the manifest parses (existing <code>cabin-manifest</code> rules);</li>
+<li>the manifest contains a <code>[package]</code> table — workspace-only roots
+  are rejected with
+  <code>cannot package workspace root without a [package] section; pass --manifest-path for a package</code>;</li>
+<li>the package name is path-safe for registry publishing: names
+  containing <code>/</code>, <code>\</code>, <code>..</code>, leading dots, control characters, or
+  Windows drive prefixes are rejected with
+  <code>package name "&lt;name&gt;" is not path-safe for registry
+  publishing</code>;</li>
+<li>no declared dependency uses <code>path = "..."</code>. Path dependencies are
+  not publishable and produce
+  <code>cannot package path dependency</code>foo<code>; path dependencies are not publishable</code>;</li>
+<li>no declared dependency uses <code>{ workspace = true }</code> without
+  workspace context. The CLI passes a workspace-resolved
+  <code>Package</code> from <code>cabin-workspace::load_workspace</code> when
+  packaging a workspace member, so the inherited requirement is
+  substituted before metadata generation. A standalone
+  <code>cabin package --manifest-path &lt;member&gt;/cabin.toml</code> (no
+  workspace context) errors with
+  <code>dependency 'foo' uses workspace = true, but package metadata
+  was generated without workspace resolution</code>;</li>
+<li>target source paths and include directories stay inside the
+  package root (lexically — <code>..</code> walking is rejected).</li>
+<li>the manifest does not declare a <code>[patch]</code> table. Patches are
+  local development policy; <code>cabin package</code> returns
+  <code>package "&lt;name&gt;" declares a [patch] table; patches are local
+  development policy and not publishable. Remove the [patch]
+  table from this manifest before packaging, or move the
+  patches to a .cabin/config.toml file.</code> See
+  <a href="../patch-overrides/"><code>patch-overrides.md</code></a>.</li>
+</ul>
+<p>Symlink / hard-link / unsupported file-type errors are raised
+later, during archive enumeration:</p>
+<ul>
+<li><code>refusing to package symlink</code><path><code>because symlinks are not supported</code></li>
+<li><code>refusing to package</code><path><code>because only regular files and directories are supported</code></li>
+</ul>
+<p>If the archive enumeration yields no <code>cabin.toml</code> at the root the
+run fails with
+<code>package archive would not contain cabin.toml</code>.</p>
+<h2 id="canonical-metadata">Canonical metadata</h2>
+<pre><code class="language-json">{
+  &quot;schema&quot;: 1,
+  &quot;name&quot;: &quot;fmt&quot;,
+  &quot;version&quot;: &quot;10.2.1&quot;,
+  &quot;dependencies&quot;: {
+    &quot;zlib&quot;: &quot;&gt;=1.2.0, &lt;2.0.0&quot;
+  },
+  &quot;dev-dependencies&quot;: {
+    &quot;gtest&quot;: &quot;^1.14&quot;
+  },
+  &quot;system-dependencies&quot;: {
+    &quot;openssl&quot;: { &quot;version&quot;: &quot;&gt;=3&quot; }
+  },
+  &quot;features&quot;: {
+    &quot;default&quot;: [&quot;simd&quot;],
+    &quot;features&quot;: { &quot;simd&quot;: [], &quot;ssl&quot;: [] }
+  },
+  &quot;yanked&quot;: false,
+  &quot;checksum&quot;: &quot;sha256:&lt;archive-sha256&gt;&quot;,
+  &quot;source&quot;: {
+    &quot;type&quot;: &quot;archive&quot;,
+    &quot;path&quot;: &quot;../artifacts/fmt/fmt-10.2.1.tar.gz&quot;,
+    &quot;format&quot;: &quot;tar.gz&quot;
+  }
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schema</code></td>
+<td>Always <code>1</code>.</td>
+</tr>
+<tr>
+<td><code>name</code>, <code>version</code></td>
+<td>From <code>[package].name</code> and <code>[package].version</code>.</td>
+</tr>
+<tr>
+<td><code>dependencies</code></td>
+<td>Normal-kind versioned registry dependencies (<code>[dependencies]</code>). Path / workspace dependencies cause validation to fail before metadata is generated.</td>
+</tr>
+<tr>
+<td><code>dev-dependencies</code> <em>(optional)</em></td>
+<td><code>[dev-dependencies]</code> versioned dependencies. Omitted when empty.</td>
+</tr>
+<tr>
+<td><code>system-dependencies</code> <em>(optional)</em></td>
+<td>Entries declared with <code>system = true</code> in any of the dependency tables, grouped by package name: <code>{ name -&gt; { "version", "dependency_kind" } }</code>. Omitted when empty. Every declared system dependency is required; the metadata document has no <code>required</code> field. Cabin never resolves or fetches these — they round-trip purely as metadata, and <code>cabin build</code> probes them via <code>pkg-config</code>.</td>
+</tr>
+<tr>
+<td><code>target</code> <em>(optional, per-entry)</em></td>
+<td>Canonical inner-expression form of a <code>cfg(...)</code> predicate copied from <code>[target.'cfg(...)'.&lt;kind&gt;]</code>. Present on Cabin package and system dep entries declared under a target table; absent otherwise. The wrapping <code>cfg(...)</code> is implicit. See <a href="../target-dependencies/"><code>target-dependencies.md</code></a>.</td>
+</tr>
+<tr>
+<td><code>features</code> <em>(optional)</em></td>
+<td>The package's <code>[features]</code> declarations. Omitted from the JSON when no features are declared.</td>
+</tr>
+<tr>
+<td><code>toolchain</code> <em>(optional)</em></td>
+<td>The workspace root's <code>[toolchain]</code> plus any <code>[target.'cfg(...)'.toolchain]</code> overrides, exactly as written in the manifest. Environment- or CLI-derived selections are deliberately not written here. Omitted when no <code>[toolchain]</code> table was declared. See <a href="../toolchains/"><code>toolchains.md</code></a>.</td>
+</tr>
+<tr>
+<td><code>build</code> <em>(optional)</em></td>
+<td>The package's <code>[profile]</code> plus any <code>[target.'cfg(...)'.profile]</code> overrides. Omitted when empty.</td>
+</tr>
+<tr>
+<td><code>compiler_wrapper</code> <em>(optional)</em></td>
+<td>The workspace root's <code>[profile.cache]</code> plus any <code>[target.'cfg(...)'.profile.cache]</code> overrides, written as the typed compiler-wrapper declaration model. Environment- or CLI-derived wrapper selections are deliberately not written here. Omitted when no cache table was declared. See <a href="../compiler-cache/"><code>compiler-cache.md</code></a>.</td>
+</tr>
+<tr>
+<td><code>yanked</code></td>
+<td>Always <code>false</code> from <code>cabin package</code>.</td>
+</tr>
+<tr>
+<td><code>checksum</code></td>
+<td><code>sha256:&lt;hex&gt;</code> digest of the archive bytes the run produced.</td>
+</tr>
+<tr>
+<td><code>source.type</code></td>
+<td>Always <code>"archive"</code>.</td>
+</tr>
+<tr>
+<td><code>source.format</code></td>
+<td>Always <code>"tar.gz"</code>.</td>
+</tr>
+<tr>
+<td><code>source.path</code></td>
+<td>File-registry relative reference: <code>../artifacts/&lt;name&gt;/&lt;name&gt;-&lt;version&gt;.tar.gz</code>. Dry-run staging does not publish that path, but the value matches the package-index <code>source</code> block shape used by file-registry publish.</td>
+</tr>
+</tbody>
+</table>
+<p>The metadata document is rendered with <code>serde_json::to_string_pretty</code>
+in struct-declaration order, dependencies sorted by name, and a
+trailing newline. Repeated runs over the same input produce the
+same bytes.</p>
+<h2 id="cli-surface">CLI surface</h2>
+<pre><code class="language-sh">cabin package \
+  [--manifest-path &lt;path&gt;] \
+  [--output-dir &lt;path&gt;] \
+  [--format human|json]
+</code></pre>
+<p>Default <code>--manifest-path</code> is <code>cabin.toml</code>, default <code>--output-dir</code> is
+<code>dist</code>, default <code>--format</code> is <code>human</code>.</p>
+<pre><code class="language-sh">cabin publish --dry-run \
+  [--manifest-path &lt;path&gt;] \
+  [--output-dir &lt;path&gt;] \
+  [--format human|json]
+</code></pre>
+<p>Same defaults. <code>cabin publish</code> without <code>--dry-run</code> and without
+<code>--registry-dir</code> exits with
+<code>actual publishing requires --registry-dir, or use --dry-run</code>.</p>
+<h2 id="output-layout">Output layout</h2>
+<pre><code>dist/
+  &lt;name&gt;-&lt;version&gt;.tar.gz
+  &lt;name&gt;-&lt;version&gt;.json
+</code></pre>
+<p>Re-running with identical input is idempotent: if the on-disk file
+already matches the current run's bytes, the file is left alone and
+the run succeeds. If the bytes differ, the run fails with
+<code>output file already exists with different bytes</code>; the user is
+expected to remove the file and re-run.</p>
+<h2 id="file-registry-publish">File-Registry Publish</h2>
+<p>File-registry publish runs on top of the same staging pipeline.
+<code>cabin publish --registry-dir &lt;path&gt;</code> calls
+<code>cabin-package</code>'s <code>stage()</code> to produce the same archive bytes +
+canonical metadata, then hands them to <code>cabin-registry-file</code> to
+write into a local file registry. The registry layout is described
+in <a href="../registry-design/"><code>registry-design.md</code></a>; the on-disk shape
+of each per-package file is the same one this document defines.</p>
+<p>Behavioural notes specific to registry publish:</p>
+<ul>
+<li><code>source.path</code> in the registry's <code>packages/&lt;name&gt;.json</code> is the
+  registry-relative
+  <code>"../artifacts/&lt;name&gt;/&lt;name&gt;-&lt;version&gt;.tar.gz"</code>, regardless of
+  what the dry-run <code>dist/&lt;name&gt;-&lt;version&gt;.json</code> happened to
+  carry. The registry crate normalises this so static sparse-HTTP
+  serving can read the same layout without rewriting.</li>
+<li>Duplicate <code>(name, version)</code> publishes fail with a clear error.</li>
+<li>Existing artifact bytes are never silently overwritten; if an
+  artifact file is present without a matching index entry, the
+  publish run refuses.</li>
+</ul>
+<h2 id="scope">Scope</h2>
+<p><code>cabin-package</code> and <code>cabin-publish</code> are the local-only archive
+and file-registry surface. The repository-wide scope policy in
+<a href="../architecture/"><code>docs/architecture.md</code></a> tracks broader registry
+direction.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../metadata-tree-explain/" class="btn btn-neutral float-left" title="Metadata, tree, and explain"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../package-index/" class="btn btn-neutral float-right" title="Local JSON package index">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../metadata-tree-explain/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../package-index/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

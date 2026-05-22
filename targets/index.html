@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Targets - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Targets";
+        var mkdocs_page_input_path = "targets.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Targets</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#supported-target-kinds">Supported target kinds</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#c-and-c-source-languages">C and C++ source languages</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#manifest-syntax">Manifest syntax</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#default-build-vs-explicit-selection">Default-build vs. explicit selection</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#output-paths">Output paths</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dependency-kind-policy-summary">Dependency-kind policy summary</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#packaging-behaviour">Packaging behaviour</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#limitations">Limitations</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Targets and building</li>
+      <li class="breadcrumb-item active">Targets</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/targets.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="targets">Targets</h1>
+<p>A <em>target</em> is one buildable unit declared inside a Cabin
+package. A package may declare any number of targets; each
+target has a <code>[target.&lt;name&gt;]</code> table with at least a <code>type</code> and
+usually a <code>sources</code> list. Header-only libraries are the main
+exception.</p>
+<p>This document covers the C and C++ target kinds Cabin supports
+today, when each one is built, and where their outputs land.
+Cabin treats C and C++ as related but distinct source
+languages: a single <code>cpp_library</code> / <code>cpp_executable</code> /
+<code>cpp_test</code> / <code>cpp_example</code> target may carry both <code>.c</code> and <code>.cc</code>
+(or <code>.cpp</code> / <code>.cxx</code> / <code>.c++</code> / <code>.C</code>) sources, and
+the planner picks the language-appropriate compiler driver per
+source. The <code>cpp_*</code> prefix on the kinds reflects "the C/C++
+target family", not "C++ only".</p>
+<h2 id="supported-target-kinds">Supported target kinds</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Output</th>
+<th>Built by <code>cabin build</code> (default)</th>
+<th>Run by <code>cabin test</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cpp_library</code></td>
+<td>static archive (<code>.a</code>)</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>cpp_header_only</code></td>
+<td>none</td>
+<td>yes — graph/interface only</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>cpp_executable</code></td>
+<td>linked executable</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td><code>cpp_test</code></td>
+<td>linked executable</td>
+<td>no — only when explicit</td>
+<td>yes</td>
+</tr>
+<tr>
+<td><code>cpp_example</code></td>
+<td>linked executable</td>
+<td>no — only when explicit</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+<h3 id="c-and-c-source-languages">C and C++ source languages</h3>
+<p>Within any <code>cpp_*</code> target, every source file is classified by
+its filename extension:</p>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>Language</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.c</code></td>
+<td>C</td>
+</tr>
+<tr>
+<td><code>.cc</code>, <code>.cpp</code>, <code>.cxx</code>, <code>.c++</code>, <code>.C</code></td>
+<td>C++</td>
+</tr>
+</tbody>
+</table>
+<p>The planner then:</p>
+<ul>
+<li>compiles <code>.c</code> sources with the <strong>C compiler driver</strong>
+  (<code>cc</code> / <code>clang</code> / <code>gcc</code>) and <code>-std=c11</code>;</li>
+<li>compiles C++ sources with the <strong>C++ compiler driver</strong>
+  (<code>c++</code> / <code>clang++</code> / <code>g++</code>) and <code>-std=c++17</code>;</li>
+<li>chooses the <strong>link driver</strong> by walking the target's own
+  objects plus every transitively reachable library object: if
+  any object came from a C++ source, link with the C++ driver;
+  otherwise link with the C driver. Pure-C executables therefore
+  stay off the C++ runtime; mixed targets inherit the C++
+  runtime as required.</li>
+</ul>
+<p>Sources whose extension is not recognised produce an explicit
+<code>unrecognised extension</code> build error so a misnamed file never
+silently picks the wrong compiler.</p>
+<p><code>[package]</code> does not carry a language field — declaring one is
+rejected as an unknown field. Per-target build behaviour is
+decided by per-source classification (<code>.c</code> → C, <code>.cc</code> / <code>.cpp</code> /
+<code>.cxx</code> → C++) plus the target kind, not by package-level
+metadata.</p>
+<h2 id="manifest-syntax">Manifest syntax</h2>
+<p>Every target is a <code>[target.&lt;name&gt;]</code> table. The <code>type</code> field
+selects the kind; the rest of the fields apply to all kinds.</p>
+<pre><code class="language-toml">[target.demo]
+type = &quot;cpp_library&quot;
+sources = [&quot;src/lib.cc&quot;]
+include_dirs = [&quot;include&quot;]
+
+[target.demo_test]
+type = &quot;cpp_test&quot;
+sources = [&quot;tests/lib_test.cc&quot;]
+deps = [&quot;demo&quot;]
+
+[target.hello_example]
+type = &quot;cpp_example&quot;
+sources = [&quot;examples/hello.cc&quot;]
+deps = [&quot;demo&quot;]
+</code></pre>
+<p>Common fields (apply to C/C++ target kinds):</p>
+<ul>
+<li><code>sources</code> — source files relative to the package root.</li>
+<li><code>include_dirs</code> — public include directories. Consumers of
+  this target inherit them through <code>deps</code>.</li>
+<li><code>defines</code> — preprocessor defines applied to this target's
+  compile actions.</li>
+<li><code>deps</code> — references to other targets:</li>
+<li>same-package by bare name: <code>deps = ["lib"]</code>;</li>
+<li>cross-package by name (resolves to the dep package's default
+    library target): <code>deps = ["fmt"]</code>;</li>
+<li>qualified <code>package:target</code>: <code>deps = ["fmt:fmt"]</code>.</li>
+</ul>
+<p>Cross-package deps must reach the consumer through a <code>[dependencies]</code>
+edge. <code>[dev-dependencies]</code> are not auto-linked into ordinary targets.</p>
+<h2 id="default-build-vs-explicit-selection">Default-build vs. explicit selection</h2>
+<p><code>cabin build</code> enumerates <code>cpp_library</code>, <code>cpp_header_only</code>, and
+<code>cpp_executable</code> targets in the selected packages. Header-only
+targets participate in dependency/interface propagation but emit no
+compile, archive, or link action. Dev-only kinds (<code>cpp_test</code>,
+<code>cpp_example</code>) are excluded from the default enumeration; they
+reach the build graph in two ways:</p>
+<ul>
+<li><code>cabin test</code> selects every <code>cpp_test</code> target in the selected
+  packages, builds the chosen test executables, and runs them;</li>
+<li>a <code>cpp_test</code> or <code>cpp_example</code> may appear in another target's
+  <code>target.&lt;X&gt;.deps</code>, in which case it is pulled into the build
+  closure as a transitive dependency.</li>
+</ul>
+<p>Cabin does not expose a single-target selector flag on
+<code>cabin build</code> or <code>cabin test</code>. Narrow the build or test scope
+by narrowing the package selection with <code>--package</code> /
+<code>--workspace</code> / <code>--exclude</code>.</p>
+<p>This keeps <code>cabin build</code> predictable: a package can ship tests
+and examples without forcing every consumer's CI to build them.</p>
+<h2 id="output-paths">Output paths</h2>
+<p>Cabin lays test / example executables out the same way as
+ordinary <code>cpp_executable</code> targets:</p>
+<pre><code>&lt;build-dir&gt;/&lt;profile&gt;/packages/&lt;pkg&gt;/&lt;target&gt;
+</code></pre>
+<p><code>&lt;build-dir&gt;</code> defaults to <code>build/</code>; <code>&lt;profile&gt;</code> is the resolved
+profile name (<code>dev</code> by default, <code>release</code> for <code>--release</code>, or
+any custom profile declared in <code>[profile.&lt;name&gt;]</code>).</p>
+<p>Two targets with the same <code>&lt;target&gt;</code> name in the same package
+would collide here; the planner rejects duplicate target names
+within a package, so this is a static guarantee.</p>
+<h2 id="dependency-kind-policy-summary">Dependency-kind policy summary</h2>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th><code>cabin build</code></th>
+<th><code>cabin test</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[dependencies]</code></td>
+<td>included</td>
+<td>included</td>
+</tr>
+<tr>
+<td><code>[dev-dependencies]</code></td>
+<td>declaration-only</td>
+<td>included for selected packages</td>
+</tr>
+<tr>
+<td><code>`system = true</code> deps`</td>
+<td>active normal declarations are probed with <code>pkg-config</code>; flags merge into build configuration</td>
+<td>same, plus selected packages' dev-kind system declarations</td>
+</tr>
+</tbody>
+</table>
+<p><code>cabin test</code> activates the selected packages' <code>[dev-dependencies]</code>
+as real graph edges. The activation never propagates: a transitive
+dep's own dev-deps stay declaration-only. <code>cabin build</code> continues
+to ignore all dev-deps so ordinary builds are unaffected.</p>
+<h2 id="packaging-behaviour">Packaging behaviour</h2>
+<p><code>cabin package</code> includes every declared source file in the
+deterministic source archive — including <code>cpp_test</code> and
+<code>cpp_example</code> sources. Consumers of the published package keep
+the right to rebuild them locally.</p>
+<p>The published canonical metadata records package-level surfaces
+such as dependencies, features, profiles, toolchain/build
+settings, checksum, and source location. It does
+not contain a target list; target declarations remain in the
+archived <code>cabin.toml</code> and are visible to local tooling through
+<code>cabin metadata</code>.</p>
+<h2 id="limitations">Limitations</h2>
+<p>The test surface is intentionally small:</p>
+<ul>
+<li>no test discovery inside binaries (no GoogleTest / Catch2 /
+  doctest output parsing);</li>
+<li>no XML / JUnit output;</li>
+<li>no <code>cabin run --example</code>, and no single-example selector on
+  <code>cabin build</code> — <code>cpp_example</code> targets only reach the build
+  graph as a transitive dep of another selected target;</li>
+<li>no automatic <code>tests/</code> / <code>examples/</code> discovery;</li>
+<li>no parallel test execution.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../toolchains/" class="btn btn-neutral float-left" title="Toolchains"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../compiler-cache/" class="btn btn-neutral float-right" title="Compiler-cache wrappers">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../toolchains/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../compiler-cache/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

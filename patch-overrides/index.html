@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Patch, override, and source replacement - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Patch, override, and source replacement";
+        var mkdocs_page_input_path = "patch-overrides.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Patch, override, and source replacement</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#patch-syntax">Patch syntax</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#workspace-root-manifest">Workspace-root manifest</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cabinconfigtoml">.cabin/config.toml</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#supported-source-kinds">Supported source kinds</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#patch-precedence">Patch precedence</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#patch-validation">Patch validation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#resolver-fetch-build-integration">Resolver / fetch / build integration</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#source-replacement-syntax">Source replacement syntax</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#replacement-chain-cycle-detection">Replacement chain + cycle detection</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#per-command-precedence">Per-command precedence</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lockfile-behaviour">Lockfile behaviour</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#metadata-view">Metadata view</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#package-publish-behaviour">Package + publish behaviour</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#layer-boundaries">Layer boundaries</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#local-fork-during-development">Local fork during development</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#workspace-wide-local-index-mirror">Workspace-wide local index mirror</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#disabling-patches-for-one-invocation">Disabling patches for one invocation</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Dependencies</li>
+      <li class="breadcrumb-item active">Patch, override, and source replacement</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/patch-overrides.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="patch-override-and-source-replacement">Patch, override, and source replacement</h1>
+<p>Cabin's typed local-policy layer lets a developer or workspace
+swap a registry-resolved package for a local working copy
+(<em>patches</em>) and redirect one supported index source to another
+(<em>source replacement</em>). Both features are deliberately narrow:
+they cover developer / CI flows that already worked with hand-
+edited paths, but they do <strong>not</strong> introduce new package
+semantics, new registry protocols, credentials, vendoring, or
+publication of override state.</p>
+<p>This document is the canonical specification. The behaviour
+described here is what <code>cabin-core::patch</code>,
+<code>cabin-core::source_replacement</code>, <code>cabin-manifest</code>,
+<code>cabin-config</code>, <code>cabin-workspace::patch</code>, the artifact pipeline
+in <code>cabin-cli</code>, the lockfile, the metadata view, and the
+package archiver all agree on.</p>
+<h2 id="patch-syntax">Patch syntax</h2>
+<p>Patches replace a <em>registry-resolved package candidate</em> with a
+local source. Today only local-path patches are supported.</p>
+<h3 id="workspace-root-manifest">Workspace-root manifest</h3>
+<pre><code class="language-toml">[patch]
+fmt = { path = &quot;../fmt&quot; }
+spdlog = { path = &quot;../forks/spdlog&quot; }
+</code></pre>
+<p>The <code>[patch]</code> table only applies on the <em>entry-point</em> manifest:
+either a single-package project's <code>cabin.toml</code> or the
+workspace root's <code>cabin.toml</code>. Member manifests that declare
+<code>[patch]</code> are rejected with
+<code>patch declarations may only appear in the workspace root
+manifest</code>.</p>
+<h3 id="cabinconfigtoml"><code>.cabin/config.toml</code></h3>
+<pre><code class="language-toml">[patch]
+fmt = { path = &quot;../forks/fmt&quot; }
+</code></pre>
+<p>Config-supplied patches follow the same shape. Relative paths
+resolve against the <em>config file's directory</em> (not the
+manifest's). Multiple config files may declare patches: higher-
+priority files override lower files on overlap, mirroring the
+rest of the config layer's precedence ladder.</p>
+<h3 id="supported-source-kinds">Supported source kinds</h3>
+<table>
+<thead>
+<tr>
+<th>Kind</th>
+<th>Manifest / config syntax</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>path</code></td>
+<td><code>{ path = "../fmt" }</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>path</code> is the only patch source kind today. Any other key is
+rejected as an unknown field. New kinds would extend
+[<code>PatchSource</code>] explicitly.</p>
+<h2 id="patch-precedence">Patch precedence</h2>
+<p>For each patched package name, Cabin walks the following layers
+top-down and keeps the first that declares an entry. Higher
+layers fully replace lower layers on overlap.</p>
+<ol>
+<li><code>[patch]</code> in the file pointed at by <code>CABIN_CONFIG</code>
+   (<code>explicit-config</code>).</li>
+<li><code>[patch]</code> in the project-local <code>&lt;root&gt;/.cabin/config.toml</code>
+   (<code>project-config</code>).</li>
+<li><code>[patch]</code> in the workspace-level
+   <code>&lt;workspace-root&gt;/.cabin/config.toml</code> (<code>workspace-config</code>).</li>
+<li><code>[patch]</code> in <code>$XDG_CONFIG_HOME/cabin/config.toml</code> (or its
+   <code>$HOME</code> fallback) (<code>user-config</code>).</li>
+<li><code>[patch]</code> in the workspace-root <code>cabin.toml</code>
+   (<code>manifest</code>).</li>
+<li>No patch.</li>
+</ol>
+<p>The resolved provenance label appears verbatim under
+<code>patches[].provenance</code> in <code>cabin metadata</code> so the chosen layer
+is auditable.</p>
+<h2 id="patch-validation">Patch validation</h2>
+<p>Before any consumer sees a resolved patch, Cabin validates each
+entry:</p>
+<ul>
+<li>The patch path must point at a directory containing a
+  <code>cabin.toml</code>. Missing files surface <code>patch for package
+  &lt;name&gt; points to &lt;path&gt;, but that path does not contain a
+  cabin.toml</code>.</li>
+<li>The patched package's <code>[package].name</code> must equal the patch
+  table key. Mismatches surface <code>patch for package &lt;name&gt;
+  points to package &lt;actual&gt;; patch package name must match
+  &lt;name&gt;</code>.</li>
+<li>For every active dependency edge that requests the patched
+  name with a SemVer constraint, the patched package's
+  <code>[package].version</code> must satisfy that constraint. Mismatches
+  surface <code>patch package &lt;name&gt; has version &lt;ver&gt;, which does
+  not satisfy dependency requirement &lt;req&gt;</code>.</li>
+</ul>
+<p>"Active" means the edge would actually contribute to the
+  resolver input on this invocation. Cabin skips:</p>
+<ul>
+<li>dev / system kinds — declaration-only, never resolved by
+    the default build;</li>
+<li><code>[target.&lt;cfg&gt;]</code> deps whose condition does not match the
+    host platform — dormant on this run;</li>
+<li><code>optional = true</code> deps — feature resolution decides their
+    membership; if a feature later enables one, the patched
+    manifest is used directly and any version mismatch
+    surfaces against the real resolver input.</li>
+</ul>
+<p>This means a patch on <code>foo = "&gt;= 99"</code> declared only as a
+  dev-dep does not block validation, because that requirement
+  is not part of the default build closure.</p>
+<ul>
+<li>Within a single layer the same name cannot appear twice (TOML
+  table-key uniqueness already handles this); across layers
+  the higher layer wins (documented above).</li>
+</ul>
+<h2 id="resolver-fetch-build-integration">Resolver / fetch / build integration</h2>
+<p>Once patches are validated, Cabin treats them as <em>synthesised
+local-path packages</em>:</p>
+<ul>
+<li>The <code>cabin-workspace</code> loader stitches each patched
+  manifest into the package graph as <code>kind = Local</code>. Existing
+  workspace-loader behaviours (cycle detection, name uniqueness,
+  dependency edges) apply unchanged.</li>
+<li>The artifact pipeline filters patched names from versioned-
+  dep closure detection and from the registry-fetch pass; the
+  patched working copy never enters the artifact cache.</li>
+<li>Feature resolution, dependency-kind handling, and
+  target-conditioned dependencies flow
+  through the patched manifest exactly as they would for any
+  path dependency.</li>
+</ul>
+<h2 id="source-replacement-syntax">Source replacement syntax</h2>
+<p>Source replacement redirects one supported index source to
+another. <strong>Config-only</strong> — manifests cannot declare source
+replacements.</p>
+<pre><code class="language-toml"># .cabin/config.toml
+[source-replacement]
+&quot;https://example.com/index&quot; = { index-path = &quot;../mirror&quot; }
+&quot;/abs/old-index&quot; = { index-url = &quot;https://new.example.com/index&quot; }
+</code></pre>
+<p>Each row carries exactly one of <code>index-path</code> or <code>index-url</code>.
+Other fields (including <code>git</code> and <code>replace-with = "&lt;name&gt;"</code>)
+are rejected with stable error messages.</p>
+<p>URLs containing <code>userinfo</code> (e.g.,
+<code>https://user:pw@example.com/index</code>) are rejected at parse time
+so credentials never leak into the lockfile, log output, or the
+metadata view.</p>
+<h3 id="replacement-chain-cycle-detection">Replacement chain + cycle detection</h3>
+<p>When the orchestration layer opens the configured index source,
+it walks the replacement map once: each hop replaces the
+current locator with the entry's <code>replacement</code> value, until a
+locator with no replacement is reached (the <em>terminal</em> source).
+Cycles surface
+<code>source replacement cycle detected: &lt;hop-1&gt; -&gt; &lt;hop-2&gt; -&gt; ...</code>
+before any index is opened.</p>
+<h2 id="per-command-precedence">Per-command precedence</h2>
+<p>For each command that consults a patch / source-replacement
+policy:</p>
+<ol>
+<li><code>--no-patches</code> short-circuits patch application and source-
+   replacement resolution for the command's dependency / index
+   inputs. Manifest <code>[patch]</code> and config <code>[patch]</code> entries do
+   not add replacement packages, and config
+   <code>[source-replacement]</code> entries do not rewrite the selected
+   index source. Ordinary <code>path = "..."</code> dependency declarations
+   and ordinary dependency edges remain active.</li>
+<li>Otherwise the merged manifest + config policy applies as
+   described above.</li>
+</ol>
+<p>Observability commands may still render configured policy as
+configuration data. In particular, <code>cabin explain source
+--no-patches &lt;name&gt;</code> still lists the merged
+<code>[source-replacement]</code> declarations under <code>source_replacements</code>;
+the flag means they were not applied to resolve package inputs.</p>
+<p><code>--no-patches</code> is available on <code>cabin metadata</code>, <code>cabin build</code>,
+<code>cabin run</code>, <code>cabin test</code>, <code>cabin resolve</code>, <code>cabin update</code>,
+<code>cabin fetch</code>, <code>cabin vendor</code>, <code>cabin tree</code>, and <code>cabin explain</code>.</p>
+<h2 id="lockfile-behaviour">Lockfile behaviour</h2>
+<p>The lockfile records active patch policy and active source-
+replacement policy as deterministic top-level arrays:</p>
+<pre><code class="language-toml">[[patch]]
+package = &quot;fmt&quot;
+version = &quot;10.2.1&quot;
+kind = &quot;path&quot;
+provenance = &quot;manifest&quot;
+path = &quot;../fmt&quot;
+
+[[source-replacement]]
+original = &quot;https://example.com/index&quot;
+original-kind = &quot;index-url&quot;
+replacement = &quot;../mirror&quot;
+replacement-kind = &quot;index-path&quot;
+provenance = &quot;user-config&quot;
+</code></pre>
+<p>Old lockfiles without these arrays remain valid (the parser
+treats the missing fields as empty). Under <code>--locked</code>, if the
+recorded arrays differ from the active policy, the resolver
+errors with
+<code>--locked cannot be used because active patch / source-
+replacement policy differs from &lt;lockfile&gt;; re-run without
+--locked to refresh the lockfile</code>.</p>
+<h2 id="metadata-view">Metadata view</h2>
+<p><code>cabin metadata --format json</code> adds two top-level arrays:</p>
+<pre><code class="language-json">&quot;patches&quot;: [
+  {
+    &quot;package&quot;: &quot;fmt&quot;,
+    &quot;version&quot;: &quot;10.2.1&quot;,
+    &quot;kind&quot;: &quot;path&quot;,
+    &quot;path&quot;: &quot;../fmt&quot;,
+    &quot;provenance&quot;: &quot;manifest&quot;
+  }
+],
+&quot;source_replacements&quot;: [
+  {
+    &quot;original&quot;: &quot;https://example.com/index&quot;,
+    &quot;original_kind&quot;: &quot;index-url&quot;,
+    &quot;replacement&quot;: &quot;../mirror&quot;,
+    &quot;replacement_kind&quot;: &quot;index-path&quot;,
+    &quot;provenance&quot;: &quot;user-config&quot;
+  }
+]
+</code></pre>
+<p>Both arrays are sorted (patches by package name, replacements
+by <code>original</code>) and contain only entries that survived
+validation. <code>--no-patches</code> empties both arrays.</p>
+<h2 id="package-publish-behaviour">Package + publish behaviour</h2>
+<p>Patches are local development policy. They never enter:</p>
+<ul>
+<li>the canonical per-version package metadata (<code>cabin package</code>
+  derives metadata from the typed <code>Package</code>, which strips
+  patch tables before serialisation);</li>
+<li>the source archive (<code>cabin package</code> <em>rejects</em> manifests with
+  a non-empty <code>[patch]</code> table — see below);</li>
+<li>the file / sparse-HTTP registry index;</li>
+<li>the lockfile's <code>[[package]]</code> array (only the orthogonal
+  <code>[[patch]]</code> array reflects patch state).</li>
+</ul>
+<p><code>cabin package</code> returns
+<code>package &lt;name&gt; declares a [patch] table; patches are local
+development policy and not publishable. Remove the [patch]
+table from this manifest before packaging, or move the patches
+to a .cabin/config.toml file.</code></p>
+<p>Config-derived patches and source replacements live entirely
+inside <code>.cabin/</code>, which <code>cabin package</code> already excludes from
+deterministic source archives via <code>EXCLUDED_DIR_NAMES</code>.</p>
+<h2 id="layer-boundaries">Layer boundaries</h2>
+<p>These responsibilities live outside this layer and are intentionally
+not handled here:</p>
+<ul>
+<li><strong>Vendor materialisation.</strong> <code>cabin vendor</code> may consume
+  patch / source-replacement state during resolution, but the
+  on-disk write logic lives in <code>cabin-vendor</code>.</li>
+<li><strong>Offline-mode enforcement.</strong> <code>--offline</code> / <code>CABIN_NET_OFFLINE</code>
+  are enforced by the CLI / config network policy, not by the
+  patch layer.</li>
+<li><strong>Source replacement</strong> swaps between the existing local-path
+  and sparse-HTTP index source kinds; it does not add new
+  registry protocols, authentication, or credential handling.</li>
+</ul>
+<h2 id="examples">Examples</h2>
+<h3 id="local-fork-during-development">Local fork during development</h3>
+<pre><code class="language-toml"># &lt;workspace-root&gt;/cabin.toml
+[package]
+name = &quot;app&quot;
+version = &quot;0.1.0&quot;
+
+[dependencies]
+fmt = &quot;&gt;=10.0.0 &lt;11.0.0&quot;
+
+[patch]
+fmt = { path = &quot;../forks/fmt&quot; }
+</code></pre>
+<p>The fork at <code>../forks/fmt</code> ships a <code>cabin.toml</code> with <code>name =
+"fmt"</code> and a version that satisfies <code>^10</code>. <code>cabin build</code>
+resolves <code>fmt</code> to the fork without contacting the registry; the
+lockfile records the patch so <code>--locked</code> re-runs see the same
+state.</p>
+<h3 id="workspace-wide-local-index-mirror">Workspace-wide local index mirror</h3>
+<pre><code class="language-toml"># &lt;workspace-root&gt;/.cabin/config.toml
+[source-replacement]
+&quot;https://example.com/index&quot; = { index-path = &quot;../mirror&quot; }
+</code></pre>
+<p>Every <code>cabin resolve / fetch / build / update</code> for this
+workspace uses <code>&lt;workspace-root&gt;/.cabin/../mirror</code> as the
+effective index source. Local config never leaks into published
+metadata.</p>
+<h3 id="disabling-patches-for-one-invocation">Disabling patches for one invocation</h3>
+<pre><code class="language-sh">cabin build --no-patches
+</code></pre>
+<p>The active manifest / config patch policy is ignored for this
+one run; ordinary dependency declarations stay in effect.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../lockfile/" class="btn btn-neutral float-left" title="cabin.lock reference"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../vendoring-offline/" class="btn btn-neutral float-right" title="Vendoring and offline mode">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../lockfile/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../vendoring-offline/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

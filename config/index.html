@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Configuration files - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Configuration files";
+        var mkdocs_page_input_path = "config.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Configuration files</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#file-locations">File locations</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#precedence">Precedence</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#schema">Schema</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#registry">[registry]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#paths">[paths]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#build">[build]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#buildcache">[build.cache]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#patch-and-source-replacement">[patch] and [source-replacement]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#term">[term]</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#toolchain">[toolchain]</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#environment-variables">Environment variables</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-config-does-not-do">What config does not do</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#package-index-metadata">Package + index metadata</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#minimal-user-config-pick-a-fixed-compiler">Minimal user config — pick a fixed compiler</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#workspace-level-cache-wrapper-defaults">Workspace-level cache + wrapper defaults</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#workspace-level-registry-default">Workspace-level registry default</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#build-profile-default">Build profile default</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#disabling-all-config-for-a-single-command">Disabling all config for a single command</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Manifest and configuration</li>
+      <li class="breadcrumb-item active">Configuration files</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/config.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="configuration-files">Configuration files</h1>
+<p>Cabin reads typed TOML configuration files for <em>local policy</em> —
+defaults the user, the workspace, or a single project want to apply
+across many invocations of <code>cabin build</code>, <code>cabin metadata</code>, and
+the resolution / fetch family. Config is <strong>not</strong> package source
+spec: it never enters the manifest, the lockfile, the published
+package metadata, or the registry index.</p>
+<p>This document is the canonical specification for config discovery,
+parsing, merging, precedence, and validation. The behaviour
+described here is what <code>cabin-config</code>, <code>cabin-toolchain</code>,
+<code>cabin-cli</code>, the metadata view, and the package archiver all agree
+on.</p>
+<h2 id="file-locations">File locations</h2>
+<p>A single command consults at most three files. The discovery order
+is intentionally short so the precedence stays auditable.</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User</td>
+<td><code>$CABIN_CONFIG_HOME/config.toml</code>, then <code>$XDG_CONFIG_HOME/cabin/config.toml</code>, then <code>$HOME/.config/cabin/config.toml</code></td>
+</tr>
+<tr>
+<td>Workspace</td>
+<td><code>&lt;workspace-root&gt;/.cabin/config.toml</code> when the entry-point manifest declares <code>[workspace]</code></td>
+</tr>
+<tr>
+<td>Package</td>
+<td><code>&lt;package-root&gt;/.cabin/config.toml</code> when the entry-point manifest is a single-package project</td>
+</tr>
+<tr>
+<td>Explicit</td>
+<td><code>$CABIN_CONFIG=&lt;path&gt;</code> — exactly one file, missing files are a hard error</td>
+</tr>
+</tbody>
+</table>
+<p>Discovery does <strong>not</strong> walk arbitrary parent directories beyond
+the workspace root. Member-local <code>.cabin/config.toml</code> files inside
+a workspace are ignored — only the workspace-root file applies.</p>
+<p>If <code>CABIN_CONFIG</code> is set to a non-empty value, it short-circuits
+discovery: only that one file loads, and a missing file is an
+explicit <code>config file &lt;path&gt; was requested explicitly but could
+not be read</code> error rather than a silent fallback.</p>
+<p>If <code>CABIN_NO_CONFIG=1</code> is set, no files load at all. The
+metadata view still reports an empty <code>config.loaded_files = []</code>
+block so consumers can distinguish "config absent" from "config
+silent".</p>
+<h2 id="precedence">Precedence</h2>
+<p>For every setting Cabin's config layer can supply (registry source,
+paths, build defaults, toolchain, compiler-cache wrapper) the precedence
+order is, highest to lowest:</p>
+<ol>
+<li><strong>CLI flag</strong> — e.g., <code>--profile</code>, <code>--cxx</code>, <code>--compiler-wrapper</code>,
+   <code>--index-path</code>, <code>--cache-dir</code>.</li>
+<li><strong>Environment variable</strong> — e.g., <code>CXX</code>, <code>AR</code>, <code>CABIN_COMPILER_WRAPPER</code>.
+   Empty values are treated as unset.</li>
+<li><strong>Package-local or workspace config</strong> — <code>&lt;root&gt;/.cabin/config.toml</code>.
+   Workspace files when <code>[workspace]</code> is declared, project files
+   otherwise.</li>
+<li><strong>User config</strong> — <code>$XDG_CONFIG_HOME/cabin/config.toml</code> (or its
+   fallbacks).</li>
+<li><strong>Manifest-declared package defaults</strong> — e.g., <code>[toolchain]</code>,
+   <code>[profile]</code>, <code>[profile.&lt;name&gt;]</code>, <code>[profile.cache]</code> on the entry-point
+   manifest.</li>
+<li><strong>Built-in defaults</strong> — Cabin's documented fallbacks (<code>dev</code>
+   profile, <code>c++</code>/<code>clang++</code>/<code>g++</code> for the C++ compiler, <code>ar</code> for
+   the archiver).</li>
+</ol>
+<p>A <code>CABIN_CONFIG</code> file slots in at the same precedence as a
+workspace / project config — Cabin treats the explicit file as the
+sole config layer. The metadata view reports its provenance label
+as <code>explicit-config</code>.</p>
+<p><code>cabin metadata</code> reports every effective config value paired with
+its <code>value_source</code> (one of <code>cli</code>, <code>env</code>, <code>user-config</code>,
+<code>workspace-config</code>, <code>project-config</code>, <code>explicit-config</code>,
+<code>manifest</code>, <code>builtin-default</code>) so the precedence is auditable
+without re-deriving it.</p>
+<h2 id="schema">Schema</h2>
+<p>Config files use TOML. The supported tables are:</p>
+<pre><code class="language-toml">[registry]
+index-path = &quot;registry&quot;
+index-url = &quot;https://example.com/index&quot;
+
+[paths]
+cache-dir = &quot;.cabin/cache&quot;
+build-dir = &quot;build&quot;
+
+[build]
+profile = &quot;release&quot;
+
+[build.cache]
+compiler-wrapper = &quot;ccache&quot;
+
+[toolchain]
+cc = &quot;clang&quot;
+cxx = &quot;clang++&quot;
+ar = &quot;llvm-ar&quot;
+
+[term]
+color = &quot;auto&quot;
+
+[patch]
+fmt = { path = &quot;../forks/fmt&quot; }
+
+[source-replacement]
+&quot;https://example.com/index&quot; = { index-path = &quot;../mirror&quot; }
+</code></pre>
+<p>Every other top-level table — and every unknown field inside a
+known table — is rejected at parse time with a clear error.</p>
+<h3 id="registry"><code>[registry]</code></h3>
+<p>Selects a default index source for the resolver / fetch family
+when neither <code>--index-path</code> nor <code>--index-url</code> is supplied on the
+CLI.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>index-path</code></td>
+<td>path</td>
+<td>Local-filesystem index. Relative paths resolve against the config file's directory.</td>
+</tr>
+<tr>
+<td><code>index-url</code></td>
+<td>URL</td>
+<td>Sparse HTTP index URL. Used as-is.</td>
+</tr>
+</tbody>
+</table>
+<p>A single config file may declare <em>either</em> <code>index-path</code> or
+<code>index-url</code>, never both — the parser rejects the combination with
+<code>config key registry.index-path conflicts with registry.index-url</code>.
+Across precedence levels, the higher-priority file's variant
+replaces the lower file's value entirely (so a workspace-level
+<code>index-url</code> overrides a user-level <code>index-path</code>).</p>
+<p><code>cabin metadata</code> does not contact the configured <code>index-url</code>;
+network access still happens only when a command (like
+<code>cabin resolve --index-url …</code> or a build with versioned
+dependencies) actually needs the index.</p>
+<h3 id="paths"><code>[paths]</code></h3>
+<p>Defaults for local filesystem paths Cabin already accepts as CLI
+flags. CLI flags win; otherwise the highest-priority config setting
+applies. Relative paths resolve against the config file's directory.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cache-dir</code></td>
+<td>path</td>
+<td>Override <code>--cache-dir</code>. Used by the artifact pipeline (<code>cabin fetch</code>, <code>cabin build</code> with versioned deps).</td>
+</tr>
+<tr>
+<td><code>build-dir</code></td>
+<td>path</td>
+<td>Override the build-output directory for commands that plan, run, analyse, or ignore build outputs (<code>build</code>, <code>run</code>, <code>test</code>, <code>tidy</code>, <code>fmt</code>, <code>lint</code>, <code>metadata</code>). The clap default <code>build</code> still applies when no flag and no config is set.</td>
+</tr>
+</tbody>
+</table>
+<p>Absolute paths pass through unchanged. Cabin never serializes
+absolute local paths into package or index metadata.</p>
+<h3 id="build"><code>[build]</code></h3>
+<p>Persistent defaults for build-time selectors that Cabin already
+exposes as CLI flags.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>profile</code></td>
+<td>string</td>
+<td>Default profile. Overridden by <code>--profile &lt;name&gt;</code> and <code>--release</code>. Must reference a built-in (<code>dev</code>, <code>release</code>) or a custom profile declared in the workspace root manifest.</td>
+</tr>
+<tr>
+<td><code>jobs</code></td>
+<td>integer</td>
+<td>Default number of parallel jobs for the build backend.  Must be a positive integer; <code>0</code> and negative values are rejected at parse time.</td>
+</tr>
+</tbody>
+</table>
+<p><code>cabin build</code>'s profile precedence is <code>--profile</code> ▶ <code>--release</code> ▶
+<code>build.profile</code> config ▶ built-in <code>dev</code>.</p>
+<p><code>cabin build</code> / <code>cabin run</code> jobs precedence is <code>-j</code> /
+<code>--jobs &lt;N&gt;</code> ▶ <code>CABIN_BUILD_JOBS</code> ▶ <code>build.jobs</code> config ▶
+build backend default. <code>cabin test</code> does not honour any
+jobs source: the test runner is sequential.</p>
+<h3 id="buildcache"><code>[build.cache]</code></h3>
+<p>Default compiler-cache wrapper. Reuses the typed model from
+<a href="../compiler-cache/"><code>compiler-cache.md</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>compiler-wrapper</code></td>
+<td>string</td>
+<td>One of <code>none</code>, <code>ccache</code>, <code>sccache</code>. Other values are rejected at parse time.</td>
+</tr>
+</tbody>
+</table>
+<p>Precedence: <code>--compiler-wrapper</code> / <code>--no-compiler-wrapper</code>
+▶ <code>CABIN_COMPILER_WRAPPER</code> ▶ <code>[build.cache]</code> config
+▶ workspace-root manifest <code>[profile.cache]</code> overlays
+▶ no wrapper.</p>
+<h3 id="patch-and-source-replacement"><code>[patch]</code> and <code>[source-replacement]</code></h3>
+<p>Local-development override policy. The <code>[patch]</code> table
+replaces a registry-resolved package candidate with a local
+working copy; the <code>[source-replacement]</code> table redirects one
+supported index source to another supported index source.
+Both tables are <em>config-only</em> surfaces (manifest <code>[patch]</code>
+tables are also supported but live in <code>cabin.toml</code>); both
+follow the same config-precedence ladder as the rest of this
+file.</p>
+<pre><code class="language-toml">[patch]
+fmt = { path = &quot;../forks/fmt&quot; }
+
+[source-replacement]
+&quot;https://example.com/index&quot; = { index-path = &quot;../mirror&quot; }
+</code></pre>
+<p>The full schema, validation rules, and lockfile / metadata
+behaviour live in <a href="../patch-overrides/"><code>patch-overrides.md</code></a>.
+Important guarantees:</p>
+<ul>
+<li><code>git</code>, <code>url</code>, and <code>version</code> patch source kinds are rejected
+  at parse time.</li>
+<li>URLs containing <code>userinfo</code> (e.g.,
+  <code>https://user:pw@example.com/index</code>) are rejected so
+  credentials never leak.</li>
+<li>Replacement chains are walked once with cycle detection.</li>
+<li>Member manifests cannot declare <code>[patch]</code> tables.</li>
+<li><code>cabin package</code> rejects manifests with a non-empty
+  <code>[patch]</code> table; config patches and source replacements are
+  excluded from package archives by <code>.cabin/</code>'s existing
+  exclusion rule.</li>
+</ul>
+<h3 id="term"><code>[term]</code></h3>
+<p>Persistent default for the terminal-color choice.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>color</code></td>
+<td>string</td>
+<td>One of <code>auto</code>, <code>always</code>, <code>never</code>. Other values are rejected at parse time.</td>
+</tr>
+</tbody>
+</table>
+<p>Precedence: <code>--color &lt;when&gt;</code> ▶ <code>CABIN_TERM_COLOR=&lt;when&gt;</code> ▶
+<code>[term].color</code> config ▶ default <code>auto</code>. See
+<a href="../environment-variables/"><code>environment-variables.md</code></a>
+for the full table of values and their behaviour.</p>
+<h3 id="toolchain"><code>[toolchain]</code></h3>
+<p>Persistent defaults for the C/C++ tool selection from
+<a href="../toolchains/"><code>toolchains.md</code></a>.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cc</code></td>
+<td>string</td>
+<td>Bare command name searched on <code>PATH</code>, or an explicit filesystem path.</td>
+</tr>
+<tr>
+<td><code>cxx</code></td>
+<td>string</td>
+<td>Same shape as <code>cc</code>, for the C++ compiler driver.</td>
+</tr>
+<tr>
+<td><code>ar</code></td>
+<td>string</td>
+<td>Same shape as <code>cc</code>, for the static-library archiver.</td>
+</tr>
+</tbody>
+</table>
+<p>Per-tool precedence: <code>--cc</code> / <code>--cxx</code> / <code>--ar</code> ▶ <code>CC</code> / <code>CXX</code>
+/ <code>AR</code> env ▶ <code>[toolchain]</code> config ▶ workspace-root manifest
+<code>[target.'cfg(...)'.toolchain]</code> overlays ▶ workspace-root manifest
+<code>[toolchain]</code> ▶ Cabin's documented fallback list.</p>
+<p>The same <code>--cxx</code> / <code>CXX</code> / <code>[toolchain].cxx</code> value is read at every
+layer; the resolver's source label distinguishes which layer
+ultimately won (<code>user-config</code>, <code>workspace-config</code>,
+<code>project-config</code>, or <code>explicit-config</code> for the config layer).</p>
+<h2 id="environment-variables">Environment variables</h2>
+<p>Cabin's config layer recognises three environment variables. They
+are documented and tested; nothing else here changes existing env
+semantics from earlier steps.</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CABIN_NO_CONFIG=1</code></td>
+<td>Disable config discovery entirely.</td>
+</tr>
+<tr>
+<td><code>CABIN_CONFIG=&lt;path&gt;</code></td>
+<td>Load exactly one config file from <code>&lt;path&gt;</code>. Missing files are a hard error.</td>
+</tr>
+<tr>
+<td><code>CABIN_CONFIG_HOME=&lt;dir&gt;</code></td>
+<td>Override the user config directory. Useful for tests and controlled environments. Cabin reads <code>&lt;dir&gt;/config.toml</code> directly.</td>
+</tr>
+</tbody>
+</table>
+<p><code>CABIN_CONFIG_HOME</code>, <code>XDG_CONFIG_HOME</code>, and <code>HOME</code> are checked in
+that order when locating the user config file. The first variable
+that supplies a non-empty value wins.</p>
+<p>Existing env variables Cabin already honours (<code>CC</code>, <code>CXX</code>, <code>AR</code>,
+<code>CABIN_COMPILER_WRAPPER</code>, <code>CABIN_CACHE_DIR</code>) are unchanged. They
+take precedence over the config layer per the precedence ladder
+above.</p>
+<h2 id="what-config-does-not-do">What config does <strong>not</strong> do</h2>
+<p>These items are explicitly out of scope for the config layer and
+will not be added here.</p>
+<ul>
+<li><strong>No credentials, tokens, registry authentication, or
+  credential-helper integration.</strong> Cabin's config file is not a
+  secrets store. Tables literally named <code>auth</code>, <code>credentials</code>,
+  <code>tokens</code>, <code>token</code>, or <code>registries</code> are rejected with a dedicated
+  error so a typo never silently smuggles a credential into a
+  published archive.</li>
+<li><strong>No vendoring policy table.</strong> <code>cabin vendor</code> may consume the
+  configured registry/path defaults, but config does not declare
+  vendored entries or a <code>[vendor]</code> table.</li>
+<li><strong>No offline config key.</strong> Offline mode is controlled by
+  <code>--offline</code> / <code>CABIN_NET_OFFLINE</code>, not by a persistent config
+  setting.</li>
+<li><strong>No new registry protocols.</strong> <code>index-path</code> and <code>index-url</code>
+  remain the only supported flavours.</li>
+<li><strong>No remote-cache configuration.</strong> Compiler-cache server
+  settings (<code>SCCACHE_*</code>, <code>CCACHE_DIR</code>, <code>CCACHE_MAXSIZE</code>, …) belong
+  to the wrapper's own configuration mechanism.</li>
+<li><strong>No target-conditioned config tables.</strong> Encountering
+  <code>[target.'cfg(...)'.&lt;...&gt;]</code> in a config file produces
+  <code>target-conditioned config tables are not supported</code>. The
+  equivalent feature lives in the package manifest.</li>
+<li><strong>No new package semantics.</strong> The config file may not declare
+  dependencies, features, target-conditioned build flags, or any
+  other field the package manifest already owns.</li>
+<li><strong>No network publish, account, ownership, or website support.</strong></li>
+</ul>
+<h2 id="package-index-metadata">Package + index metadata</h2>
+<p>Config is local policy. Cabin never:</p>
+<ul>
+<li>writes the contents of <code>.cabin/config.toml</code> into the canonical
+  per-version package metadata (<code>&lt;name&gt;-&lt;version&gt;.json</code>);</li>
+<li>writes config-derived effective values into
+  <code>cabin.lock</code> or any registry index file;</li>
+<li>includes <code>.cabin/</code> in deterministic source archives (the
+  directory is in <code>EXCLUDED_DIR_NAMES</code> for <code>cabin package</code>).</li>
+</ul>
+<p>Manifest declarations remain the only source-spec surface for
+published packages. <code>cabin metadata</code>'s <code>config</code> block is intended
+for human / tool consumption of <em>the local environment</em> and is not
+serialised to the registry.</p>
+<h2 id="examples">Examples</h2>
+<h3 id="minimal-user-config-pick-a-fixed-compiler">Minimal user config — pick a fixed compiler</h3>
+<pre><code class="language-toml"># ~/.config/cabin/config.toml
+[toolchain]
+cxx = &quot;clang++&quot;
+ar = &quot;llvm-ar&quot;
+</code></pre>
+<p>Every <code>cabin build</code> and <code>cabin metadata</code> invocation picks <code>clang++</code>
+and <code>llvm-ar</code> unless overridden by <code>CXX</code> / <code>AR</code> / <code>--cxx</code> / <code>--ar</code>.</p>
+<h3 id="workspace-level-cache-wrapper-defaults">Workspace-level cache + wrapper defaults</h3>
+<pre><code class="language-toml"># &lt;workspace-root&gt;/.cabin/config.toml
+[paths]
+cache-dir = &quot;.cabin/cache&quot;
+
+[build.cache]
+compiler-wrapper = &quot;ccache&quot;
+</code></pre>
+<p>Every contributor's local <code>cabin build</code> writes artifacts to
+<code>&lt;workspace-root&gt;/.cabin/cache</code> and prefixes compile commands with
+<code>ccache</code>. CI pipelines can override either by passing the matching
+CLI flag.</p>
+<h3 id="workspace-level-registry-default">Workspace-level registry default</h3>
+<pre><code class="language-toml"># &lt;workspace-root&gt;/.cabin/config.toml
+[registry]
+index-path = &quot;vendor/index&quot;
+</code></pre>
+<p>Resolves the index path against the config file's directory
+(<code>.cabin/vendor/index</code> here). <code>cabin resolve --index-path …</code>
+overrides the default; <code>--index-url …</code> is rejected against the
+configured <code>index-path</code> only when both are passed on the same
+command line.</p>
+<h3 id="build-profile-default">Build profile default</h3>
+<pre><code class="language-toml"># .cabin/config.toml
+[build]
+profile = &quot;release&quot;
+</code></pre>
+<p><code>cabin build</code> defaults to <code>--profile release</code>. CLI <code>--profile dev</code>
+or <code>--release</code> still wins.</p>
+<h3 id="disabling-all-config-for-a-single-command">Disabling all config for a single command</h3>
+<pre><code class="language-sh">CABIN_NO_CONFIG=1 cabin build --release
+</code></pre>
+<p>Useful in CI when a developer's workspace config might mask the
+intended behaviour.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../manifest/" class="btn btn-neutral float-left" title="cabin.toml reference"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../environment-variables/" class="btn btn-neutral float-right" title="Environment variables">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../manifest/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../environment-variables/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

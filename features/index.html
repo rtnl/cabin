@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Features - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Features";
+        var mkdocs_page_input_path = "features.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../new-and-init/">Creating a new package</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Features</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#manifest-syntax">Manifest syntax</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#identifier-grammar">Identifier grammar</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#rules">Rules</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#optional-dependencies-and-the-feature-resolver">Optional dependencies and the feature resolver</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cli-selection">CLI selection</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cabin-metadata">cabin metadata</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#package-metadata-and-registry-preservation">Package metadata and registry preservation</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Dependencies</li>
+      <li class="breadcrumb-item active">Features</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/features.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="features">Features</h1>
+<p>Cabin features are public, additive, named-boolean capabilities the
+user (or a downstream consumer) selects at build time. Features may
+imply other features and may enable optional dependencies on the
+same package. They are declared in the <code>[features]</code> table of
+<code>cabin.toml</code>.</p>
+<h2 id="manifest-syntax">Manifest syntax</h2>
+<pre><code class="language-toml">[package]
+name = &quot;demo&quot;
+version = &quot;0.1.0&quot;
+
+[features]
+default = [&quot;simd&quot;]
+simd = []
+ssl = []
+full = [&quot;simd&quot;, &quot;ssl&quot;]
+</code></pre>
+<h3 id="identifier-grammar">Identifier grammar</h3>
+<p>Feature names are:</p>
+<ul>
+<li>non-empty;</li>
+<li>ASCII letters, digits, <code>_</code>, <code>-</code>;</li>
+<li>no whitespace, <code>/</code>, <code>.</code>, or <code>:</code>.</li>
+</ul>
+<p>This keeps ordinary feature identifiers separate from the
+feature-entry syntax described below.</p>
+<h3 id="rules">Rules</h3>
+<ul>
+<li>The reserved <code>default</code> key holds the list of features enabled when
+  the user does not pass <code>--no-default-features</code>. It may be omitted.</li>
+<li>A feature value is a list of <em>feature entries</em>, each of which is
+  one of:</li>
+<li><code>"feature_name"</code> — enables another local feature on the same
+    package (transitive feature implication).</li>
+<li><code>"dep:dependency_name"</code> — enables an optional Cabin package
+    dependency declared by this package's <code>[dependencies]</code> table.</li>
+<li><code>"dependency_name/feature_name"</code> — requests a feature on a
+    Cabin package dependency. If the dependency is optional this
+    form also enables it.</li>
+<li>The on-disk shape stays a list of strings; the typed
+  <a href="https://github.com/cabinpkg/cabin/blob/main/crates/cabin-core/src/config.rs"><code>FeatureEntry</code></a>
+  view is produced lazily by the feature resolver.</li>
+<li>Local feature references must point at another declared feature
+  in the same package. Unknown local references are rejected with
+  a clear error.</li>
+<li>Cycles between local features are rejected with a clear <code>feature
+  definitions contain a cycle: a -&gt; b -&gt; a</code> error.</li>
+<li>Declaring a normal feature called <code>default</code> is rejected (the key
+  is reserved for the default group).</li>
+<li>Feature entries may only use ASCII letters, digits, <code>_</code>, <code>-</code>,
+  <code>.</code>, plus the leading <code>dep:</code> prefix or a single <code>/</code> separator.
+  Anything else is rejected with a clear error.</li>
+</ul>
+<h2 id="optional-dependencies-and-the-feature-resolver">Optional dependencies and the feature resolver</h2>
+<p>Features can also turn Cabin package dependencies on and off, and
+can request features on dependency packages that are present. This
+layers cleanly on top of the dependency-kind model:</p>
+<pre><code class="language-toml">[dependencies]
+fmt = { version = &quot;^10&quot;, features = [&quot;compile&quot;], default-features = false }
+openssl = { version = &quot;^3&quot;, optional = true }
+
+[features]
+default = []
+ssl = [&quot;dep:openssl&quot;]
+full = [&quot;ssl&quot;, &quot;openssl/vendored&quot;]
+</code></pre>
+<ul>
+<li><code>optional = true</code> declares an optional Cabin package dependency
+  (supported in <code>[dependencies]</code>; rejected in <code>[dev-dependencies]</code>
+  and <code>`system = true</code> deps`).</li>
+<li><code>features = ["..."]</code> requests features on the dependency
+  package; entries must be feature names declared by that
+  dependency.</li>
+<li><code>default-features = false</code> drops <em>this edge's</em> request for the
+  dependency's <code>default</code> feature. It does <strong>not</strong> globally
+  disable the dependency's defaults — if any other edge requests
+  defaults for the same dependency, the unified result still
+  includes them.</li>
+</ul>
+<p>The cross-package feature resolver lives in the <code>cabin-feature</code>
+crate. Given a typed <code>PackageGraph</code>, the selected root indices, and
+a <code>RootFeatureRequest</code> built from the CLI flags, it computes the
+<em>additive</em> closure of:</p>
+<ul>
+<li>enabled features per package;</li>
+<li>enabled optional dependencies per package;</li>
+<li>per-edge feature requests applied to the depended-on package.</li>
+</ul>
+<p>Resolution is deterministic (sorted iteration, fixed-point
+worklist) and never touches the network. Errors are explicit and
+testable: unknown root features, <code>dep:</code> on non-optional
+dependencies, and requests for features the depended-on package
+does not declare all surface with stable wording.</p>
+<p>Effects on commands:</p>
+<ul>
+<li><strong><code>cabin resolve</code> / <code>update</code> / <code>fetch</code></strong> filter disabled
+  optional dependencies declared on local (workspace / path)
+  packages out of the resolver / fetch / lockfile inputs.
+  Optional dependencies declared on <em>registry</em> packages are
+  skipped regardless of feature state. A feature request on a
+  registry package does not enable that registry package's own
+  optional dependencies. Dev dependencies remain excluded by
+  default; system dependencies remain declaration-only.</li>
+<li><strong><code>cabin build</code></strong> sees the same filtered dep set, so a disabled
+  optional dependency never enters the build graph or links into
+  ordinary C++ targets.</li>
+<li><strong><code>cabin package</code></strong> preserves <code>optional</code>, <code>features</code>, and
+  <code>default-features</code> per dependency in the canonical metadata
+  document. Bare entries without overrides serialise as plain
+  version-requirement strings so older readers stay happy.</li>
+</ul>
+<h2 id="cli-selection">CLI selection</h2>
+<p><code>cabin build</code> / <code>cabin resolve</code> / <code>cabin metadata</code> accept the
+same selection flag bundle:</p>
+<pre><code>--features &lt;names&gt;          # repeatable; each value may be comma-separated
+--all-features              # enable every declared feature
+--no-default-features       # drop the [features].default set
+</code></pre>
+<p><code>cabin tree</code> and the graph-only <code>cabin explain</code> subcommands
+(<code>package</code>, <code>target</code>, <code>source</code>, and <code>feature</code>) also run the
+feature-selection part of this bundle so unknown features and
+invalid <code>dep:</code> feature entries surface consistently.</p>
+<p>Default behaviour:</p>
+<ul>
+<li>without <code>--no-default-features</code>, the names listed under
+  <code>[features].default</code> are enabled and expanded transitively;</li>
+<li><code>--all-features</code> overrides everything else and enables every
+  declared feature;</li>
+<li>CLI selections apply to the selected root / primary packages.
+  Dependency feature requests declared on edges are then resolved
+  additively through the graph.</li>
+</ul>
+<p>Errors are validated up-front and reported with a clear message:</p>
+<pre><code>$ cabin build --features missing
+unknown feature &quot;missing&quot; for package &quot;demo&quot;
+</code></pre>
+<h2 id="cabin-metadata"><code>cabin metadata</code></h2>
+<p><code>cabin metadata --format json</code> includes a per-package <code>features</code>
+block (omitted when empty so older consumers see the same JSON
+shape they always have) and a resolved <code>configuration</code> block
+whenever the package declared features:</p>
+<pre><code class="language-json">{
+  &quot;configuration&quot;: {
+    &quot;features&quot;: [&quot;simd&quot;],
+    &quot;fingerprint&quot;: &quot;&lt;64 hex chars&gt;&quot;
+  }
+}
+</code></pre>
+<p>Selection flags passed to <code>cabin metadata</code> flow into the
+configuration block exactly the way they do for <code>cabin build</code>.</p>
+<h2 id="package-metadata-and-registry-preservation">Package metadata and registry preservation</h2>
+<p><code>cabin package</code> writes feature declarations into the
+<code>&lt;name&gt;-&lt;version&gt;.json</code> document next to the archive. <code>cabin
+publish --registry-dir &lt;path&gt;</code> carries them through the registry's
+per-package index file. <code>cabin-index</code> (local file index) and
+<code>cabin-index-http</code> (sparse HTTP index) parse the optional
+<code>features</code> field on every version entry and preserve it on
+<code>VersionMetadata</code>. Older registry entries that omit the field
+continue to load.</p>
+<p>The resolver consults package features and dependency feature
+requests when deciding whether optional package dependencies
+declared on local (workspace / path) packages are active.
+Optional dependencies declared on registry packages are
+conservatively skipped: their per-edge <code>features</code> /
+<code>default-features</code> requests round-trip through registry metadata,
+but transitive feature state for registry packages does not
+gate them on. The lockfile records resolved registry versions
+only; per-<code>BuildConfiguration</code> state lives in the run-time
+fingerprint and is not persisted to <code>cabin.lock</code>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../target-dependencies/" class="btn btn-neutral float-left" title="Target / platform-specific dependencies"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../lockfile/" class="btn btn-neutral float-right" title="cabin.lock reference">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../target-dependencies/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../lockfile/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

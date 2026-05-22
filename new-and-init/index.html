@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Creating a new package - Cabin Docs</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Creating a new package";
+        var mkdocs_page_input_path = "new-and-init.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cabin Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Getting started</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../installation/">Installation</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Overview</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../cargo-inspired-interface/">Cargo-inspired interface</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Creating a new package</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#binary-scaffold-default">Binary scaffold (default)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#library-scaffold-lib">Library scaffold (--lib)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#gitignore">.gitignore</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#package-name">Package name</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#errors">Errors</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../architecture/">Architecture</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Manifest and configuration</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../manifest/">cabin.toml reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config/">Configuration files</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../environment-variables/">Environment variables</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../profiles/">Build profiles</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../toolchains/">Toolchains</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Targets and building</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../targets/">Targets</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compiler-cache/">Compiler-cache wrappers</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../fmt/">Formatting</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tidy/">Static analysis</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Dependencies</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../dependency-kinds/">Dependency kinds</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../system-dependencies/">System dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../target-dependencies/">Target / platform-specific dependencies</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../features/">Features</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../lockfile/">cabin.lock reference</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../patch-overrides/">Patch, override, and source replacement</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../vendoring-offline/">Vendoring and offline mode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../artifacts/">Source artifacts</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Workspaces and observability</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../workspaces/">Workspaces</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata-tree-explain/">Metadata, tree, and explain</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Distribution and registry interface</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-format/">Package archive and canonical metadata</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../package-index/">Local JSON package index</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../registry-design/">Registry design</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../distribution/">CLI distribution artefacts</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cabin Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Overview</li>
+      <li class="breadcrumb-item active">Creating a new package</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/cabinpkg/cabin/edit/main/docs/new-and-init.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="cabin-new-and-cabin-init"><code>cabin new</code> and <code>cabin init</code></h1>
+<p><code>cabin new</code> and <code>cabin init</code> generate a minimal single-package
+project layout: a <code>cabin.toml</code>, a <code>src/</code> tree, a public header
+tree (library scaffolds only), and a <code>.gitignore</code>.  Both commands
+share the same scaffold logic, so the generated bytes match
+exactly for the same kind / name pair.</p>
+<ul>
+<li><code>cabin new &lt;path&gt;</code> creates a new directory at <code>&lt;path&gt;</code> and
+  fills it with the scaffold.  <code>&lt;path&gt;</code> must not already exist.</li>
+<li><code>cabin init</code> initialises the current directory.  The directory
+  may already contain user files; the scaffold never overwrites
+  them.</li>
+</ul>
+<p>The default scaffold kind is a <strong>binary</strong> package
+(<code>cpp_executable</code>).  Pass <code>--lib</code> to generate a <strong>library</strong>
+package (<code>cpp_library</code>) instead.  <code>--bin</code> and <code>--lib</code> are
+mutually exclusive; passing both produces a clear error and no
+filesystem mutation.</p>
+<h2 id="binary-scaffold-default">Binary scaffold (default)</h2>
+<pre><code>&lt;dest&gt;/
+  cabin.toml
+  src/
+    main.cc
+  .gitignore
+</code></pre>
+<p>The manifest declares a single <code>cpp_executable</code> target named
+after the package:</p>
+<pre><code class="language-toml">[package]
+name = &quot;hello&quot;
+version = &quot;0.1.0&quot;
+
+[target.hello]
+type = &quot;cpp_executable&quot;
+sources = [&quot;src/main.cc&quot;]
+</code></pre>
+<p><code>src/main.cc</code> is a minimal <code>int main</code> that prints a greeting and
+returns zero.  An existing <code>src/main.cc</code> is preserved unchanged
+so re-running <code>cabin init</code> over a partially scaffolded project
+never clobbers user code.</p>
+<h2 id="library-scaffold-lib">Library scaffold (<code>--lib</code>)</h2>
+<pre><code>&lt;dest&gt;/
+  cabin.toml
+  include/
+    &lt;package&gt;/
+      &lt;package&gt;.hpp
+  src/
+    &lt;package&gt;.cc
+  .gitignore
+</code></pre>
+<p>The manifest declares a single <code>cpp_library</code> target with a
+public <code>include/</code> directory:</p>
+<pre><code class="language-toml">[package]
+name = &quot;greeter&quot;
+version = &quot;0.1.0&quot;
+
+[target.greeter]
+type = &quot;cpp_library&quot;
+sources = [&quot;src/greeter.cc&quot;]
+include_dirs = [&quot;include&quot;]
+</code></pre>
+<p>The generated header (<code>include/&lt;package&gt;/&lt;package&gt;.hpp</code>) and the
+implementation source (<code>src/&lt;package&gt;.cc</code>) define a minimal
+<code>add(int, int)</code> function inside a namespace derived from the
+package name.  Hyphens in the package name are mapped to
+underscores when forming the C++ namespace identifier (so
+<code>hello-world</code> becomes <code>namespace hello_world</code>); the on-disk file
+paths keep the original package name.</p>
+<p>Existing header / source files at those paths are preserved
+unchanged.</p>
+<h2 id="gitignore"><code>.gitignore</code></h2>
+<p>Both <code>cabin new</code> and <code>cabin init</code> create a <code>.gitignore</code> at the
+destination when one does not already exist.  An existing
+<code>.gitignore</code> is preserved verbatim — Cabin never appends to it
+or rewrites it.</p>
+<p>The generated file ignores Cabin's default build-output
+directories:</p>
+<pre><code>/build/
+/dist/
+</code></pre>
+<p><code>cabin.lock</code> is intentionally <strong>not</strong> ignored.  Cabin recommends
+committing the lockfile so collaborators and CI converge on the
+same resolution; see <a href="../lockfile/"><code>lockfile.md</code></a>.</p>
+<h2 id="package-name">Package name</h2>
+<p>When <code>--name</code> is omitted, the package name is derived from the
+final path component (<code>cabin new path/to/hello-world</code> produces
+<code>hello-world</code>).  If that component is empty, contains characters
+outside the allowed alphabet (ASCII letters, digits, <code>_</code>, <code>-</code>),
+or starts with a <code>.</code>, Cabin falls back to the literal name
+<code>cabin-package</code>.</p>
+<p>Pass <code>--name &lt;name&gt;</code> to override the derived name.  Names
+containing whitespace or unsupported characters are rejected
+with a clear error.</p>
+<h2 id="errors">Errors</h2>
+<p><code>cabin new</code> and <code>cabin init</code> produce actionable diagnostics for:</p>
+<ul>
+<li><code>--bin</code> used together with <code>--lib</code>;</li>
+<li>an invalid package name (empty, whitespace, or characters
+  outside the allowed alphabet);</li>
+<li>a destination that already exists (for <code>cabin new</code> — the
+  message suggests <code>cabin init</code> for that case);</li>
+<li>a parent directory that does not exist (for <code>cabin new</code>);</li>
+<li>a pre-existing <code>cabin.toml</code> (rejected; nothing is overwritten).</li>
+</ul>
+<p>When validation fails, <code>cabin new</code> removes the destination
+directory it just created so a partially scaffolded layout does
+not survive a validation error.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../cargo-inspired-interface/" class="btn btn-neutral float-left" title="Cargo-inspired interface"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../architecture/" class="btn btn-neutral float-right" title="Architecture">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/cabinpkg/cabin" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../cargo-inspired-interface/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../architecture/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
